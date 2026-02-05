@@ -1,0 +1,133 @@
+/* src/components/Programs.css */
+
+.programs-section {
+  padding: 80px 20px;
+  background-color: var(--background-secondary);
+}
+
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.program-card {
+  border-radius: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+
+  /* Ensure white background */
+  background-color: var(--background-primary);
+  border: none;
+
+  /* Parallax properties */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  /* Enable 3D transform context */
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+}
+
+/* Gradient Border Pseudo-element behind card */
+.program-card::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 19px;
+  /* Slightly larger than card */
+  background: linear-gradient(45deg, var(--accent-gold), var(--accent-red), var(--accent-gold));
+  background-size: 200% 200%;
+  animation: borderRotate 4s ease infinite;
+
+  /* Push behind */
+  transform: translateZ(-1px);
+
+  opacity: 0.7;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.program-card:hover {
+  /* "Parallax" lift effect */
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.program-card:hover::before {
+  opacity: 1;
+  /* Make border vibrant on hover */
+  filter: blur(2px);
+  /* Slight glow */
+}
+
+.program-image-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--background-secondary);
+  position: relative;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.program-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  ;
+}
+
+.program-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  background-color: var(--background-primary);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.program-title {
+  font-size: 22px;
+  font-family: var(--font-heading-secondary);
+  color: var(--text-charcoal);
+  margin-top: 0;
+  margin-bottom: 8px;
+  /* Reduced from 12px */
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.program-description {
+  font-size: 16px;
+  color: var(--text-medium-gray);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .programs-section {
+    padding: 60px 15px;
+  }
+
+  .programs-grid {
+    gap: 25px;
+  }
+
+  .program-title {
+    font-size: 20px;
+  }
+
+  .program-description {
+    font-size: 15px;
+  }
+}

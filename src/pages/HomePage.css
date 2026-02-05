@@ -1,0 +1,137 @@
+.homepage-container {
+  background-color: var(--background-secondary);
+  position: relative;
+}
+
+/* The WelcomeSection and subsequent sections will scroll over the sticky HeroSection */
+.welcome-section-wrapper {
+  position: relative;
+  z-index: 2;
+  /* Ensure it scrolls over the hero */
+  /* Wrapper is transparent to let Hero video show through where needed */
+  background-color: transparent;
+
+  /* Default text color for dark sections */
+  color: var(--text-inverse);
+}
+
+/* Apply the user's specific gradient ONLY to the Welcome Section */
+.welcome-section {
+  /* Gradient: Transparent White (top) -> White (middle) -> Dark Gray/Black (bottom) */
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.8) 0%,
+      #ffffff 40%,
+      #1a1a1a 100%);
+
+  /* Text in this section should be dark as the background is mostly white/light */
+  color: var(--text-charcoal) !important;
+}
+
+/* 2. Our Programs - BLACK Background */
+.welcome-section-wrapper .programs-section {
+  background-color: var(--background-secondary);
+  /* Black */
+  color: var(--text-inverse);
+}
+
+.welcome-section-wrapper .programs-section .section-title {
+  color: var(--text-inverse);
+}
+
+/* 3. Our Facility - WHITE Background */
+.welcome-section-wrapper .facility-section {
+  background-color: var(--background-primary);
+  /* White */
+  color: var(--text-dark-gray);
+}
+
+/* Ensure Facility Title is Black */
+.welcome-section-wrapper .facility-section .section-title {
+  color: var(--text-charcoal);
+}
+
+/* 4. Google Reviews (Testimonials) - BLACK Background */
+.welcome-section-wrapper .testimonials-section,
+.welcome-section-wrapper .cta-section {
+  background-color: rgb(146, 146, 146);
+  /* Black */
+  color: white;
+}
+
+.welcome-section-wrapper .testimonials-section .section-title {
+  color: var(--text-inverse);
+}
+
+/* Fix for specific CTA text to be black */
+.welcome-section-wrapper .cta-section .cta-text {
+  color: var(--text-charcoal) !important;
+}
+
+/* 5. Contact Us - WHITE Background */
+.welcome-section-wrapper .contact-us-section {
+  background-color: var(--background-primary);
+  /* White */
+  color: var(--text-charcoal);
+}
+
+.welcome-section-wrapper .contact-us-section .section-title {
+  color: var(--text-charcoal);
+}
+
+/* 6. Instagram Feed - BLACK Background */
+.welcome-section-wrapper .instagram-feed-section {
+  background-color: var(--background-secondary);
+  /* Black */
+  color: var(--text-inverse);
+}
+
+.welcome-section-wrapper .instagram-feed-section .section-title {
+  color: var(--text-inverse);
+}
+
+/* 7. About Our Programs (FAQ) - WHITE Background */
+.welcome-section-wrapper .faq-section {
+  background-color: var(--background-primary);
+  /* White */
+  color: var(--text-charcoal);
+}
+
+.welcome-section-wrapper .faq-section .section-title {
+  color: var(--text-charcoal);
+}
+
+.welcome-section-wrapper .faq-question {
+  color: var(--text-charcoal);
+}
+
+.welcome-section-wrapper .faq-answer {
+  color: var(--text-dark-gray);
+}
+
+/* Reduce spacing generally */
+.welcome-section-wrapper>section {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+/* Specific fix / override for WelcomeSection */
+.welcome-section {
+  padding-bottom: 0 !important;
+  /* Remove bottom padding to pull Programs up */
+}
+
+/* Fix for Contact Us Section to ensure text is black inside the white box */
+.welcome-section-wrapper .contact-form-container .section-title,
+.welcome-section-wrapper .contact-form-container .contact-phone,
+.welcome-section-wrapper .contact-form-container .contact-phone a,
+.welcome-section-wrapper .contact-form-container input,
+.welcome-section-wrapper .contact-form-container textarea {
+  color: var(--text-charcoal) !important;
+}
+
+/* Ensure inputs have correct background even on homepage */
+.contact-form-container input,
+.contact-form-container textarea {
+  background-color: var(--input-background);
+  border: 1px solid var(--border-light-gray);
+}

@@ -1,0 +1,178 @@
+.schedule-page {
+    padding: 120px 20px 80px;
+    max-width: 1400px;
+    margin: 0 auto 0 auto;
+
+    /* Dark Page Background */
+    background-color: var(--background-secondary);
+    color: var(--text-inverse);
+    min-height: 100vh;
+}
+
+.schedule-page h1 {
+    font-family: var(--font-heading-primary);
+    color: var(--text-inverse);
+    font-size: 48px;
+    letter-spacing: 1px;
+}
+
+.schedule-page p.schedule-intro {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--text-inverse);
+    opacity: 0.9;
+}
+
+.schedule-download-btn-container {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Updated Grid Spacing */
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    /* Reduced gap slightly */
+    padding: 10px;
+}
+
+@media (min-width: 1200px) {
+    .schedule-grid {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 15px;
+    }
+}
+
+/* Card Styling: Dark Background with Gradient Glow/Detail INSIDE */
+.schedule-day {
+    /* Dark Card background */
+    background-color: #1a1a1a;
+    color: var(--text-inverse);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    /* Contains the inner glow */
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    /* Subtle glow instead of loud border */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schedule-day:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(197, 163, 92, 0.2);
+    /* Gold glow on hover */
+    border-color: var(--accent-gold);
+}
+
+.schedule-day h2 {
+    /* Gradient Background for Header */
+    background: linear-gradient(135deg, var(--accent-gold-dark), var(--accent-gold));
+    color: #fff;
+    padding: 14px 10px;
+    font-size: 18px;
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.schedule-sessions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+
+    /* Optional: Very subtle gradient overlay on the dark background */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
+}
+
+.schedule-session {
+    padding: 12px 15px;
+    border-bottom: 1px solid #333;
+    position: relative;
+    z-index: 2;
+}
+
+.schedule-session:last-child {
+    border-bottom: none;
+}
+
+/* Time: Gold */
+.schedule-session .time {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--accent-gold);
+    font-size: 14px;
+}
+
+/* Title: White */
+.schedule-session .title {
+    margin: 0;
+    line-height: 1.3;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.session-tags {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* Tags optimized for dark bg */
+.session-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.session-tag.kids {
+    background: rgba(33, 150, 243, 0.2);
+    color: #64b5f6;
+}
+
+.session-tag.adults {
+    background: rgba(76, 175, 80, 0.2);
+    color: #81c784;
+}
+
+.session-tag.private {
+    background: rgba(156, 39, 176, 0.2);
+    color: #ba68c8;
+}
+
+.session-tag.wrestling {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ffb74d;
+}
+
+.schedule-cta {
+    margin-top: 60px;
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-inverse);
+}
+
+.schedule-cta a {
+    color: var(--accent-gold);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .schedule-page {
+        padding: 100px 16px 60px;
+    }
+}
