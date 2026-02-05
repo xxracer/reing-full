@@ -21,7 +21,7 @@ const TrainingSchedule = () => {
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/schedule');
+                const response = await axios.get('/api/schedule');
                 if (response.data) {
                     // Transform flat list to grouped by day
                     const grouped = daysOrder.map(day => {

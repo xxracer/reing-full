@@ -96,14 +96,39 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
             }
 
             // 2. Coords -> Editor Pos (Pixels)
-            // Formula: pos% = 50 - (px / 600) * 100
-            // px = (50 - pos%) * 6
-            const safeX = content.coords?.x ?? 50;
-            const safeY = content.coords?.y ?? 50;
-            setEditorPos({
-              x: (50 - safeX) * 6,
-              y: (50 - safeY) * 6
-            });
+            // Formula: pos% is from 0 (left-aligned) to 100 (right-aligned).
+            // When Left-Aligned (0%), pixel offset is 0? No, wait.
+            // If dragging, Left=0 means Left edge is at Left Frame -> 0%.
+            // Left = (Frame - Box) (Negative max) means Right edge is at Right Frame -> 100%.
+
+            // Equation: PixelX = (PercentX / 100) * (FrameW - BoxW)
+            // Note: (FrameW - BoxW) is usually negative if zoomed in.
+
+            if (content.coords && content.zoom) {
+              const safeX = content.coords.x ?? 50;
+              const safeY = content.coords.y ?? 50;
+
+              const z = parseFloat(content.zoom) || 1;
+              const currentBoxW = 600 * z;
+              const currentBoxH = (600 * z) / (16 / 9);
+
+              const frameW = 600;
+              const frameH = 600 / (16 / 9); // Or fixed ratio height
+
+              // Only apply offset if box > frame
+              const maxOffsetX = frameW - currentBoxW;
+              const maxOffsetY = frameH - currentBoxH;
+
+              let initX = 0;
+              let initY = 0;
+
+              if (maxOffsetX < 0) initX = (safeX / 100) * maxOffsetX;
+              if (maxOffsetY < 0) initY = (safeY / 100) * maxOffsetY;
+
+              setEditorPos({ x: initX, y: initY });
+            } else {
+              setEditorPos({ x: 0, y: 0 });
+            }
           } catch (e) {
             setCurrentImageUrl(response.data.content_value);
             setEditorPos({ x: 0, y: 0 }); // Default
@@ -570,13 +595,46 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                   const onMove = (moveEvent) => {
                     const dx = moveEvent.clientX - startX;
                     const dy = moveEvent.clientY - startY;
-                    const newX = startPosX + dx;
-                    const newY = startPosY + dy;
+                    let newX = startPosX + dx;
+                    let newY = startPosY + dy;
+
+                    // Constrain Drag? - No, user wants "Free Move", but math relies on it acting like object-position
+                    // object-position clamps 0-100%.
+                    // So we should clamp Pixel Drag to (Frame - Box) ... 0.
+
+                    const frameW = 600;
+                    const frameH = boxSize.height * (frameW / boxSize.width); // approx relative frame? No. 
+                    // The Frame is fixed size in DOM.
+                    // Frame Width is 600px.
+                    // Frame Height depends on FixedRatio.
+                    const realFrameH = 600 / (fixedRatio === '4 / 5' ? 0.8 : fixedRatio === '1 / 1' ? 1 : (16 / 9));
+
+                    const maxOffsetX = frameW - boxSize.width;
+                    const maxOffsetY = realFrameH - boxSize.height;
+
+                    // If Box is smaller than Frame, we can't really "pan" it in object-position logic usually...
+                    // But if Box is larger (Zoom > 1), offsets are negative.
+                    // 0 is Max Left (Showing Left Side), maxOffsetX is Max Right (Showing Right Side).
+                    // Actually 0 is Left edge at 0.
+                    // Frame - Box is Right edge at Frame Right.
+
+                    // Clamp
+                    if (maxOffsetX < 0) newX = Math.min(0, Math.max(maxOffsetX, newX));
+                    else newX = 0; // Center or align left if smaller? Let's just pin 0 for safety if no zoom.
+
+                    if (maxOffsetY < 0) newY = Math.min(0, Math.max(maxOffsetY, newY));
+                    else newY = 0;
+
                     setEditorPos({ x: newX, y: newY });
 
                     // Live Update Percentages
-                    const pX = 50 - (newX / 600) * 100;
-                    const pY = 50 - (newY / (600 * 9 / 16)) * 100; // approx height factor
+                    // Percent = (Pos / maxOffset) * 100
+                    let pX = 50;
+                    let pY = 50;
+
+                    if (maxOffsetX < 0) pX = (newX / maxOffsetX) * 100;
+                    if (maxOffsetY < 0) pY = (newY / maxOffsetY) * 100;
+
                     setPosition({
                       x: Math.max(0, Math.min(100, pX)),
                       y: Math.max(0, Math.min(100, pY))

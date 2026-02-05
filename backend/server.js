@@ -389,30 +389,35 @@ app.get('/api/google-reviews', async (req, res) => {
 
 // Schedule API
 app.get('/api/schedule', async (req, res) => {
+  console.log('[API] GET /api/schedule - Fetching schedule...');
   try {
     const { rows } = await db.query('SELECT * FROM schedules ORDER BY id ASC');
+    console.log(`[API] GET /api/schedule - Found ${rows.length} items.`);
     res.json(rows);
   } catch (err) {
-    console.error('Error fetching schedule:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch schedule.' });
+    console.error('[API] ERROR GET /api/schedule:', err);
+    res.status(500).json({ success: false, message: 'Failed to fetch schedule.', error: err.message });
   }
 });
 
 app.post('/api/schedule', requireAuth, async (req, res) => {
+  console.log('[API] POST /api/schedule - Received data:', req.body);
   const { day, time_range, class_name, description, category } = req.body;
   try {
     const { rows } = await db.query(
       'INSERT INTO schedules (day, time_range, class_name, description, category) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [day, time_range, class_name, description, category]
     );
+    console.log('[API] POST /api/schedule - Created item:', rows[0]);
     res.status(201).json(rows[0]);
   } catch (err) {
-    console.error('Error creating schedule item:', err);
-    res.status(500).json({ success: false, message: 'Failed to create schedule item.' });
+    console.error('[API] ERROR POST /api/schedule:', err);
+    res.status(500).json({ success: false, message: 'Failed to create schedule item.', error: err.message });
   }
 });
 
 app.put('/api/schedule/:id', requireAuth, async (req, res) => {
+  console.log(`[API] PUT /api/schedule/${req.params.id} - Updating with:`, req.body);
   const { id } = req.params;
   const { day, time_range, class_name, description, category } = req.body;
   try {
@@ -420,22 +425,28 @@ app.put('/api/schedule/:id', requireAuth, async (req, res) => {
       'UPDATE schedules SET day = $1, time_range = $2, class_name = $3, description = $4, category = $5 WHERE id = $6 RETURNING *',
       [day, time_range, class_name, description, category, id]
     );
-    if (rows.length === 0) return res.status(404).json({ success: false, message: 'Item not found' });
+    if (rows.length === 0) {
+      console.warn(`[API] PUT /api/schedule/${id} - Item not found.`);
+      return res.status(404).json({ success: false, message: 'Schedule item not found' });
+    }
+    console.log('[API] PUT /api/schedule - Updated:', rows[0]);
     res.json(rows[0]);
   } catch (err) {
-    console.error('Error updating schedule item:', err);
-    res.status(500).json({ success: false, message: 'Failed to update schedule item.' });
+    console.error(`[API] ERROR PUT /api/schedule/${id}:`, err);
+    res.status(500).json({ success: false, message: 'Failed to update schedule item.', error: err.message });
   }
 });
 
 app.delete('/api/schedule/:id', requireAuth, async (req, res) => {
+  console.log(`[API] DELETE /api/schedule/${req.params.id}`);
   const { id } = req.params;
   try {
     await db.query('DELETE FROM schedules WHERE id = $1', [id]);
-    res.json({ success: true, message: 'Item deleted' });
+    console.log(`[API] DELETE /api/schedule/${id} - Success`);
+    res.json({ success: true, message: 'Schedule item deleted' });
   } catch (err) {
-    console.error('Error deleting schedule item:', err);
-    res.status(500).json({ success: false, message: 'Failed to delete schedule item.' });
+    console.error(`[API] ERROR DELETE /api/schedule/${id}:`, err);
+    res.status(500).json({ success: false, message: 'Failed to delete schedule item.', error: err.message });
   }
 });
 
