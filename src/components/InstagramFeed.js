@@ -36,7 +36,7 @@ const InstagramFeed = () => {
             let imageUrl = response.data.content_value;
             let postLink = '#';
             let zoom = 1;
-            let coords = { x: 0, y: 0 };
+            let coords = { x: 50, y: 50 };
             let aspectRatio = '1 / 1';
             try {
               const parsed = JSON.parse(imageUrl);
@@ -118,9 +118,10 @@ const InstagramFeed = () => {
                       muted
                       playsInline
                       style={{
-                        transform: `translate(${post.coords?.x || 0}${typeof post.coords?.x === 'string' ? '' : 'px'}, ${post.coords?.y || 0}${typeof post.coords?.y === 'string' ? '' : 'px'}) scale(${post.zoom || 1})`,
-                        transformOrigin: 'center center',
-                        transition: 'transform 0.3s ease-out',
+                        objectPosition: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
+                        transform: `scale(${post.zoom || 1})`,
+                        transformOrigin: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
+                        transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
@@ -132,9 +133,10 @@ const InstagramFeed = () => {
                       src={post.img}
                       alt={`Instagram post ${post.id}`}
                       style={{
-                        transform: `translate(${post.coords?.x || 0}${typeof post.coords?.x === 'string' ? '' : 'px'}, ${post.coords?.y || 0}${typeof post.coords?.y === 'string' ? '' : 'px'}) scale(${post.zoom || 1})`,
-                        transformOrigin: 'center center',
-                        transition: 'transform 0.3s ease-out',
+                        objectPosition: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
+                        transform: `scale(${post.zoom || 1})`,
+                        transformOrigin: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
+                        transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover'

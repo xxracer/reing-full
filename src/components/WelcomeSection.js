@@ -108,9 +108,10 @@ const WelcomeSection = () => {
                   width: '100%',
                   height: '100%',
                   objectFit: objectFit,
-                  transform: `translate(${coords?.x && !isNaN(parseFloat(coords.x)) ? coords.x : 0}${typeof coords?.x === 'string' ? '' : 'px'}, ${coords?.y && !isNaN(parseFloat(coords.y)) ? coords.y : 0}${typeof coords?.y === 'string' ? '' : 'px'}) scale(${zoom || 1})`,
-                  transformOrigin: 'center center',
-                  transition: 'transform 0.3s ease-out',
+                  objectPosition: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
+                  transform: `scale(${zoom || 1})`,
+                  transformOrigin: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
+                  transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
                   position: 'relative',
                   zIndex: 1,
                   pointerEvents: 'none'
@@ -146,9 +147,10 @@ const WelcomeSection = () => {
                   width: '100%',
                   height: '100%',
                   objectFit: objectFit,
-                  transform: `translate(${coords?.x && !isNaN(parseFloat(coords.x)) ? coords.x : 0}${typeof coords?.x === 'string' ? '' : 'px'}, ${coords?.y && !isNaN(parseFloat(coords.y)) ? coords.y : 0}${typeof coords?.y === 'string' ? '' : 'px'}) scale(${zoom || 1})`,
-                  transformOrigin: 'center center',
-                  transition: 'transform 0.3s ease-out',
+                  objectPosition: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
+                  transform: `scale(${zoom || 1})`,
+                  transformOrigin: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
+                  transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
                   position: 'relative',
                   zIndex: 1
                 }}

@@ -18,7 +18,7 @@ import './ProgramHero.css';
 const ProgramHero = ({ title, sectionId, defaultImage }) => {
   const [heroImageUrl, setHeroImageUrl] = useState(defaultImage);
   const [zoom, setZoom] = useState(1);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [coords, setCoords] = useState({ x: 50, y: 50 });
   const [aspectRatio, setAspectRatio] = useState(undefined); // Start undefined to let CSS default apply if not set
   const apiBaseUrl = ''; // All API calls will be proxied
 
@@ -69,9 +69,10 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              transform: `translate(${coords.x}${typeof coords.x === 'string' ? '' : 'px'}, ${coords.y}${typeof coords.y === 'string' ? '' : 'px'}) scale(${zoom})`,
-              transformOrigin: 'center center',
-              transition: 'transform 0.1s ease-out',
+              objectPosition: `${coords.x}% ${coords.y}%`,
+              transform: `scale(${zoom})`,
+              transformOrigin: `${coords.x}% ${coords.y}%`,
+              transition: 'transform 0.1s ease-out, object-position 0.1s ease-out',
               pointerEvents: 'none'
             }}
           />
@@ -83,9 +84,10 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
               width: '100%',
               height: '100%',
               objectFit: 'cover', // Ensures it covers the box
-              transform: `translate(${coords.x}${typeof coords.x === 'string' ? '' : 'px'}, ${coords.y}${typeof coords.y === 'string' ? '' : 'px'}) scale(${zoom})`,
-              transformOrigin: 'center center',
-              transition: 'transform 0.1s ease-out'
+              objectPosition: `${coords.x}% ${coords.y}%`,
+              transform: `scale(${zoom})`,
+              transformOrigin: `${coords.x}% ${coords.y}%`,
+              transition: 'transform 0.1s ease-out, object-position 0.1s ease-out'
             }}
           />
         )}

@@ -110,11 +110,23 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
     const deltaY = e.clientY - lastMousePos.current.y;
     lastMousePos.current = { x: e.clientX, y: e.clientY };
 
+    // Convert pixel delta to percentage delta (Frame width is fixed 600px)
+    // Dragging Right (Positive Delta) -> Moves image Right -> Shows Left side -> Decrease %?
+    // object-position: 0% (Left) 50% (Center) 100% (Right)
+    // If I show Left side (0%), I am looking at the left.
+    // If I drag image Right, I am "Panning" to the Left part of the image.
+    // So Delta > 0 (Right Drag) => Decrease %.
+    const frameWidth = 600;
+    const frameHeight = boxSize.height || (600 * (9 / 16)); // Approximation
+
+    const percentDeltaX = (deltaX / frameWidth) * 100;
+    const percentDeltaY = (deltaY / frameHeight) * 100;
+
     setPosition(prev => ({
-      x: prev.x + deltaX,
-      y: prev.y + deltaY
+      x: Math.max(0, Math.min(100, prev.x - percentDeltaX)), // Clamp 0-100, Invert direction for natural pan
+      y: Math.max(0, Math.min(100, prev.y - percentDeltaY))
     }));
-  }, []);
+  }, [boxSize]);
 
   const handleMouseUp = React.useCallback(() => {
     isDragging.current = false;
@@ -366,7 +378,8 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                   width: '100%',
                   height: '100%',
                   objectFit: objectFit,
-                  transform: `translate(${position.x}%, ${position.y}%) scale(${zoom})`,
+                  objectPosition: `${position.x}% ${position.y}%`,
+                  transform: `scale(${zoom})`,
                   transformOrigin: `${position.x}% ${position.y}%`,
                   position: 'relative',
                   zIndex: 1
@@ -394,8 +407,9 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                transform: `translate(${position.x}%, ${position.y}%) scale(${zoom})`,
-                transformOrigin: 'center center',
+                objectPosition: `${position.x}% ${position.y}%`,
+                transform: `scale(${zoom})`,
+                transformOrigin: `${position.x}% ${position.y}%`,
               }}
             />
             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', pointerEvents: 'none' }}></div>
@@ -417,7 +431,8 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                 width: '100%',
                 height: '100%',
                 objectFit: objectFit,
-                transform: `translate(${position.x}%, ${position.y}%) scale(${zoom})`,
+                objectPosition: `${position.x}% ${position.y}%`,
+                transform: `scale(${zoom})`,
                 transformOrigin: `${position.x}% ${position.y}%`,
               }}
             />
@@ -537,7 +552,7 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                 maxConstraints={[2000, 2000]}
                 axis="both"
                 style={{
-                  transform: `translate(${position.x}px, ${position.y}px)`, // Move the WHOLE box (image + handles)
+                  // transform: `translate(${position.x}px, ${position.y}px)`, // REMOVED PIXEL TRANSFORM
                   position: 'relative' // Ensure transform works
                 }}
               >
@@ -562,7 +577,8 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'fill',
+                        objectFit: 'cover',
+                        objectPosition: `${position.x}% ${position.y}%`,
                         pointerEvents: 'none',
                         display: 'block'
                       }}
@@ -599,7 +615,8 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'fill',
+                        objectFit: 'cover',
+                        objectPosition: `${position.x}% ${position.y}%`,
                         pointerEvents: 'none',
                         display: 'block'
                       }}

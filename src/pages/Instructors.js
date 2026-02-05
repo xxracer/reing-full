@@ -79,7 +79,7 @@ const Instructors = () => {
       {instructors.map((instructor, index) => {
         let imageUrl = instructor.image;
         let zoom = 1;
-        let coords = { x: 0, y: 0 };
+        let coords = { x: 50, y: 50 };
         let aspectRatio = '4 / 5'; // Default for instructors usually vertical, but can be overridden
         try {
           const parsed = JSON.parse(instructor.image);
@@ -101,8 +101,9 @@ const Instructors = () => {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  transform: `translate(${coords.x}${typeof coords.x === 'string' ? '' : 'px'}, ${coords.y}${typeof coords.y === 'string' ? '' : 'px'}) scale(${zoom})`,
-                  transformOrigin: 'center center',
+                  objectPosition: `${coords.x}% ${coords.y}%`,
+                  transform: `scale(${zoom})`,
+                  transformOrigin: `${coords.x}% ${coords.y}%`,
                   transition: 'transform 0.3s ease-out',
                   position: 'relative',
                   zIndex: 1

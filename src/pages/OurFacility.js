@@ -2,8 +2,8 @@ import React from 'react';
 import FAQ from '../components/FAQ';
 
 const OurFacilityPage = () => {
-  const [image1, setImage1] = React.useState({ url: 'https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png', coords: { x: 0, y: 0 }, zoom: 1 });
-  const [image2, setImage2] = React.useState({ url: 'https://static.wixstatic.com/media/c5947c_b40f2d46adab45ae967e41fd1868925b~mv2.png', coords: { x: 0, y: 0 }, zoom: 1 });
+  const [image1, setImage1] = React.useState({ url: 'https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png', coords: { x: 50, y: 50 }, zoom: 1 });
+  const [image2, setImage2] = React.useState({ url: 'https://static.wixstatic.com/media/c5947c_b40f2d46adab45ae967e41fd1868925b~mv2.png', coords: { x: 50, y: 50 }, zoom: 1 });
   const apiBaseUrl = '';
 
   React.useEffect(() => {
@@ -16,7 +16,7 @@ const OurFacilityPage = () => {
             const content = JSON.parse(data.content_value);
             setter({
               url: content.url || data.content_value,
-              coords: content.coords || { x: 0, y: 0 },
+              coords: content.coords || { x: 50, y: 50 },
               zoom: content.zoom || 1
             });
           } catch (e) {
@@ -52,8 +52,9 @@ const OurFacilityPage = () => {
       width: '100%',
       height: '100%',
       objectFit: 'cover',
-      transform: `translate(${coords?.x || 0}${typeof coords?.x === 'string' ? '' : 'px'}, ${coords?.y || 0}${typeof coords?.y === 'string' ? '' : 'px'}) scale(${zoom || 1})`,
-      transformOrigin: 'center center',
+      objectPosition: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
+      transform: `scale(${zoom || 1})`,
+      transformOrigin: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
       pointerEvents: 'none'
     };
 

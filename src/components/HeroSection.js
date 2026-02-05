@@ -4,7 +4,7 @@ import axios from 'axios';
 import './HeroSection.css';
 
 const HeroSection = ({ videoOpacity }) => {
-  const [heroImage, setHeroImage] = useState({ url: null, position: 'center', coords: { x: 0, y: 0 } });
+  const [heroImage, setHeroImage] = useState({ url: null, position: 'center', coords: { x: 50, y: 50 } });
   const [heroVideoUrl, setHeroVideoUrl] = useState(null); // Fix: Start with null to prevent "ghost" video
   const [isLoading, setIsLoading] = useState(true);
   const apiBaseUrl = ''; // All API calls will be proxied
@@ -18,7 +18,7 @@ const HeroSection = ({ videoOpacity }) => {
           setHeroImage({
             url: content.url,
             position: content.position || 'center',
-            coords: content.coords || { x: 0, y: 0 }
+            coords: content.coords || { x: 50, y: 50 }
           });
         }
 
@@ -95,8 +95,9 @@ const HeroSection = ({ videoOpacity }) => {
               playsInline
               className="hero-image-bg" // Keep same class for positioning
               style={{
-                objectPosition: heroImage.position,
-                transform: `translate(${heroImage.coords.x}px, ${heroImage.coords.y}px)`,
+                objectPosition: `${heroImage.coords.x}% ${heroImage.coords.y}%`,
+                transform: `scale(${heroImage.zoom || 1})`,
+                transformOrigin: `${heroImage.coords.x}% ${heroImage.coords.y}%`,
                 objectFit: 'cover',
                 width: '100%',
                 height: '100%',
@@ -109,8 +110,9 @@ const HeroSection = ({ videoOpacity }) => {
               alt="Jiu Jitsu Academy"
               className="hero-image-bg"
               style={{
-                objectPosition: heroImage.position,
-                transform: `translate(${heroImage.coords.x}px, ${heroImage.coords.y}px)`
+                objectPosition: `${heroImage.coords.x}% ${heroImage.coords.y}%`,
+                transform: `scale(${heroImage.zoom || 1})`,
+                transformOrigin: `${heroImage.coords.x}% ${heroImage.coords.y}%`
               }}
             />
           )}
