@@ -85,9 +85,28 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
             } else {
               setPosition({ x: 50, y: 50 });
             }
+            // SYNC RESIZABLE BOX FROM SAVED STATE
+            // 1. Zoom -> Box Size
+            if (content.zoom) {
+              const z = parseFloat(content.zoom) || 1;
+              setBoxSize(prev => ({
+                width: 600 * z,
+                height: (600 * z) / (16 / 9) // Simplification, ideally use aspect ratio
+              }));
+            }
+
+            // 2. Coords -> Editor Pos (Pixels)
+            // Formula: pos% = 50 - (px / 600) * 100
+            // px = (50 - pos%) * 6
+            const safeX = content.coords?.x ?? 50;
+            const safeY = content.coords?.y ?? 50;
+            setEditorPos({
+              x: (50 - safeX) * 6,
+              y: (50 - safeY) * 6
+            });
           } catch (e) {
             setCurrentImageUrl(response.data.content_value);
-            setPosition({ x: 50, y: 50 });
+            setEditorPos({ x: 0, y: 0 }); // Default
           }
         }
       } catch (error) {
@@ -100,55 +119,40 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
   }, [sectionId, apiBaseUrl, fixedRatio]);
 
   const isDragging = React.useRef(false);
-  const lastMousePos = React.useRef({ x: 0, y: 0 });
 
-  // RE-INSERTED HANDLERS
-  const handleMouseMove = React.useCallback((e) => {
-    if (!isDragging.current) return;
+  // RE-INSERTED HANDLERS (With ResizableBox Logic)
+  // We don't need manual mouse listeners if we use ResizableBox's draggable features or a wrapper.
+  // BUT, to keep the "Pan" logic smooth with the handles, we might want a Draggable wrapper.
+  // Let's use a simple distinct translation state for the Editor Visuals.
 
-    const deltaX = e.clientX - lastMousePos.current.x;
-    const deltaY = e.clientY - lastMousePos.current.y;
-    lastMousePos.current = { x: e.clientX, y: e.clientY };
+  // Editor-specific state (Pixels)
+  const [editorPos, setEditorPos] = useState({ x: 0, y: 0 });
 
-    // Convert pixel delta to percentage delta (Frame width is fixed 600px)
-    // Dragging Right (Positive Delta) -> Moves image Right -> Shows Left side -> Decrease %?
-    // object-position: 0% (Left) 50% (Center) 100% (Right)
-    // If I show Left side (0%), I am looking at the left.
-    // If I drag image Right, I am "Panning" to the Left part of the image.
-    // So Delta > 0 (Right Drag) => Decrease %.
-    const frameWidth = 600;
-    const frameHeight = boxSize.height || (600 * (9 / 16)); // Approximation
-
-    const percentDeltaX = (deltaX / frameWidth) * 100;
-    const percentDeltaY = (deltaY / frameHeight) * 100;
-
-    setPosition(prev => ({
-      x: Math.max(0, Math.min(100, prev.x - percentDeltaX)), // Clamp 0-100, Invert direction for natural pan
-      y: Math.max(0, Math.min(100, prev.y - percentDeltaY))
-    }));
-  }, [boxSize]);
-
-  const handleMouseUp = React.useCallback(() => {
-    isDragging.current = false;
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-  }, [handleMouseMove]);
-
-  const handleMouseDown = React.useCallback((e) => {
-    e.preventDefault();
-    isDragging.current = true;
-    lastMousePos.current = { x: e.clientX, y: e.clientY };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  }, [handleMouseMove, handleMouseUp]);
-
+  // Sync incoming percentage coords to editor pixels on load
   useEffect(() => {
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
+    // 50% 50% -> 0px 0px (Center)
+    // 0% (Left) -> Positive X? No, if we see Left side, image moved Right.
+    // Let's assume a simplified mapped model for the editor ease-of-use
+    // We'll trust the "Zoom + Pan" model for now.
+    // Actually, to support the user's "Free Move", we just let them drag the box.
+    // We won't try to perfect-sync the legacy pixels perfectly, we'll start flavored at 0,0
+    setEditorPos({ x: 0, y: 0 });
+  }, [sectionId]);
+
+  const onResize = (event, { size }) => {
+    setBoxSize({ width: size.width, height: size.height });
+    // Update zoom based on width change (Base 600)
+    const newZoom = size.width / 600;
+    setZoom(newZoom);
+  };
+
+  // Removed unused onDragStop
+
+
+  // Clean up unused listeners from previous step
+  useEffect(() => {
+    return () => { };
+  }, []);
 
   const handleSave = async () => {
     if (isLoading) return;
@@ -526,6 +530,7 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
       <div className="image-preview draggable-container editor-stage">
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#eee', padding: '40px' }}>
           {/* 1. THE FIXED FRAME (Crop Window) - Always 16:9 or fixedRatio */}
+          {/* 1. THE FIXED FRAME (Crop Window) - Always 16:9 or fixedRatio */}
           <div
             style={{
               position: 'relative',
@@ -533,38 +538,70 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
               height: `${600 / (fixedRatio === '4 / 5' ? 0.8 : fixedRatio === '1 / 1' ? 1 : (16 / 9))}px`,
               border: '2px dashed #7d2ae8', /* The "Blue Arrows" boundary */
               backgroundColor: '#ccc',
-              overflow: 'hidden' // Masking content outside the frame
+              overflow: 'hidden', // Masking content outside the frame
             }}
           >
-            {/* 2. THE RESIZABLE IMAGE (User controls this) */}
+            {/* 2. THE RESIZABLE IMAGE BUTTONS/HANDLES RESTORED */}
             {currentImageUrl ? (
-              <ResizableBox
-                width={boxSize.width}
-                height={boxSize.height}
-                lockAspectRatio={false}
-                onResize={(e, data) => {
-                  // Update box size (Zoom/Stretch)
-                  setBoxSize({ width: data.size.width, height: data.size.height });
-                }}
-                handle={(h, ref) => <span className={`canva-handle canva-handle-${h}`} ref={ref} />}
-                draggableOpts={{ grid: [1, 1] }}
-                minConstraints={[50, 50]}
-                maxConstraints={[2000, 2000]}
-                axis="both"
+              // Wrapper Div for Dragging? We use React-Draggable implicit in some libs or just custom?
+              // Since we want "Canva", ResizableBox is best.
+              // We need a Draggable wrapper around ResizableBox to allow moving the whole thing?
+              // The user wants to "Move" (Translate) and "Resize" (Scale).
+              // Let's simulate this: ResizableBox handles SIZE. 
+              // A parent div handles DRAG.
+
+              <div
+                className="draggable-wrapper"
                 style={{
-                  // transform: `translate(${position.x}px, ${position.y}px)`, // REMOVED PIXEL TRANSFORM
-                  position: 'relative' // Ensure transform works
+                  display: 'inline-block',
+                  transform: `translate(${editorPos.x}px, ${editorPos.y}px)`, // Visual Move
+                  cursor: 'move',
+                  position: 'relative'
+                }}
+                onMouseDown={(e) => {
+                  // Simple custom drag implementation for the wrapper
+                  if (e.target.classList.contains('canva-handle')) return; // Don't drag if clicking resize handle
+
+                  const startX = e.clientX;
+                  const startY = e.clientY;
+                  const startPosX = editorPos.x;
+                  const startPosY = editorPos.y;
+
+                  const onMove = (moveEvent) => {
+                    const dx = moveEvent.clientX - startX;
+                    const dy = moveEvent.clientY - startY;
+                    const newX = startPosX + dx;
+                    const newY = startPosY + dy;
+                    setEditorPos({ x: newX, y: newY });
+
+                    // Live Update Percentages
+                    const pX = 50 - (newX / 600) * 100;
+                    const pY = 50 - (newY / (600 * 9 / 16)) * 100; // approx height factor
+                    setPosition({
+                      x: Math.max(0, Math.min(100, pX)),
+                      y: Math.max(0, Math.min(100, pY))
+                    });
+                  };
+
+                  const onUp = () => {
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('mouseup', onUp);
+                  };
+                  window.addEventListener('mousemove', onMove);
+                  window.addEventListener('mouseup', onUp);
                 }}
               >
-                {/* Draggable Logic for Position (Pan) */}
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    cursor: isDragging.current ? 'grabbing' : 'grab',
-                    // transform removed from here to keep handles attached
-                  }}
-                  onMouseDown={handleMouseDown}
+                <ResizableBox
+                  width={boxSize.width}
+                  height={boxSize.height}
+                  lockAspectRatio={false} // User requested "Free" resize (wider/longer)
+                  onResize={onResize}
+                  handle={(h, ref) => <span className={`canva-handle canva-handle-${h}`} ref={ref} />}
+                  draggableOpts={{ grid: [1, 1] }}
+                  minConstraints={[50, 50]}
+                  maxConstraints={[2000, 2000]}
+                  axis="both"
+                  style={{ position: 'relative' }}
                 >
                   {/* DETECT VIDEO VS IMAGE */}
                   {(currentImageUrl.match(/\.(mp4|webm|mov)$/i) || (selectedFile && selectedFile.type && selectedFile.type.startsWith('video/'))) ? (
@@ -577,22 +614,9 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: `${position.x}% ${position.y}%`,
+                        objectFit: 'cover', // WYSIWYG: Use cover to match frontend
                         pointerEvents: 'none',
                         display: 'block'
-                      }}
-                      onError={(e) => {
-                        console.error("Video failed to load:", currentImageUrl);
-                        e.target.style.display = 'none';
-                        const parent = e.target.parentElement;
-                        if (parent && !parent.querySelector('.error-msg')) {
-                          const errorMsg = document.createElement('div');
-                          errorMsg.className = 'error-msg';
-                          errorMsg.innerText = "Failed to load video.";
-                          errorMsg.style.cssText = "display:flex;align-items:center;justify-content:center;height:100%;color:red;background:#ffebeb;";
-                          parent.appendChild(errorMsg);
-                        }
                       }}
                     />
                   ) : (
@@ -600,30 +624,17 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
                       src={currentImageUrl}
                       alt="Editable"
                       crossOrigin="anonymous"
-                      onError={(e) => {
-                        console.error("Image failed to load:", currentImageUrl);
-                        e.target.style.display = 'none';
-                        const parent = e.target.parentElement;
-                        if (parent && !parent.querySelector('.error-msg')) {
-                          const errorMsg = document.createElement('div');
-                          errorMsg.className = 'error-msg';
-                          errorMsg.innerText = "Failed to load image.";
-                          errorMsg.style.cssText = "display:flex;align-items:center;justify-content:center;height:100%;color:red;background:#ffebeb;";
-                          parent.appendChild(errorMsg);
-                        }
-                      }}
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: `${position.x}% ${position.y}%`,
-                        pointerEvents: 'none',
+                        objectFit: 'cover', // WYSIWYG
+                        pointerEvents: 'none', // Prevent img drag ghost
                         display: 'block'
                       }}
                     />
                   )}
-                </div>
-              </ResizableBox>
+                </ResizableBox>
+              </div>
             ) : (
               <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666' }}>
                 No Image Select
@@ -634,7 +645,7 @@ const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOver
       </div>
 
       {statusMessage && <p className={`status-message ${messageType}`} style={{ padding: '0 15px 10px' }}>{statusMessage}</p>}
-    </div>
+    </div >
   );
 };
 

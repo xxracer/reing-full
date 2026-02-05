@@ -34,6 +34,14 @@ const ManageSchedule = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleTimeChange = (e) => {
+        let value = e.target.value;
+        // Auto-format 3 or 4 digits to Time (e.g. 900 -> 9:00, 1000 -> 10:00)
+        // Uses word boundaries to avoid affecting parts of other words
+        value = value.replace(/\b(\d{1,2})(\d{2})\b/g, '$1:$2');
+        setFormData({ ...formData, [e.target.name]: value });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -94,7 +102,7 @@ const ManageSchedule = () => {
                             <option key={d} value={d}>{d}</option>
                         ))}
                     </select>
-                    <input name="time_range" placeholder="Time Range (e.g. 10:00 AM - 11:00 AM)" value={formData.time_range} onChange={handleChange} required style={{ padding: '8px' }} />
+                    <input name="time_range" placeholder="Time Range (e.g. 10:00 AM - 11:00 AM)" value={formData.time_range} onChange={handleTimeChange} required style={{ padding: '8px' }} />
                     <input name="class_name" placeholder="Class Name" value={formData.class_name} onChange={handleChange} required style={{ padding: '8px' }} />
                     <select name="category" value={formData.category} onChange={handleChange} style={{ padding: '8px' }}>
                         <option value="adults">Adults</option>
