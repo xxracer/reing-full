@@ -109,12 +109,33 @@ const ProgramContentEditor = ({ programId, title }) => {
                     />
                 </div>
 
-                <div style={{ marginBottom: '30px' }}>
+                {/* Legacy/Optional second internal image */}
+                {/* <div style={{ marginBottom: '30px' }}>
                     <ImageEditor
                         sectionId={`program_${programId}_internal_2`}
                         title="Detail Image 2 (Bottom)"
                         showPositionControl={true}
                     />
+                </div> */}
+            </div>
+
+            <div style={{ marginBottom: '40px', borderTop: '1px solid #eee', paddingTop: '30px' }}>
+                <h3>Carousel / Grid Images (5 Items)</h3>
+                <p style={{ fontSize: '0.9em', color: '#666', marginBottom: '20px' }}>
+                    These 5 images appear in the grid at the bottom of the page.
+                </p>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+                    {[1, 2, 3, 4, 5].map(num => (
+                        <div key={num}>
+                            <ImageEditor
+                                sectionId={`program_${programId}_carousel_${num}`}
+                                title={`Grid Image ${num}`}
+                                showPositionControl={true}
+                                aspectRatio={1} // Force Square (1:1) for grid items
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div >

@@ -115,8 +115,8 @@ const TrainingSchedule = () => {
                         style={{ height: '80px', width: 'auto', marginBottom: '10px' }}
                         crossOrigin="anonymous"
                     />
-                    <h1 style={{ marginBottom: '10px', marginTop: 0 }}>TRAINING SCHEDULE</h1>
-                    <p className="schedule-intro" style={{ marginBottom: '0' }}>
+                    <h1 style={{ marginBottom: '10px', marginTop: 0, color: '#FFFFFF' }}>TRAINING SCHEDULE</h1>
+                    <p className="schedule-intro" style={{ marginBottom: '0', color: '#FFFFFF' }}>
                         Below is the latest weekly schedule for Reign Jiu Jitsu in Katy.
                     </p>
                 </div>

@@ -44,16 +44,61 @@ const PrivateLessons = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_private-lessons_data`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
-          setContent(prev => ({
-            ...prev,
-            ...parsedData,
-            carouselImages: parsedData.carouselImages || prev.carouselImages
-          }));
+          setContent(prev => ({ ...prev, ...parsedData }));
         }
       } catch (error) { }
     };
 
+    const fetchDynamicImages = async () => {
+      try {
+        const carouselPromises = [1, 2, 3, 4, 5].map(num =>
+          axios.get(`${apiBaseUrl}/api/content/program_private-lessons_carousel_${num}`)
+        );
+        // Private lessons internal_1 and internal_2 are already handled, but let's conform to the pattern if we want consistency
+        // Or just leave them since they were separate. Actually, I should update carousel logic here.
+
+        const internalPromise1 = axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_1`);
+        const internalPromise2 = axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_2`);
+
+        const [r1, r2, r3, r4, r5, rInt1, rInt2] = await Promise.allSettled([...carouselPromises, internalPromise1, internalPromise2]);
+
+        const newCarousel = [];
+        [r1, r2, r3, r4, r5].forEach((res, index) => {
+          if (res.status === 'fulfilled' && res.value.data && res.value.data.content_value) {
+            let src = res.value.data.content_value;
+            try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+            newCarousel[index] = src;
+          }
+        });
+
+        let newImage1 = null;
+        if (rInt1.status === 'fulfilled' && rInt1.value.data && rInt1.value.data.content_value) {
+          let src = rInt1.value.data.content_value;
+          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+          newImage1 = src;
+        }
+
+        let newImage2 = null;
+        if (rInt2.status === 'fulfilled' && rInt2.value.data && rInt2.value.data.content_value) {
+          let src = rInt2.value.data.content_value;
+          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+          newImage2 = src;
+        }
+
+        setContent(prev => {
+          const updated = { ...prev };
+          if (newCarousel.some(img => img)) {
+            updated.carouselImages = updated.carouselImages.map((old, idx) => newCarousel[idx] || old);
+          }
+          if (newImage1) updated.image1 = newImage1;
+          if (newImage2) updated.image2 = newImage2;
+          return updated;
+        });
+      } catch (e) { }
+    };
+
     fetchContent();
+    fetchDynamicImages();
   }, []);
 
   const faqSchema = {

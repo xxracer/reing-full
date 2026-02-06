@@ -44,19 +44,70 @@ const KidsProgram = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_kids_data`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
-          // Merge parsed data but ensure carouselImages exists if not provided
           setContent(prev => ({
             ...prev,
             ...parsedData,
-            carouselImages: parsedData.carouselImages || prev.carouselImages
+            // Only use parsed carousel if explicitly set, otherwise wait for dynamic fetch
+            // or keep existing defaults if dynamic fetch fails.
           }));
         }
       } catch (error) {
-        // Use defaults if fetch fails
+        // Use defaults
       }
     };
-    // Fetch Images logic kept for legacy but carouselImages takes precedence for the new layout
+
+    const fetchDynamicImages = async () => {
+      try {
+        const carouselPromises = [1, 2, 3, 4, 5].map(num =>
+          axios.get(`${apiBaseUrl}/api/content/program_kids_carousel_${num}`)
+        );
+
+        // Also fetch internal image 1 if dynamic
+        const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_kids_internal_1`);
+
+        const [r1, r2, r3, r4, r5, rInt1] = await Promise.allSettled([...carouselPromises, internalPromise]);
+
+        // Process Carousel
+        const newCarousel = [];
+        [r1, r2, r3, r4, r5].forEach((res, index) => {
+          if (res.status === 'fulfilled' && res.value.data && res.value.data.content_value) {
+            let src = res.value.data.content_value;
+            try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+            newCarousel[index] = src;
+          }
+        });
+
+        // Process Internal Image
+        let newImage1 = null;
+        if (rInt1.status === 'fulfilled' && rInt1.value.data && rInt1.value.data.content_value) {
+          let src = rInt1.value.data.content_value;
+          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+          newImage1 = src;
+        }
+
+        setContent(prev => {
+          const updated = { ...prev };
+
+          // Update carousel if we found any new images
+          if (newCarousel.some(img => img)) {
+            updated.carouselImages = updated.carouselImages.map((old, idx) => newCarousel[idx] || old);
+          }
+
+          // Update internal image if found
+          if (newImage1) {
+            updated.image1 = newImage1;
+          }
+
+          return updated;
+        });
+
+      } catch (e) {
+        console.error("Error fetching dynamic images", e);
+      }
+    };
+
     fetchContent();
+    fetchDynamicImages();
   }, []);
 
   const faqSchema = {
