@@ -132,7 +132,7 @@ const ProgramContentEditor = ({ programId, title }) => {
                                 sectionId={`program_${programId}_carousel_${num}`}
                                 title={`Grid Image ${num}`}
                                 showPositionControl={true}
-                                aspectRatio={1} // Force Square (1:1) for grid items
+                                aspectRatio="1 / 1" // Force Square (1:1) for grid items
                             />
                         </div>
                     ))}

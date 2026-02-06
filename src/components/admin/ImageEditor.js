@@ -3,9 +3,13 @@ import axios from 'axios';
 import ImageLibrary from './ImageLibrary';
 import './ImageEditor.css';
 
-const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOverride }) => {
+const ImageEditor = ({ sectionId, title, showPositionControl = false, onSaveOverride, aspectRatio: propsAspectRatio }) => {
   // Determine if this section requires a fixed aspect ratio context
   const getFixedRatio = (id) => {
+    if (propsAspectRatio) {
+      // Handle number input (e.g. 1 becomes "1 / 1") or return string as is
+      return typeof propsAspectRatio === 'number' ? `${propsAspectRatio} / 1` : propsAspectRatio;
+    }
     if (id.includes('instructor')) return '4 / 5'; // Portrait for instructors
     if (id.includes('logo')) return '1 / 1';       // Square for logos
     // Default to 16:9 for everything else (Programs, Welcome, Homepage, etc.)
