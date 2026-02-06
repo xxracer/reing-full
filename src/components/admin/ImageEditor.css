@@ -9,6 +9,211 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* SIMPLE EDITOR CSS */
+.simple-editor-container {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.editor-header h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+}
+
+.editor-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-upload {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: #e0e0e0;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.btn-upload:hover {
+    background: #d0d0d0;
+}
+
+.btn-save {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-save:hover {
+    background: #45a049;
+}
+
+.btn-save:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-library {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-library:hover {
+    background: #1976D2;
+}
+
+.btn-remove {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-remove:hover {
+    background: #d32f2f;
+}
+
+.btn-library-small {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.editor-viewport-wrapper {
+    background: #eee;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editor-viewport {
+    background: #ccc;
+    position: relative;
+    cursor: grab;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.editor-viewport:active {
+    cursor: grabbing;
+}
+
+.empty-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.drag-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.editor-controls {
+    padding: 15px;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.control-group label {
+    font-size: 12px;
+    font-weight: 600;
+    width: 40px;
+}
+
+.control-group input[type="range"] {
+    flex-grow: 1;
+}
+
+.link-input {
+    margin-top: 10px;
+}
+
+.link-input input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.status-msg {
+    padding: 5px 15px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.status-msg.success {
+    background: #dff0d8;
+    color: #3c763d;
+}
+
+.status-msg.error {
+    background: #f2dede;
+    color: #a94442;
+}
+
+.status-msg.info {
+    background: #d9edf7;
+    color: #31708f;
+}
+
 .editor-toolbar {
     display: flex;
     align-items: center;
