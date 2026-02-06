@@ -131,10 +131,11 @@
   /* Push behind */
   transform: translateZ(-1px);
 
-  /* Animated Gradient */
-  background: linear-gradient(45deg, var(--accent-gold), var(--accent-red), var(--accent-gold));
-  background-size: 200% 200%;
-  animation: borderRotate 4s ease infinite;
+  /* Animated Gradient REMOVED */
+  background: #f0f0f0;
+  /* Simple clean border */
+  /* background-size: 200% 200%; REMOVED */
+  /* animation: borderRotate 4s ease infinite; REMOVED */
 }
 
 .dropdown-menu.open {
@@ -180,12 +181,15 @@
   border-radius: 10px;
   /* Slightly larger radius */
 
-  /* Gradient Background */
-  background: linear-gradient(45deg, var(--accent-gold), var(--accent-red), var(--accent-gold));
-  background-size: 200% 200%;
+  /* Gradient Background REMOVED */
+  /* background: linear-gradient(45deg, var(--accent-gold), var(--accent-red), var(--accent-gold)); */
+  /* background-size: 200% 200%; */
 
-  /* Animation */
-  animation: borderRotate 4s ease infinite;
+  /* Animation REMOVED */
+  /* animation: borderRotate 4s ease infinite; */
+
+  /* Just a solid highlight or nothing */
+  background: transparent;
 
   /* Place behind the white box */
   transform: translateZ(-1px);

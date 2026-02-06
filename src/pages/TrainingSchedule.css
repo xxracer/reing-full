@@ -46,14 +46,14 @@
 
 /* Card Styling: Dark Background with Gradient Glow/Detail INSIDE */
 .schedule-day {
-    /* Dark Card background */
-    background-color: #1a1a1a;
-    color: var(--text-inverse);
+    /* Light Card background */
+    background-color: var(--background-primary);
+    color: var(--text-charcoal);
     border-radius: 12px;
     position: relative;
     overflow: hidden;
     /* Contains the inner glow */
-    border: 1px solid #333;
+    border: 1px solid var(--border-light-gray);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -72,7 +72,8 @@
 
 .schedule-day h2 {
     /* Gradient Background for Header */
-    background: linear-gradient(135deg, var(--accent-gold-dark), var(--accent-gold));
+    /* Gradient Background for Header */
+    background: #333333;
     color: #fff;
     padding: 14px 10px;
     font-size: 18px;
@@ -89,12 +90,13 @@
     flex-grow: 1;
 
     /* Optional: Very subtle gradient overlay on the dark background */
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
+    /* Simple background */
+    background: transparent;
 }
 
 .schedule-session {
     padding: 12px 15px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border-light-gray);
     position: relative;
     z-index: 2;
 }
@@ -112,11 +114,11 @@
     font-size: 14px;
 }
 
-/* Title: White */
+/* Title: Dark */
 .schedule-session .title {
     margin: 0;
     line-height: 1.3;
-    color: #fff;
+    color: var(--text-charcoal);
     font-weight: 600;
     font-size: 15px;
 }

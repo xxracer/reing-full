@@ -42,9 +42,15 @@
 }
 
 .program-hero-title {
-  font-size: 3rem;
-  font-weight: bold;
+  font-family: var(--font-heading-primary);
+  font-size: 4rem;
+  /* Increased to match bold look of Home Hero, closer to 64px */
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  /* Often part of the look for Bebas Neue */
   position: relative;
   z-index: 2;
-  /* Topmost layer */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  /* Optional readability improvement */
 }

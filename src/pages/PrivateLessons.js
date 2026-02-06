@@ -3,6 +3,7 @@ import axios from 'axios';
 import './ProgramPage.css';
 import FAQ from '../components/FAQ';
 import ProgramHero from '../components/ProgramHero';
+import ImageCarousel from '../components/ImageCarousel';
 
 const PrivateLessons = () => {
   const [content, setContent] = useState({
@@ -15,8 +16,14 @@ const PrivateLessons = () => {
       "- Ideal for self-defense or competition prep",
       "- Get the boost you need to succeed"
     ],
-    image1: "https://static.wixstatic.com/media/c5947c_dfc350dae9d242e6b35ea9ab6499341c~mv2.png",
-    image2: "",
+    image1: "https://static.wixstatic.com/media/c5947c_dfc350dae9d242e6b35ea9ab6499341c~mv2.png", // Body Image
+    carouselImages: [
+      "https://static.wixstatic.com/media/c5947c_dfc350dae9d242e6b35ea9ab6499341c~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_dfc350dae9d242e6b35ea9ab6499341c~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_dfc350dae9d242e6b35ea9ab6499341c~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_dfc350dae9d242e6b35ea9ab6499341c~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_dfc350dae9d242e6b35ea9ab6499341c~mv2.png"
+    ],
     faqs: [
       {
         question: "Can I share a Private Lesson with a friend?",
@@ -37,34 +44,16 @@ const PrivateLessons = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_private-lessons_data`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
-          setContent(prev => ({ ...prev, ...parsedData }));
+          setContent(prev => ({
+            ...prev,
+            ...parsedData,
+            carouselImages: parsedData.carouselImages || prev.carouselImages
+          }));
         }
       } catch (error) { }
     };
 
-    const fetchImages = async () => {
-      try {
-        const [img1Res, img2Res] = await Promise.all([
-          axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_1`),
-          axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_2`)
-        ]);
-
-        if (img1Res.data && img1Res.data.content_value) {
-          let src = img1Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image1: src }));
-        }
-
-        if (img2Res.data && img2Res.data.content_value) {
-          let src = img2Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image2: src }));
-        }
-      } catch (e) { }
-    };
-
     fetchContent();
-    fetchImages();
   }, []);
 
   const faqSchema = {
@@ -92,32 +81,38 @@ const PrivateLessons = () => {
         defaultImage="https://static.wixstatic.com/media/c5947c_32e7f546ef5043418e7e8229d64bb099~mv2.png"
       />
 
-      <section className="program-intro">
-        <p>{content.introText}</p>
-      </section>
+      <div className="program-content-container">
 
-      <section className="program-details-section">
-        <div className="program-details-text">
-          <h2>{content.detailsTitle}</h2>
-          <p>{content.detailsText}</p>
-          <ul>
-            {content.detailsList.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="program-details-image">
-          {content.image1 && <img src={content.image1} alt="Private Lesson Detail" />}
-        </div>
-      </section>
+        <section className="program-top-intro">
+          <p>{content.introText}</p>
+        </section>
 
-      {content.image2 && (
-        <div style={{ 'textAlign': 'center', 'marginBottom': '60px' }}>
-          <img src={content.image2} alt="Private Lesson Activity" />
-        </div>
-      )}
+        <section className="program-main-split">
+          <div className="text-side">
+            <div className="program-details-text-only">
+              <h2>{content.detailsTitle}</h2>
+              <p>{content.detailsText}</p>
+              <ul>
+                {content.detailsList.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-      <FAQ faqData={content.faqs} title="Private Lessons FAQs" />
+          <div className="image-side">
+            <div className="program-body-image-wrapper">
+              <img src={content.image1} alt="Private Lesson Main" />
+            </div>
+          </div>
+        </section>
+
+        <section className="program-carousel-section">
+          <ImageCarousel images={content.carouselImages} />
+        </section>
+
+        <FAQ faqData={content.faqs} title="Private Lessons FAQs" />
+      </div>
     </div>
   );
 };

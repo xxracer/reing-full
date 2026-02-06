@@ -44,9 +44,11 @@
   bottom: -3px;
   border-radius: 19px;
   /* Slightly larger than card */
-  background: linear-gradient(45deg, var(--accent-gold), var(--accent-red), var(--accent-gold));
-  background-size: 200% 200%;
-  animation: borderRotate 4s ease infinite;
+  /* Gradient removed for cleaner look */
+  background: #e0e0e0;
+  /* Solid light gray */
+  /* background-size: 200% 200%; REMOVED */
+  /* animation: borderRotate 4s ease infinite; REMOVED */
 
   /* Push behind */
   transform: translateZ(-1px);

@@ -3,6 +3,7 @@ import axios from 'axios';
 import './ProgramPage.css';
 import FAQ from '../components/FAQ';
 import ProgramHero from '../components/ProgramHero';
+import ImageCarousel from '../components/ImageCarousel';
 
 const HomeschoolProgram = () => {
   const [content, setContent] = useState({
@@ -15,8 +16,14 @@ const HomeschoolProgram = () => {
       "- Learn the values of discipline and perseverance",
       "- Perfect for daytime martial arts training"
     ],
-    image1: "https://static.wixstatic.com/media/c5947c_b0565367f7d345408d6f1e8853fb5f2f~mv2.png",
-    image2: "https://static.wixstatic.com/media/c5947c_d824ca9346fc4e299f2d533a72eae649~mv2.png",
+    image1: "https://static.wixstatic.com/media/c5947c_b0565367f7d345408d6f1e8853fb5f2f~mv2.png", // Body Image
+    carouselImages: [
+      "https://static.wixstatic.com/media/c5947c_d824ca9346fc4e299f2d533a72eae649~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_b0565367f7d345408d6f1e8853fb5f2f~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_d824ca9346fc4e299f2d533a72eae649~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_b0565367f7d345408d6f1e8853fb5f2f~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_d824ca9346fc4e299f2d533a72eae649~mv2.png"
+    ],
     faqs: [
       {
         question: "What are the qualifications of the instructor for the Homeschool program?",
@@ -41,34 +48,15 @@ const HomeschoolProgram = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_homeschool_data`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
-          setContent(prev => ({ ...prev, ...parsedData }));
+          setContent(prev => ({
+            ...prev,
+            ...parsedData,
+            carouselImages: parsedData.carouselImages || prev.carouselImages
+          }));
         }
       } catch (error) { }
     };
-
-    const fetchImages = async () => {
-      try {
-        const [img1Res, img2Res] = await Promise.all([
-          axios.get(`${apiBaseUrl}/api/content/program_homeschool_internal_1`),
-          axios.get(`${apiBaseUrl}/api/content/program_homeschool_internal_2`)
-        ]);
-
-        if (img1Res.data && img1Res.data.content_value) {
-          let src = img1Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image1: src }));
-        }
-
-        if (img2Res.data && img2Res.data.content_value) {
-          let src = img2Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image2: src }));
-        }
-      } catch (e) { }
-    };
-
     fetchContent();
-    fetchImages();
   }, []);
 
   const faqSchema = {
@@ -96,30 +84,39 @@ const HomeschoolProgram = () => {
         defaultImage="https://static.wixstatic.com/media/c5947c_84d1216506fb4e4485d07d065cea8b98~mv2.png"
       />
 
-      <section className="program-intro">
-        <p>{content.introText}</p>
-      </section>
+      <div className="program-content-container">
 
-      <section className="program-details-section">
-        <div className="program-details-text">
-          <h2>{content.detailsTitle}</h2>
-          <p>{content.detailsText}</p>
-          <ul>
-            {content.detailsList.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="program-details-image">
-          {content.image1 && <img src={content.image1} alt="Homeschool Program Detail" />}
-        </div>
-      </section>
+        {/* Top Intro Section */}
+        <section className="program-top-intro">
+          <p>{content.introText}</p>
+        </section>
 
-      <div style={{ 'textAlign': 'center', 'marginBottom': '60px' }}>
-        {content.image2 && <img src={content.image2} alt="Homeschool Program Activity" />}
+        <section className="program-main-split">
+          <div className="text-side">
+            <div className="program-details-text-only">
+              <h2>{content.detailsTitle}</h2>
+              <p>{content.detailsText}</p>
+              <ul>
+                {content.detailsList.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="image-side">
+            <div className="program-body-image-wrapper">
+              <img src={content.image1} alt="Homeschool Program Main" />
+            </div>
+          </div>
+        </section>
+
+        <section className="program-carousel-section">
+          <ImageCarousel images={content.carouselImages} />
+        </section>
+
+        <FAQ faqData={content.faqs} title="Homeschool Program FAQs" />
       </div>
-
-      <FAQ faqData={content.faqs} title="Homeschool Program FAQs" />
     </div>
   );
 };

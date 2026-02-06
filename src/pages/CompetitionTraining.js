@@ -3,6 +3,7 @@ import axios from 'axios';
 import './ProgramPage.css';
 import FAQ from '../components/FAQ';
 import ProgramHero from '../components/ProgramHero';
+import ImageCarousel from '../components/ImageCarousel';
 
 const CompetitionTraining = () => {
   const [content, setContent] = useState({
@@ -15,8 +16,14 @@ const CompetitionTraining = () => {
       "- Sharpen your game and push your limits",
       "- Represent BJJ in Katy, Texas with pride"
     ],
-    image1: "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
-    image2: "", // No second image in original but we support it
+    image1: "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg", // Body Image
+    carouselImages: [
+      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
+      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
+      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
+      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
+      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg"
+    ],
     faqs: [
       {
         question: "Does the program include nutritional guidance?",
@@ -37,34 +44,15 @@ const CompetitionTraining = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_competition_data`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
-          setContent(prev => ({ ...prev, ...parsedData }));
+          setContent(prev => ({
+            ...prev,
+            ...parsedData,
+            carouselImages: parsedData.carouselImages || prev.carouselImages
+          }));
         }
       } catch (error) { }
     };
-
-    const fetchImages = async () => {
-      try {
-        const [img1Res, img2Res] = await Promise.all([
-          axios.get(`${apiBaseUrl}/api/content/program_competition_internal_1`),
-          axios.get(`${apiBaseUrl}/api/content/program_competition_internal_2`)
-        ]);
-
-        if (img1Res.data && img1Res.data.content_value) {
-          let src = img1Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image1: src }));
-        }
-
-        if (img2Res.data && img2Res.data.content_value) {
-          let src = img2Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image2: src }));
-        }
-      } catch (e) { }
-    };
-
     fetchContent();
-    fetchImages();
   }, []);
 
   const faqSchema = {
@@ -92,33 +80,38 @@ const CompetitionTraining = () => {
         defaultImage="https://static.wixstatic.com/media/c5947c_80a936d01653434093c7bf7f4276b689~mv2.png"
       />
 
-      <section className="program-intro">
-        <p>{content.introText}</p>
-      </section>
+      <div className="program-content-container">
 
-      <section className="program-details-section">
-        <div className="program-details-text">
-          <h2>{content.detailsTitle}</h2>
-          <p>{content.detailsText}</p>
-          <ul>
-            {content.detailsList.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="program-details-image">
-          {content.image1 && <img src={content.image1} alt="Competition Training Detail" />}
-        </div>
-      </section>
+        <section className="program-top-intro">
+          <p>{content.introText}</p>
+        </section>
 
-      {/* Optional second image spot if user adds one */}
-      {content.image2 && (
-        <div style={{ 'textAlign': 'center', 'marginBottom': '60px' }}>
-          <img src={content.image2} alt="Competition Activity" />
-        </div>
-      )}
+        <section className="program-main-split">
+          <div className="text-side">
+            <div className="program-details-text-only">
+              <h2>{content.detailsTitle}</h2>
+              <p>{content.detailsText}</p>
+              <ul>
+                {content.detailsList.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-      <FAQ faqData={content.faqs} title="Competition Training FAQs" />
+          <div className="image-side">
+            <div className="program-body-image-wrapper">
+              <img src={content.image1} alt="Competition Training Main" />
+            </div>
+          </div>
+        </section>
+
+        <section className="program-carousel-section">
+          <ImageCarousel images={content.carouselImages} />
+        </section>
+
+        <FAQ faqData={content.faqs} title="Competition Training FAQs" />
+      </div>
     </div>
   );
 };

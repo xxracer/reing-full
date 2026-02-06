@@ -3,13 +3,18 @@
 :root {
   /* Color Palette */
   --background-primary: #ffffff;
-  --background-secondary: #000000;
+  --background-secondary: #f4f4f4;
+  /* Light Gray for "Clean" look */
   --text-charcoal: #000000;
-  --text-inverse: #ffffff;
+  --text-inverse: #000000;
+  /* Text on secondary is now dark */
   --text-dark-gray: #333333;
   --text-medium-gray: #555555;
   --border-light-gray: #e0e0e0;
-  --input-background: #f9f9f9;
+  --text-white: #ffffff;
+  /* New variable for actual white text */
+
+  /* ... rest of vars ... */
   --accent-gold: #c5a35c;
   --accent-gold-dark: #a8843f;
   --accent-red: #ff0000;
@@ -39,7 +44,8 @@
 button,
 .btn-red-effect {
   background-color: var(--background-secondary);
-  color: var(--text-inverse);
+  color: var(--text-white);
+  /* Forced white text */
   border: none;
   padding: 10px 20px;
   cursor: pointer;
@@ -58,6 +64,23 @@ button:hover,
 button:active,
 .btn-red-effect:active {
   transform: translateY(0);
+}
+
+.btn-red {
+  background-color: var(--accent-red);
+  color: var(--text-white);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-red:hover {
+  background-color: var(--accent-red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(227, 28, 37, 0.4);
 }
 
 body {

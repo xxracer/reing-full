@@ -36,9 +36,10 @@
   right: -4px;
   bottom: -4px;
   border-radius: 24px;
-  background: linear-gradient(45deg, var(--accent-gold), var(--accent-red), var(--accent-gold));
-  background-size: 200% 200%;
-  animation: borderRotate 4s ease infinite;
+  background: #f0f0f0;
+  /* Simple clean gray/white border */
+  /* background-size: 200% 200%; REMOVED */
+  /* animation: borderRotate 4s ease infinite; REMOVED */
 
   /* Blur adds the glow effect */
   filter: blur(2px);

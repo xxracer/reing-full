@@ -3,7 +3,8 @@
 .program-page {
   background-color: var(--background-primary);
   color: var(--text-charcoal);
-  padding-top: 80px; /* To account for fixed navbar */
+  padding-top: 80px;
+  /* To account for fixed navbar */
 }
 
 .program-hero {
@@ -81,37 +82,139 @@
 }
 
 .benefits-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 60px auto;
-    padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 20px;
 }
 
 .benefit-item {
-    text-align: center;
+  text-align: center;
 }
 
 .benefit-item h3 {
-    font-family: var(--font-heading-secondary);
-    font-size: 20px;
-    margin-bottom: 10px;
+  font-family: var(--font-heading-secondary);
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 .scrolled .program-page {
-    background-color: var(--background-primary);
-    color: var(--text-charcoal);
+  background-color: var(--background-primary);
+  color: var(--text-charcoal);
 }
 
 .scrolled .program-hero {
-    background-color: var(--background-secondary);
+  background-color: var(--background-secondary);
 }
 
 .scrolled .program-hero-title,
 .scrolled .program-details-text h2,
 .scrolled .benefit-item h3 {
-    color: var(--text-charcoal);
+  color: var(--text-charcoal);
+}
+
+/* New Layout Styles - Corrected */
+.program-content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.program-main-split {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.text-side {
+  flex: 1;
+  text-align: left;
+}
+
+.image-side {
+  flex: 1;
+  max-width: 600px;
+  /* Adjust as needed */
+}
+
+.program-body-image-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.program-body-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Top Intro Text - Centered and "Two Lines" look */
+.program-top-intro {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 50px auto;
+  /* Space below intro */
+}
+
+.program-top-intro p,
+.program-top-intro .intro-text-highlight {
+  font-family: var(--font-heading-secondary);
+  /* Maybe Montserrat for this prominence? */
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--text-charcoal);
+  font-weight: 600;
+}
+
+/* Override Details Text styles for the split view */
+.program-details-text-only {
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+.program-details-text-only h2 {
+  font-family: var(--font-heading-secondary);
+  font-size: 32px;
+  margin-top: 0;
+  /* CRITICAL: Remove top margin to align with image */
+  margin-bottom: 20px;
+  color: var(--text-charcoal);
+  line-height: 1.1;
+  /* Tighter line height for title */
+}
+
+.program-details-text-only p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.program-details-text-only ul {
+  list-style: none;
+  padding: 0;
+}
+
+.program-details-text-only li {
+  font-size: 16px;
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.program-details-text-only li::before {
+  content: "•";
+  color: var(--accent-red);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
 }
 
 /* --- Mobile Responsiveness --- */
@@ -156,5 +259,15 @@
   .program-page div img {
     max-width: 100%;
     height: auto;
+  }
+
+  .program-main-split {
+    flex-direction: column;
+  }
+
+  .text-side,
+  .image-side {
+    width: 100%;
+    max-width: 100%;
   }
 }

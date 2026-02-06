@@ -3,6 +3,7 @@ import axios from 'axios';
 import './ProgramPage.css';
 import FAQ from '../components/FAQ';
 import ProgramHero from '../components/ProgramHero';
+import ImageCarousel from '../components/ImageCarousel';
 
 const KidsProgram = () => {
   const [content, setContent] = useState({
@@ -15,8 +16,14 @@ const KidsProgram = () => {
       "- Build respect and discipline",
       "- Have fun while learning"
     ],
-    image1: "https://static.wixstatic.com/media/c5947c_78dcb424cd4245d9acc5de69236867dc~mv2.jpeg",
-    image2: "https://static.wixstatic.com/media/c5947c_5cedfbdb69ec448a9e5e0c60dba8235a~mv2.jpeg",
+    image1: "https://static.wixstatic.com/media/c5947c_78dcb424cd4245d9acc5de69236867dc~mv2.jpeg", // Body Image
+    carouselImages: [
+      "https://static.wixstatic.com/media/c5947c_5cedfbdb69ec448a9e5e0c60dba8235a~mv2.jpeg",
+      "https://static.wixstatic.com/media/c5947c_690fa9195b12420bb76a88e15c1502b1~mv2.jpeg",
+      "https://static.wixstatic.com/media/c5947c_78dcb424cd4245d9acc5de69236867dc~mv2.jpeg",
+      "https://static.wixstatic.com/media/c5947c_5cedfbdb69ec448a9e5e0c60dba8235a~mv2.jpeg",
+      "https://static.wixstatic.com/media/c5947c_690fa9195b12420bb76a88e15c1502b1~mv2.jpeg"
+    ],
     faqs: [
       {
         question: "What is the minimum age for the Kids Program?",
@@ -37,38 +44,19 @@ const KidsProgram = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_kids_data`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
-          setContent(prev => ({ ...prev, ...parsedData }));
+          // Merge parsed data but ensure carouselImages exists if not provided
+          setContent(prev => ({
+            ...prev,
+            ...parsedData,
+            carouselImages: parsedData.carouselImages || prev.carouselImages
+          }));
         }
       } catch (error) {
         // Use defaults if fetch fails
       }
     };
-
-    // Also fetch the internal images if they were saved via the specific image editors (legacy support or specific overrides)
-    const fetchImages = async () => {
-      try {
-        const [img1Res, img2Res] = await Promise.all([
-          axios.get(`${apiBaseUrl}/api/content/program_kids_internal_1`),
-          axios.get(`${apiBaseUrl}/api/content/program_kids_internal_2`)
-        ]);
-
-        if (img1Res.data && img1Res.data.content_value) {
-          let src = img1Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image1: src }));
-        }
-
-        if (img2Res.data && img2Res.data.content_value) {
-          let src = img2Res.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          setContent(prev => ({ ...prev, image2: src }));
-        }
-
-      } catch (e) { }
-    };
-
+    // Fetch Images logic kept for legacy but carouselImages takes precedence for the new layout
     fetchContent();
-    fetchImages();
   }, []);
 
   const faqSchema = {
@@ -90,36 +78,51 @@ const KidsProgram = () => {
         {JSON.stringify(faqSchema)}
       </script>
 
+      {/* 1. Hero Image */}
       <ProgramHero
         title="Kids Program"
         sectionId="program_kids_hero"
         defaultImage="https://static.wixstatic.com/media/c5947c_690fa9195b12420bb76a88e15c1502b1~mv2.jpeg"
       />
 
-      <section className="program-intro">
-        <p>{content.introText}</p>
-      </section>
+      <div className="program-content-container">
 
-      <section className="program-details-section">
-        <div className="program-details-text">
-          <h2>{content.detailsTitle}</h2>
-          <p>{content.detailsText}</p>
-          <ul>
-            {content.detailsList.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="program-details-image">
-          {content.image1 && <img src={content.image1} alt="Kids Program Detail" />}
-        </div>
-      </section>
+        {/* Top Intro Section - "Subirlo arriba y ponerlo en dos lineas" */}
+        <section className="program-top-intro">
+          <p>{content.introText}</p>
+        </section>
 
-      <div style={{ 'textAlign': 'center', 'marginBottom': '40px' }}>
-        {content.image2 && <img src={content.image2} alt="Kids Program Activity" />}
+        {/* Split Section: Text Left, Image Right */}
+        <section className="program-main-split">
+
+          <div className="text-side">
+            <div className="program-details-text-only">
+              {/* Bold Title aligned with Image Top */}
+              <h2>{content.detailsTitle}</h2>
+              <p>{content.detailsText}</p>
+              <ul>
+                {content.detailsList.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="image-side">
+            <div className="program-body-image-wrapper">
+              <img src={content.image1} alt="Kids Program Main" />
+            </div>
+          </div>
+
+        </section>
+
+        {/* 5 Images Grid */}
+        <section className="program-carousel-section">
+          <ImageCarousel images={content.carouselImages} />
+        </section>
+
+        <FAQ faqData={content.faqs} title="Kids Program FAQs" />
       </div>
-
-      <FAQ faqData={content.faqs} title="Kids Program FAQs" />
     </div>
   );
 };
