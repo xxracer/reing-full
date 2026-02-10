@@ -23,6 +23,7 @@ import AffiliateSchools from './pages/AffiliateSchools';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import BlogPage from './pages/BlogPage';
+import BlogPost from './pages/BlogPost';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageHomepage from './pages/admin/ManageHomepage';
 import ManagePrograms from './pages/admin/ManagePrograms';
@@ -64,6 +65,7 @@ const AppLayout = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
 
           <Route path="/login" element={<LoginPage />} />
 

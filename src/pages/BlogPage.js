@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import FAQ from '../components/FAQ';
 import './BlogPage.css';
@@ -70,32 +71,34 @@ const BlogPage = () => {
             <p>No articles found. Check back soon!</p>
           ) : (
             blogs.map(blog => (
-              <div key={blog.id} className="blog-card">
-                {blog.image_url && (
-                  blog.image_url.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
-                    <video
-                      src={blog.image_url}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="blog-image"
-                      style={{ objectFit: 'cover' }}
-                    />
-                  ) : (
-                    <img src={blog.image_url} alt={blog.title} className="blog-image" />
-                  )
-                )}
-                <div className="blog-content">
-                  <h3 className="blog-title">{blog.title}</h3>
-                  <div className="blog-excerpt">
-                    {blog.content.substring(0, 100)}...
-                  </div>
-                  <div className="blog-date">
-                    {new Date(blog.created_at).toLocaleDateString()}
+              <Link to={`/blog/${blog.slug}`} key={blog.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="blog-card">
+                  {blog.image_url && (
+                    blog.image_url.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
+                      <video
+                        src={blog.image_url}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="blog-image"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <img src={blog.image_url} alt={blog.title} className="blog-image" />
+                    )
+                  )}
+                  <div className="blog-content">
+                    <h3 className="blog-title">{blog.title}</h3>
+                    <div className="blog-excerpt">
+                      {blog.content.substring(0, 100)}...
+                    </div>
+                    <div className="blog-date">
+                      {new Date(blog.created_at).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>
