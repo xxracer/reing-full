@@ -41,7 +41,7 @@ const AdultProgram = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/content/program_adult_data`);
+        const response = await axios.get(`${apiBaseUrl}/api/content/program_adult_data?t=${Date.now()}`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
           setContent(prev => ({ ...prev, ...parsedData }));
@@ -52,26 +52,32 @@ const AdultProgram = () => {
     const fetchDynamicImages = async () => {
       try {
         const carouselPromises = [1, 2, 3, 4, 5].map(num =>
-          axios.get(`${apiBaseUrl}/api/content/program_adult_carousel_${num}`)
+          axios.get(`${apiBaseUrl}/api/content/program_adult_carousel_${num}?t=${Date.now()}`)
         );
-        const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_adult_internal_1`);
+        const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_adult_internal_1?t=${Date.now()}`);
 
         const [r1, r2, r3, r4, r5, rInt1] = await Promise.allSettled([...carouselPromises, internalPromise]);
 
         const newCarousel = [];
         [r1, r2, r3, r4, r5].forEach((res, index) => {
           if (res.status === 'fulfilled' && res.value.data && res.value.data.content_value) {
-            let src = res.value.data.content_value;
-            try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-            newCarousel[index] = src;
+            let data = res.value.data.content_value;
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.url) data = parsed;
+            } catch (e) { }
+            newCarousel[index] = data;
           }
         });
 
         let newImage1 = null;
         if (rInt1.status === 'fulfilled' && rInt1.value.data && rInt1.value.data.content_value) {
-          let src = rInt1.value.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
-          newImage1 = src;
+          let data = rInt1.value.data.content_value;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.url) data = parsed;
+          } catch (e) { }
+          newImage1 = data;
         }
 
         setContent(prev => {
@@ -88,6 +94,18 @@ const AdultProgram = () => {
     fetchContent();
     fetchDynamicImages();
   }, []);
+
+  const getImageProps = (imgData) => {
+    if (typeof imgData === 'object' && imgData !== null && imgData.url) {
+      return {
+        src: imgData.url,
+        style: imgData.coords ? { objectPosition: `${imgData.coords.x}% ${imgData.coords.y}%` } : {}
+      };
+    }
+    return { src: imgData, style: {} };
+  };
+
+  const image1Props = getImageProps(content.image1);
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -135,7 +153,11 @@ const AdultProgram = () => {
 
           <div className="image-side">
             <div className="program-body-image-wrapper">
-              <img src={content.image1} alt="Adult Program Main" />
+              <img
+                src={image1Props.src}
+                alt="Adult Program Main"
+                style={{ ...image1Props.style, width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </div>
           </div>
         </section>

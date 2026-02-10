@@ -53,20 +53,39 @@ const TrainingSchedule = () => {
         if (!scheduleRef.current) return;
 
         try {
-            // Wait a moment for any last minute renders / logo load (though manual click implies it's ready)
-            // Explicitly force logo load check if needed, but crossOrigin on img helps.
+            // Create a clone of the element to render it with desktop styles
+            const element = scheduleRef.current;
+            const clone = element.cloneNode(true);
 
-            const canvas = await html2canvas(scheduleRef.current, {
-                scale: 2,
+            // Style the clone to force desktop rendering
+            // We set a fixed width large enough to trigger the desktop grid layout (passed 1200px breakpoint)
+            clone.style.width = '1400px';
+            clone.style.height = 'auto';
+            clone.style.position = 'absolute';
+            clone.style.top = '-9999px';
+            clone.style.left = '-9999px';
+            clone.style.zIndex = '-1';
+            clone.style.backgroundColor = '#000000'; // Ensure background is captured
+
+            // Append to body to ensure it renders (needed for html2canvas)
+            document.body.appendChild(clone);
+
+            // Wait briefly for layout to settle? usually needed for fonts/images but clone is sync.
+            // HTML2Canvas options
+            const canvas = await html2canvas(clone, {
+                scale: 2, // High res
                 backgroundColor: '#000000',
                 useCORS: true,
-                logging: false, // Turn off logging
-                height: scheduleRef.current.scrollHeight,
-                windowHeight: scheduleRef.current.scrollHeight
+                logging: false,
+                width: 1400, // Force canvas width
+                windowWidth: 1400 // Mock window width for media queries
             });
 
+            // Remove clone
+            document.body.removeChild(clone);
+
             const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('l', 'mm', 'a4');
+            const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape
 
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -78,19 +97,17 @@ const TrainingSchedule = () => {
             const ratio = pdfWidth / imgWidth;
 
             // Check if height overflows A4 landscape
-            const totalPDFHeight = imgHeight * ratio;
-
-            // If it fits on one page, good. If not, we might scale down or multipage.
-            // For this schedule, it should fit if we let it scale to fit height if needed.
-
+            // If it does, we scale to fit height instead, or split. 
+            // Fitting to height is safer for a single page summary.
             let finalRatio = ratio;
-            if (totalPDFHeight > pdfHeight) {
+            if (imgHeight * ratio > pdfHeight) {
                 finalRatio = pdfHeight / imgHeight;
             }
 
             const finalWidth = imgWidth * finalRatio;
             const finalHeight = imgHeight * finalRatio;
 
+            // Center
             const imgX = (pdfWidth - finalWidth) / 2;
             const imgY = (pdfHeight - finalHeight) / 2;
 
@@ -152,7 +169,7 @@ const TrainingSchedule = () => {
                 </div>
             </div>
 
-            <div className="schedule-download-btn-container" style={{ marginTop: '30px' }}>
+            <div className="schedule-download-btn-container">
                 <button onClick={handleDownloadPDF} className="btn-red-effect" style={{ fontSize: '16px', padding: '12px 24px' }}>
                     Download Schedule PDF
                 </button>
@@ -161,6 +178,9 @@ const TrainingSchedule = () => {
             <div className="schedule-cta">
                 <a href="/contact">Contact us</a> for more info.
             </div>
+
+            {/* Spacer to prevent content from being hidden behind sticky button */}
+            <div className="schedule-spacer"></div>
         </div>
     );
 };

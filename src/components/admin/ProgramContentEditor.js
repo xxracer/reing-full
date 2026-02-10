@@ -125,7 +125,7 @@ const ProgramContentEditor = ({ programId, title }) => {
                     These 5 images appear in the grid at the bottom of the page.
                 </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
                     {[1, 2, 3, 4, 5].map(num => (
                         <div key={num}>
                             <ImageEditor

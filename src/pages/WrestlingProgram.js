@@ -16,14 +16,8 @@ const WrestlingProgram = () => {
             "- Enhance your BJJ stand-up game",
             "- Build explosive power and conditioning"
         ],
-        image1: "https://static.wixstatic.com/media/c5947c_3d6396d1949141f19c991873990833e2~mv2.jpg", // Body Image
-        carouselImages: [
-            "https://static.wixstatic.com/media/c5947c_3d6396d1949141f19c991873990833e2~mv2.jpg",
-            "https://static.wixstatic.com/media/c5947c_3d6396d1949141f19c991873990833e2~mv2.jpg",
-            "https://static.wixstatic.com/media/c5947c_3d6396d1949141f19c991873990833e2~mv2.jpg",
-            "https://static.wixstatic.com/media/c5947c_3d6396d1949141f19c991873990833e2~mv2.jpg",
-            "https://static.wixstatic.com/media/c5947c_3d6396d1949141f19c991873990833e2~mv2.jpg"
-        ],
+        image1: "", // Body Image
+        carouselImages: Array(5).fill(null),
         faqs: [
             {
                 question: "Is wrestling experience required?",
@@ -52,9 +46,9 @@ const WrestlingProgram = () => {
         const fetchDynamicImages = async () => {
             try {
                 const carouselPromises = [1, 2, 3, 4, 5].map(num =>
-                    axios.get(`${apiBaseUrl}/api/content/program_wrestling_carousel_${num}`)
+                    axios.get(`${apiBaseUrl}/api/content/program_wrestling_carousel_${num}?t=${Date.now()}`)
                 );
-                const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_wrestling_internal_1`);
+                const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_wrestling_internal_1?t=${Date.now()}`);
 
                 const [r1, r2, r3, r4, r5, rInt1] = await Promise.allSettled([...carouselPromises, internalPromise]);
 

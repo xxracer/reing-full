@@ -16,14 +16,8 @@ const CompetitionTraining = () => {
       "- Sharpen your game and push your limits",
       "- Represent BJJ in Katy, Texas with pride"
     ],
-    image1: "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg", // Body Image
-    carouselImages: [
-      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_8ff5a096294b498eb84b3f63dd24889b~mv2.jpg"
-    ],
+    image1: "", // Body Image
+    carouselImages: Array(5).fill(null),
     faqs: [
       {
         question: "Does the program include nutritional guidance?",
@@ -41,7 +35,7 @@ const CompetitionTraining = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/content/program_competition_data`);
+        const response = await axios.get(`${apiBaseUrl}/api/content/program_competition_data?t=${Date.now()}`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
           setContent(prev => ({
@@ -56,9 +50,9 @@ const CompetitionTraining = () => {
     const fetchDynamicImages = async () => {
       try {
         const carouselPromises = [1, 2, 3, 4, 5].map(num =>
-          axios.get(`${apiBaseUrl}/api/content/program_competition_carousel_${num}`)
+          axios.get(`${apiBaseUrl}/api/content/program_competition_carousel_${num}?t=${Date.now()}`)
         );
-        const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_competition_internal_1`);
+        const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_competition_internal_1?t=${Date.now()}`);
 
         const [r1, r2, r3, r4, r5, rInt1] = await Promise.allSettled([...carouselPromises, internalPromise]);
 

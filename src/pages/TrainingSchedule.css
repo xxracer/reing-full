@@ -24,16 +24,46 @@
 }
 
 .schedule-download-btn-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Dark semi-transparent background */
+    padding: 15px 0;
     text-align: center;
-    margin-bottom: 40px;
+    z-index: 1000;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.schedule-download-btn-container button {
+    background-color: #E31C25 !important;
+    /* Force Acrobat Red */
+    color: #FFFFFF !important;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(227, 28, 37, 0.4);
+}
+
+.schedule-download-btn-container button:hover {
+    background-color: #C1171E !important;
+    transform: translateY(-2px);
+}
+
+.schedule-spacer {
+    height: 100px;
+    /* Space for the fixed button */
 }
 
 /* Updated Grid Spacing */
 .schedule-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    /* Reduced gap slightly */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Slightly wider cards for better read */
+    gap: 20px;
     padding: 10px;
 }
 
@@ -41,6 +71,47 @@
     .schedule-grid {
         grid-template-columns: repeat(7, 1fr);
         gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .schedule-page {
+        padding: 40px 10px 120px;
+        /* Less top padding, more bottom for button */
+    }
+
+    .schedule-grid {
+        gap: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        /* Force 2 columns on mobile */
+    }
+
+    .schedule-day {
+        margin-bottom: 0;
+        border-radius: 8px;
+    }
+
+    .schedule-day h2 {
+        font-size: 14px;
+        /* Smaller header */
+        padding: 10px 5px;
+    }
+
+    .schedule-session {
+        padding: 8px 10px;
+    }
+
+    .schedule-session .time {
+        font-size: 12px;
+    }
+
+    .schedule-session .title {
+        font-size: 13px;
+    }
+
+    .session-tag {
+        font-size: 9px;
+        padding: 2px 4px;
     }
 }
 

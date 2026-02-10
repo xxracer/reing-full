@@ -39,6 +39,10 @@ const ImageLibrary = ({ onSelect, onClose }) => {
     }
   };
 
+  const isVideo = (url) => {
+    return url.match(/\.(mp4|webm|mov|quicktime)(\?|$)/i);
+  };
+
   return (
     <div className="image-library-modal-backdrop">
       <div className="image-library-modal-content">
@@ -52,7 +56,19 @@ const ImageLibrary = ({ onSelect, onClose }) => {
           {images.map(image => (
             <div key={image.id} className="image-thumbnail-wrapper" style={{ position: 'relative' }}>
               <div className="image-thumbnail" onClick={() => handleImageSelect(image.image_url)}>
-                <img src={image.image_url} alt={`Library item ${image.id}`} />
+                {isVideo(image.image_url) ? (
+                  <video
+                    src={image.image_url}
+                    muted
+                    loop
+                    playsInline
+                    onMouseOver={event => event.target.play()}
+                    onMouseOut={event => event.target.pause()}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <img src={image.image_url} alt={`Library item ${image.id}`} />
+                )}
               </div>
               <button
                 className="delete-image-btn"

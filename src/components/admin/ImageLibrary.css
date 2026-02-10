@@ -40,6 +40,14 @@
   border: none;
   font-size: 2rem;
   cursor: pointer;
+  color: #333;
+  /* Fix visibility on white background */
+  line-height: 1;
+  padding: 0 10px;
+}
+
+.close-button:hover {
+  color: #cc0000;
 }
 
 .image-grid {
