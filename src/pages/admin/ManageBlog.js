@@ -11,7 +11,7 @@ const ManageBlog = () => {
     });
     const [editingId, setEditingId] = useState(null);
 
-    const apiBaseUrl = 'http://localhost:3001';
+    const apiBaseUrl = '';
 
     const fetchBlogs = async () => {
         try {
