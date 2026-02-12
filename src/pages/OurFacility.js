@@ -114,7 +114,7 @@ const OurFacilityPage = () => {
         Our academy is equipped with high-quality mats, clean locker rooms, and a welcoming environment. Parents and students alike love the safe and professional setting. More than just a gym, Reign is a community-driven martial arts academy in Katy, TX.
       </p>
 
-      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '60px' }}>
+      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', marginBottom: '60px' }}>
         {renderMedia(image1, "Facility interior wide shot")}
         {renderMedia(image2, "Training equipment / mats close-up")}
       </div>

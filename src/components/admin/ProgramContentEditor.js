@@ -86,13 +86,33 @@ const ProgramContentEditor = ({ programId, title }) => {
                     </div>
                 )}
 
+                {/* Editor 1: Hero Image (or Shared) */}
                 <ImageEditor
-                    key={isSynced ? 'synced' : 'independent'} // Force re-mount when mode changes
-                    sectionId={`program_${programId}_${isSynced ? 'image' : 'hero'}`} // 'image' is the shared Homepage key, 'hero' is independent
-                    title={isSynced ? "Shared Image Editor" : "Hero Image Editor (Independent)"}
+                    key={isSynced ? 'synced' : 'hero-independent'}
+                    sectionId={`program_${programId}_${isSynced ? 'image' : 'hero'}`}
+                    title={isSynced ? "Shared Image Editor" : "Hero Image (Program Page Only)"}
                     showPositionControl={true}
                     onSaveOverride={handleHeroSave}
                 />
+
+                {/* Editor 2: Homepage Image (Only visible when independent) */}
+                {!isSynced && (
+                    <div style={{ marginTop: '40px', paddingTop: '30px', borderTop: '1px dashed #ccc' }}>
+                        <div style={{ marginBottom: '15px' }}>
+                            <h3>Homepage Card Image</h3>
+                            <p style={{ color: '#666', fontSize: '0.9em' }}>
+                                This image will appear on the Homepage "Our Programs" card.
+                            </p>
+                        </div>
+                        <ImageEditor
+                            key="homepage-independent"
+                            sectionId={`program_${programId}_image`}
+                            title="Homepage Card Image Editor"
+                            showPositionControl={true}
+                        // No override needed, default save works determines JSON structure compatible with Programs.js
+                        />
+                    </div>
+                )}
             </div>
 
             <div style={{ marginBottom: '40px', borderTop: '1px solid #eee', paddingTop: '30px' }}>

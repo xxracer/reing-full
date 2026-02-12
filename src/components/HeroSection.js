@@ -65,17 +65,7 @@ const HeroSection = ({ videoOpacity }) => {
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: '100vw',
-                height: '100vh',
-                transform: 'translate(-50%, -50%)',
-                objectFit: 'cover',
-                pointerEvents: 'none',
-                zIndex: -1
-              }}
+              className="hero-iframe"
             ></iframe>
           ) : (
             <video autoPlay loop muted playsInline className="hero-video-bg">
@@ -121,7 +111,7 @@ const HeroSection = ({ videoOpacity }) => {
 
       <div className="hero-content">
         <h1 className="hero-main-title">Katys Premier Jiu Jitsu Academy</h1>
-        <p className="hero-sub-text">Kids Jiu-Jitsu • Adult Gi & No-Gi • Competition & Homeschool Training</p>
+        <p className="hero-sub-text">Kids Jiu-Jitsu • Adult Gi & No-Gi • Competition & Homeschool Program</p>
         <a href="#contact" className="hero-cta-button btn-red">Book Your Trial Class</a>
       </div>
     </section>

@@ -92,11 +92,16 @@
   padding: 25px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  /* Center content horizontally */
+  gap: 0px;
+  /* Reduced gap to practically zero */
   flex: 1;
   background-color: var(--background-primary);
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
+  text-align: center;
+  /* Center text */
 }
 
 .program-title {
@@ -104,16 +109,22 @@
   font-family: var(--font-heading-secondary);
   color: var(--text-charcoal);
   margin-top: 0;
-  margin-bottom: 8px;
-  /* Reduced from 12px */
+  margin-bottom: 0;
+  /* Removed margin to let gap handle it */
   text-transform: uppercase;
   font-weight: 700;
+  letter-spacing: normal;
+  line-height: 1.1;
+  /* Tighten title height */
 }
 
 .program-description {
   font-size: 16px;
   color: var(--text-medium-gray);
-  line-height: 1.6;
+  line-height: 1.3;
+  margin-top: 5px;
+  /* Visual tweak to bring it closer */
+  margin-bottom: 0;
 }
 
 @media (max-width: 768px) {

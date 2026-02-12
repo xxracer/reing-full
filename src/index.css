@@ -15,8 +15,11 @@
   /* New variable for actual white text */
 
   /* ... rest of vars ... */
-  --accent-gold: #c5a35c;
-  --accent-gold-dark: #a8843f;
+  /* Gold replaced with Red/Neutral as requested */
+  --accent-gold: #D32F2F;
+  /* Matching Red */
+  --accent-gold-dark: #B71C1C;
+  /* Darker Red */
   --accent-red: #ff0000;
   --accent-red-hover: #cc0000;
 

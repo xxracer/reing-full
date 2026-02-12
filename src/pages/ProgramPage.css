@@ -36,6 +36,15 @@
   line-height: 1.7;
 }
 
+.program-intro p:first-of-type {
+  font-family: var(--font-heading-secondary);
+  font-size: 1.25em;
+  /* Slightly larger */
+  font-weight: 500;
+  color: var(--text-charcoal);
+  margin-bottom: 20px;
+}
+
 .program-details-section {
   display: flex;
   flex-wrap: wrap;

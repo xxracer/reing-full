@@ -1,9 +1,43 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ImageEditor from '../../components/admin/ImageEditor';
 import VideoEditor from '../../components/admin/VideoEditor';
 
 const ManageHomepage = () => {
+  const [mediaType, setMediaType] = useState('images'); // 'images' or 'video'
+  const [saveStatus, setSaveStatus] = useState('');
+  const apiBaseUrl = '';
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.get(`${apiBaseUrl}/api/content/facility_media_type`);
+        if (response.data && response.data.content_value) {
+          setMediaType(response.data.content_value);
+        }
+      } catch (error) {
+        console.error("Error fetching media type", error);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  const handleMediaTypeChange = async (type) => {
+    setMediaType(type);
+    setSaveStatus('Saving...');
+    try {
+      await axios.post(`${apiBaseUrl}/api/content`, {
+        content_key: 'facility_media_type',
+        content_value: type,
+        content_type: 'text'
+      });
+      setSaveStatus('Saved!');
+      setTimeout(() => setSaveStatus(''), 2000);
+    } catch (error) {
+      console.error("Error saving media type", error);
+      setSaveStatus('Error saving');
+    }
+  };
   return (
     <div>
       <h1>Manage Homepage</h1>
@@ -82,20 +116,69 @@ const ManageHomepage = () => {
         showPositionControl={true}
       />
       <h2>Facility Section</h2>
-      <ImageEditor
-        sectionId="facility_image_1"
-        title="Facility Image 1"
-        showPositionControl={true}
-      />
-      <ImageEditor
-        sectionId="facility_image_2"
-        title="Facility Image 2"
-        showPositionControl={true}
-      />
-      <VideoEditor
-        sectionId="facility_video"
-        title="Facility YouTube Video"
-      />
+
+      <div style={{
+        padding: '15px',
+        backgroundColor: '#f9f9f9',
+        borderRadius: '8px',
+        marginBottom: '20px',
+        border: '1px solid #eee'
+      }}>
+        <h4 style={{ marginTop: 0 }}>Display Mode</h4>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <input
+              type="radio"
+              name="mediaType"
+              value="images"
+              checked={mediaType === 'images'}
+              onChange={() => handleMediaTypeChange('images')}
+            />
+            <strong>Two Images</strong>
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <input
+              type="radio"
+              name="mediaType"
+              value="youtube"
+              checked={mediaType === 'youtube'}
+              onChange={() => handleMediaTypeChange('youtube')}
+            />
+            <strong>YouTube (16:9)</strong>
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <input
+              type="radio"
+              name="mediaType"
+              value="vertical"
+              checked={mediaType === 'vertical'}
+              onChange={() => handleMediaTypeChange('vertical')}
+            />
+            <strong>Vertical Video (IG Style)</strong>
+          </label>
+          {saveStatus && <span style={{ color: 'green', fontSize: '0.9rem', marginLeft: '10px' }}>{saveStatus}</span>}
+        </div>
+      </div>
+
+      {mediaType === 'images' ? (
+        <>
+          <ImageEditor
+            sectionId="facility_image_1"
+            title="Facility Image 1"
+            showPositionControl={true}
+          />
+          <ImageEditor
+            sectionId="facility_image_2"
+            title="Facility Image 2"
+            showPositionControl={true}
+          />
+        </>
+      ) : (
+        <VideoEditor
+          sectionId="facility_video"
+          title={mediaType === 'youtube' ? "Facility YouTube Video (16:9)" : "Facility Vertical Video (9:16)"}
+        />
+      )}
 
       <h2>Instagram Section</h2>
       <p style={{ fontSize: '0.8rem', color: '#666' }}>Upload static images or GIFs for the Instagram feed.</p>

@@ -58,6 +58,38 @@
     /* Space for the fixed button */
 }
 
+/* Category Colors */
+.tag-kids {
+    background-color: #2196F3;
+    /* Blue */
+    color: white;
+}
+
+.tag-adults {
+    background-color: #D32F2F;
+    /* Red */
+    color: white;
+}
+
+.tag-wrestling {
+    background-color: #4CAF50;
+    /* Green */
+    color: white;
+}
+
+.tag-private {
+    background-color: #9C27B0;
+    /* Purple */
+    color: white;
+}
+
+.schedule-event {
+    /* Ensure event styling uses these classes */
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 5px;
+}
+
 /* Updated Grid Spacing */
 .schedule-grid {
     display: grid;

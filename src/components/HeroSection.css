@@ -2,13 +2,15 @@
 
 .hero-section {
   height: 100vh;
-  position: sticky; /* Make the hero section sticky */
+  position: sticky;
+  /* Make the hero section sticky */
   top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  z-index: 1; /* Ensure it stays behind the scrolling content */
+  z-index: 1;
+  /* Ensure it stays behind the scrolling content */
 }
 
 .hero-video-wrapper,
@@ -30,7 +32,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  background: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent black overlay */
   z-index: 1;
 }
 
@@ -41,9 +44,36 @@
   object-fit: cover;
 }
 
+.hero-iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Force iframe to cover properly based on aspect ratio */
+@media (min-aspect-ratio: 16/9) {
+  .hero-iframe {
+    height: 56.25vw;
+    /* 100 * 9 / 16 */
+  }
+}
+
+@media (max-aspect-ratio: 16/9) {
+  .hero-iframe {
+    width: 177.78vh;
+    /* 100 * 16 / 9 */
+  }
+}
+
 .hero-content {
   position: relative;
-  z-index: 2; /* Content stays on top of the video */
+  z-index: 2;
+  /* Content stays on top of the video */
   padding: 20px;
   max-width: 900px;
 }
@@ -56,9 +86,9 @@
   color: #FFFFFF;
   text-shadow:
     -1px -1px 0 #000,
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000;
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
   animation: fadeIn 1.5s ease-in-out;
 }
 
@@ -89,20 +119,28 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {
   .hero-section {
     height: 85vh;
   }
+
   .hero-main-title {
     font-size: 42px;
   }
+
   .hero-sub-text {
     font-size: 18px;
   }
+
   .hero-cta-button {
     padding: 12px 30px;
     font-size: 16px;
@@ -113,7 +151,24 @@
   .hero-main-title {
     font-size: 34px;
   }
+
   .hero-sub-text {
     font-size: 16px;
   }
+}
+
+/* Typography */
+.hero-main-title {
+  font-size: 3rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero-sub-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }

@@ -32,7 +32,8 @@ const TrainingSchedule = () => {
                                 .map(item => ({
                                     time: item.time_range,
                                     title: item.class_name,
-                                    tags: [item.category] // Assuming category maps to tag
+                                    tags: [item.category],
+                                    category: item.category // Pass raw category for class mapping
                                 }))
                         };
                     });
@@ -155,7 +156,7 @@ const TrainingSchedule = () => {
                                             <p className="title">{session.title}</p>
                                             <div className="session-tags">
                                                 {session.tags.map((tag) => (
-                                                    <span key={tag} className={`session-tag ${tag}`}>
+                                                    <span key={tag} className={`session-tag tag-${tag}`}>
                                                         {tagLabels[tag] || tag || 'Class'}
                                                     </span>
                                                 ))}
