@@ -201,7 +201,7 @@ const ImageEditor = ({ sectionId, title, onSaveOverride, aspectRatio: propsAspec
           </button>
           <label className="btn-upload">
             Upload
-            <input type="file" onChange={handleFileUpload} accept="image/*" hidden />
+            <input type="file" onChange={handleFileUpload} accept="image/*,video/mp4,video/quicktime,video/webm" hidden />
           </label>
           {currentImageUrl && (
             <button className="btn-remove" onClick={handleRemove} title="Remove Image">

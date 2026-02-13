@@ -10,14 +10,33 @@ const ContactUs = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('submitting');
+
+    let locationData = {};
+    try {
+      // Attempt to fetch IP location data
+      const ipRes = await fetch('https://ipapi.co/json/');
+      locationData = await ipRes.json();
+    } catch (error) {
+      console.error('Could not fetch location data:', error);
+    }
+
+    const payload = {
+      ...formData,
+      ip: locationData.ip,
+      city: locationData.city,
+      region: locationData.region,
+      country: locationData.country_name,
+      postal: locationData.postal,
+      full_location_data: locationData // Send full object just in case
+    };
 
     fetch('/api/send-message', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
     })
       .then(res => res.json())
       .then(data => {
@@ -54,12 +73,48 @@ const ContactUs = () => {
             Call or text us at <a href="tel:17134466008">(713) 446-6008</a>
           </p>
           {status === 'success' ? (
-            <div className="success-message-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '300px' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '20px' }}>✅</div>
+            <div className="success-message-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '300px', textAlign: 'center' }}>
+              <div style={{ fontSize: '4rem', marginBottom: '10px' }}>✅</div>
               <h3 style={{ fontSize: '2rem', marginBottom: '10px', color: 'var(--text-primary)' }}>Thank You!</h3>
-              <p style={{ fontSize: '1.2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                We have received your message and will get back to you shortly.
+              <p style={{ fontSize: '1.2rem', marginBottom: '30px', color: 'var(--text-secondary)' }}>
+                We have received your message.
               </p>
+
+              <div style={{
+                backgroundColor: 'white',
+                padding: '20px',
+                borderRadius: '12px',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                width: '100%',
+                maxWidth: '350px'
+              }}>
+                <p style={{
+                  color: '#d32f2f',
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem',
+                  marginBottom: '15px',
+                  textTransform: 'uppercase'
+                }}>
+                  For quicker response click here to text us now
+                </p>
+                <a
+                  href="sms:+17134466008"
+                  style={{
+                    display: 'inline-block',
+                    backgroundColor: '#d32f2f',
+                    color: 'white',
+                    padding: '12px 24px',
+                    borderRadius: '30px',
+                    textDecoration: 'none',
+                    fontWeight: 'bold',
+                    fontSize: '1.1rem',
+                    boxShadow: '0 4px 6px rgba(211, 47, 47, 0.3)',
+                    transition: 'transform 0.2s'
+                  }}
+                >
+                  Text Us Now 💬
+                </a>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
