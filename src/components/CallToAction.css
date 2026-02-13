@@ -27,6 +27,8 @@
 }
 
 .cta-button {
+  display: inline-block;
+  /* Fix vertical spacing */
   background-color: var(--accent-gold);
   color: var(--background-primary);
   border: 2px solid var(--accent-gold);
@@ -37,9 +39,36 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
+  /* Remove underline */
+  margin-top: 10px;
 }
 
 .cta-button:hover {
   background-color: transparent;
   color: var(--accent-gold);
+}
+
+@media (max-width: 768px) {
+  .cta-section {
+    padding: 60px 20px;
+  }
+
+  .cta-title {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+
+  .cta-text {
+    font-size: 16px;
+    margin-bottom: 25px;
+  }
+
+  .cta-button {
+    font-size: 16px;
+    padding: 12px 30px;
+    width: 100%;
+    /* Full width on mobile for easier tapping */
+    max-width: 300px;
+  }
 }

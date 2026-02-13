@@ -73,46 +73,36 @@ const ContactUs = () => {
             Call or text us at <a href="tel:17134466008">(713) 446-6008</a>
           </p>
           {status === 'success' ? (
-            <div className="success-message-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '300px', textAlign: 'center' }}>
-              <div style={{ fontSize: '4rem', marginBottom: '10px' }}>✅</div>
-              <h3 style={{ fontSize: '2rem', marginBottom: '10px', color: 'var(--text-primary)' }}>Thank You!</h3>
-              <p style={{ fontSize: '1.2rem', marginBottom: '30px', color: 'var(--text-secondary)' }}>
+            <div className="success-message-container">
+              <img
+                src="https://static.wixstatic.com/media/c5947c_19213bcf1b97445db4da31c938fb312b~mv2.jpg"
+                alt="Reign Logo"
+                className="success-logo"
+              />
+              <h3 className="success-title">Thank You</h3>
+              <p className="success-text">
                 We have received your message.
               </p>
 
-              <div style={{
-                backgroundColor: 'white',
-                padding: '20px',
-                borderRadius: '12px',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-                width: '100%',
-                maxWidth: '350px'
-              }}>
-                <p style={{
-                  color: '#d32f2f',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem',
-                  marginBottom: '15px',
-                  textTransform: 'uppercase'
-                }}>
-                  For quicker response click here to text us now
+              <div className="success-cta">
+                <p className="cta-text">
+                  For a quicker response, click below to text us now:
                 </p>
                 <a
                   href="sms:+17134466008"
+                  className="btn-red"
                   style={{
-                    display: 'inline-block',
-                    backgroundColor: '#d32f2f',
-                    color: 'white',
-                    padding: '12px 24px',
-                    borderRadius: '30px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px',
                     textDecoration: 'none',
-                    fontWeight: 'bold',
-                    fontSize: '1.1rem',
-                    boxShadow: '0 4px 6px rgba(211, 47, 47, 0.3)',
-                    transition: 'transform 0.2s'
+                    fontSize: '1.2rem',
+                    padding: '15px 40px',
+                    borderRadius: '50px',
+                    boxShadow: '0 5px 15px rgba(211, 47, 47, 0.4)'
                   }}
                 >
-                  Text Us Now 💬
+                  Text Us Now <span style={{ fontSize: '1.2em' }}>💬</span>
                 </a>
               </div>
             </div>
