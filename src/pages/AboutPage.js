@@ -11,7 +11,7 @@ const AboutPage = () => {
     },
     {
       question: "Do you focus more on competition or self-defense?",
-      answer: "We integrate both. Jiu Jitsu is fundamentally a self-defense system, but we offer specialized training streams—like our Competition Program—to serve advanced goals."
+      answer: "Jiu Jitsu at Reign is built on real self-defense first. Every student learns how to protect themselves and stay composed under pressure. For those who want more, our Competition Program develops advanced skill, conditioning, and mental toughness. The result is simple: practical confidence for life, with the option to train at an elite level."
     },
     {
       question: "What mental benefits can I expect from the training?",
@@ -19,24 +19,8 @@ const AboutPage = () => {
     }
   ];
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": pageFaqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
   return (
     <div className="program-page">
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
 
       <ProgramHero
         title="About / Our Method"
@@ -46,7 +30,13 @@ const AboutPage = () => {
 
       <section className="program-intro">
         <p>
-          Our method is based on discipline, respect, and technical excellence. At Reign Jiu Jitsu, we combine traditional Jiu Jitsu with modern training to create well-rounded martial artists. Students learn not just to train, but to live by the values of perseverance and humility.
+          At Reign Jiu Jitsu in Katy, Texas, Professor Moon has developed an innovative results-proven Jiu Jitsu program that blends his years of experience as a public school educator with his deep background in Jiu Jitsu and personal training, specializing in sports performance. His method is intentionally designed to reach ALL types of learners, whether a student thrives through structure, repetition, competition, or individualized coaching.
+        </p>
+        <p style={{ marginTop: '15px' }}>
+          By combining proven teaching principles with high-level technical training, he has produced some of the top youth competitors in the world, developing multiple champions through a system built on discipline, confidence, and intelligent progression.
+        </p>
+        <p style={{ marginTop: '15px' }}>
+          What makes Reign different is that this methodology is not limited to one instructor. Professor Moon has successfully translated his system to the entire coaching staff, creating a unified culture where every instructor teaches with clarity, purpose, and energy. The result is a welcoming, high-performance training environment where beginners, hobbyists, and elite competitors can all grow, improve, and thrive.
         </p>
       </section>
 

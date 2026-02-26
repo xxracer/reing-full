@@ -52,28 +52,12 @@ const Instructors = () => {
     },
     {
       question: "What belt ranks do the instructors hold?",
-      answer: "Our team is led by accomplished Black Belts, ensuring that students receive instruction at the highest level of technical knowledge and competitive experience."
+      answer: "Our team includes multiple Black Belts, both homegrown through our program and those who have joined us from outside academies, creating a diverse and well-rounded training experience. We also have experienced Brown, Purple, and Blue Belt instructors who have been developed under Professor Moon’s training system, ensuring consistency in teaching style, structure, and standards across every class."
     }
   ];
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": pageFaqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
   return (
     <div className="instructors-page">
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
       <h1>Meet Our World-Class Instructors</h1>
 
       {instructors.map((instructor, index) => {

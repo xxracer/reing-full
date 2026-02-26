@@ -66,7 +66,8 @@
 }
 
 .contact-form-container input,
-.contact-form-container textarea {
+.contact-form-container textarea,
+.contact-dropdown {
   width: 100%;
   padding: 14px;
   border: 1px solid var(--border-light-gray);
@@ -76,6 +77,16 @@
   background-color: var(--input-background);
   color: var(--text-charcoal);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.contact-dropdown {
+  background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: center;
 }
 
 .contact-form-container input::placeholder,
@@ -85,7 +96,8 @@
 
 
 .contact-form-container input:focus,
-.contact-form-container textarea:focus {
+.contact-form-container textarea:focus,
+.contact-dropdown:focus {
   outline: none;
   border-color: var(--accent-gold);
   box-shadow: 0 0 0 3px rgba(197, 163, 92, 0.2);

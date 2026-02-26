@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ContactUs.css';
 
 const ContactUs = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', program: '', message: '' });
   const [status, setStatus] = useState(''); // '' | 'submitting' | 'success' | 'error'
 
   const handleInputChange = (e) => {
@@ -42,7 +42,7 @@ const ContactUs = () => {
       .then(data => {
         if (data.success) {
           setStatus('success');
-          setFormData({ name: '', email: '', message: '' }); // Clear form
+          setFormData({ name: '', email: '', program: '', message: '' }); // Clear form
         } else {
           setStatus('error');
         }
@@ -69,8 +69,8 @@ const ContactUs = () => {
         </div>
         <div className="contact-form-container">
           <h2 className="section-title">Contact Us</h2>
-          <p className="contact-phone">
-            Call or text us at <a href="tel:17134466008">(713) 446-6008</a>
+          <p className="contact-phone" style={{ marginBottom: '10px' }}>
+            Submit your info below or text us for a faster response at <a href="tel:17134466008">(713) 446-6008</a>
           </p>
           {status === 'success' ? (
             <div className="success-message-container">
@@ -124,10 +124,24 @@ const ContactUs = () => {
                 onChange={handleInputChange}
                 required
               />
+              <select
+                name="program"
+                value={formData.program}
+                onChange={handleInputChange}
+                required
+                className="contact-dropdown"
+              >
+                <option value="" disabled>Which Program(s) interest you?</option>
+                <option value="Kids">Kids</option>
+                <option value="Adults">Adults</option>
+                <option value="Adult Fundamentals">Adult Fundamentals</option>
+                <option value="HomeSchool Program">HomeSchool Program</option>
+                <option value="Kids Comp">Kids Comp</option>
+              </select>
               <textarea
                 name="message"
                 rows="5"
-                placeholder="Message"
+                placeholder="Message: How can we help you?"
                 value={formData.message}
                 onChange={handleInputChange}
                 required

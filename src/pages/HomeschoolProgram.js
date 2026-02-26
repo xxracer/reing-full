@@ -27,15 +27,15 @@ const HomeschoolProgram = () => {
     faqs: [
       {
         question: "What are the qualifications of the instructor for the Homeschool program?",
-        answer: "The program is led by a black belt instructor who also has a background as a Physical Education and Health teacher, providing a unique and qualified perspective for homeschool students."
+        answer: "The program is led by a black belt instructor who also has a background as a Physical Education and Health teacher who has over 16 years of experience in teaching, providing a unique and qualified perspective for homeschool students."
       },
       {
         question: "Can these classes count toward my child’s P.E. requirement?",
-        answer: "Yes, the program emphasizes physical fitness, helping children build strength, flexibility, and overall health, fulfilling the physical activity goals often associated with P.E. "
+        answer: "Yes, the program emphasizes physical fitness, helping children build strength, flexibility, and overall health, fulfilling the physical activity goals often associated with P.E."
       },
       {
         question: "What unique benefits does the program offer for homeschool children?",
-        answer: "It provides valuable social development and connection with peers, alongside specialized instruction in confidence, discipline, and physical fitness in a screen-free environment. "
+        answer: "It provides valuable social development and connection with peers, alongside specialized instruction in confidence, discipline, and physical fitness in a screen-free environment."
       }
     ]
   });
@@ -116,24 +116,8 @@ const HomeschoolProgram = () => {
 
   const image1Props = getImageProps(content.image1);
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": content.faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
   return (
     <div className="program-page">
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
 
       <ProgramHero
         title="Homeschool Program"

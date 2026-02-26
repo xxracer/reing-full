@@ -116,24 +116,8 @@ const PrivateLessons = () => {
 
   const image1Props = getImageProps(content.image1);
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": content.faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
   return (
     <div className="program-page">
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
 
       <ProgramHero
         title="Private Lessons"

@@ -21,11 +21,11 @@ const KidsProgram = () => {
     faqs: [
       {
         question: "What is the minimum age for the Kids Program?",
-        answer: "Our Kids Jiu Jitsu program is suitable for children ages 6 and up, focusing on fundamentals and character development."
+        answer: "Our Kids Jiu Jitsu program is suitable for children ages 4 and up, focusing on fundamentals, sport jiujitsu and character development."
       },
       {
         question: "What gear is required for my child's first class?",
-        answer: "For the trial class, comfortable athletic wear is sufficient. If you enroll in an Unlimited Membership, a complimentary Gi (uniform) is often provided."
+        answer: "For your trial class, we’ll lend you a Gi to use. If you enroll in an Unlimited Membership, we’ll guide you on purchasing the required Gi for training."
       }
     ]
   });
@@ -122,24 +122,8 @@ const KidsProgram = () => {
 
   const image1Props = getImageProps(content.image1);
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": content.faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
   return (
     <div className="program-page">
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
 
       {/* 1. Hero Image */}
       <ProgramHero
