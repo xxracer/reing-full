@@ -11,10 +11,10 @@ const AdultProgram = () => {
     detailsTitle: "Self-Defense, Fitness, and Growth",
     detailsText: "Our classes are designed to help you achieve your goals, whether you're a beginner or an advanced student.",
     detailsList: [
-      "- Learn effective self-defense techniques",
-      "- Improve your fitness and overall health",
-      "- Experience personal growth in a supportive community",
-      "- Classes include both Gi and No-Gi training"
+      "Learn effective self-defense techniques",
+      "Improve your fitness and overall health",
+      "Experience personal growth in a supportive community",
+      "Classes include both Gi and No-Gi training"
     ],
     image1: "https://static.wixstatic.com/media/c5947c_200495ae287d4122be667a7e4a8f4551~mv2.jpg", // Body Image
     carouselImages: [

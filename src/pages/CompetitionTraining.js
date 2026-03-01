@@ -11,10 +11,10 @@ const CompetitionTraining = () => {
     detailsTitle: "Prepare for the Podium",
     detailsText: "Our program is designed to sharpen your game and prepare you for the highest levels of competition.",
     detailsList: [
-      "- Led by experienced, world-class coaches",
-      "- Prepare for local, national, and international tournaments",
-      "- Sharpen your game and push your limits",
-      "- Represent BJJ in Katy, Texas with pride"
+      "Led by experienced, world-class coaches",
+      "Prepare for local, national, and international tournaments",
+      "Sharpen your game and push your limits",
+      "Represent BJJ in Katy, Texas with pride"
     ],
     image1: "", // Body Image
     carouselImages: Array(5).fill(null),
@@ -25,7 +25,7 @@ const CompetitionTraining = () => {
       },
       {
         question: "What level of experience is required for Competition Training?",
-        answer: "This program is geared toward intermediate to advanced practitioners (typically blue belt and up) who have a solid understanding of the fundamentals and are looking to specialize."
+        answer: "Anyone can compete. This program is open to all belt levels, including white belts who want to challenge themselves early. We encourage anyone with the drive to test themselves, whether the goal is personal growth or becoming a champion. Our coaches assess your current level, build you up step by step, and prepare you to compete with confidence. We develop competitors from day one and set you up for success."
       }
     ]
   });

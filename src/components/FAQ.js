@@ -12,11 +12,11 @@ const defaultFaqData = [
   },
   {
     question: "Is a uniform (Gi) required for the first class?",
-    answer: "No. For your first class, we’ll provide a complimentary Gi for you to use. Just wear comfortable athletic clothing underneath. If you decide to enroll, we’ll guide you on purchasing the appropriate uniform for training."
+    answer: "No. For your first class, we’ll provide a complimentary Gi for you to use. Just wear comfortable athletic clothing underneath and some sandals or flip flops. If you become a member, we’ll guide you on purchasing the appropriate uniform for training."
   },
   {
     question: "Who is the Head Instructor and what level of expertise does he provide?",
-    answer: "Moon Kim is a Brazilian Jiu-Jitsu Black Belt with 17 years of experience in public Education and teaching. He brings a strong background in structured instruction, helping students understand not just what to do, but why they’re doing it. He was the first student of IBJJF World Champion Pablo Silva, training under a world-class competitor from the beginning. His coaching combines high-level competitive foundations with clear, professional and easy to understand instruction."
+    answer: "Moon Kim is a first degree Brazilian Jiu-Jitsu Black Belt with 17 years of experience in public Education and teaching. He brings a strong background in structured instruction, helping students understand not just what to do, but why they’re doing it. He was the first student of IBJJF World Champion Pablo Silva, training under a world-class competitor from the beginning. His coaching combines high-level competitive foundations with clear, professional and easy to understand instruction."
   },
   {
     question: "What is Brazilian Jiu-Jitsu, and how is it different from other martial arts?",

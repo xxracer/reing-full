@@ -11,10 +11,10 @@ const PrivateLessons = () => {
     detailsTitle: "Focus on Your Goals",
     detailsText: "Private lessons are the fastest way to improve. Get personalized feedback and instruction tailored to your specific needs.",
     detailsList: [
-      "- Accelerate your progress",
-      "- Focus on your specific goals",
-      "- Ideal for self-defense or competition prep",
-      "- Get the boost you need to succeed"
+      "Accelerate your progress",
+      "Focus on your specific goals",
+      "Ideal for self-defense or competition prep",
+      "Get the boost you need to succeed"
     ],
     image1: "", // Body Image
     carouselImages: Array(5).fill(null),

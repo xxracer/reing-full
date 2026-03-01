@@ -11,10 +11,10 @@ const WrestlingProgram = () => {
         detailsTitle: "Takedowns and Control",
         detailsText: "Wrestling is a crucial component of grappling. Our program will help you develop the skills to take the fight to the ground on your terms.",
         detailsList: [
-            "- Master effective takedowns",
-            "- Improve positional control",
-            "- Enhance your BJJ stand-up game",
-            "- Build explosive power and conditioning"
+            "Master effective takedowns",
+            "Improve positional control",
+            "Enhance your BJJ stand-up game",
+            "Build explosive power and conditioning"
         ],
         image1: "", // Body Image
         carouselImages: Array(5).fill(null),

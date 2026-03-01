@@ -11,10 +11,10 @@ const KidsProgram = () => {
     detailsTitle: "Building Confidence and Skills",
     detailsText: "We provide a safe and supportive environment where children can learn and grow. Our curriculum is designed to be engaging and effective.",
     detailsList: [
-      "- Develop coordination and teamwork",
-      "- Learn valuable self-defense skills",
-      "- Build respect and discipline",
-      "- Have fun while learning"
+      "Develop coordination and teamwork",
+      "Learn valuable self-defense skills",
+      "Build respect and discipline",
+      "Have fun while learning"
     ],
     image1: "", // Body Image
     carouselImages: Array(5).fill(null),

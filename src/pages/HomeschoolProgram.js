@@ -8,13 +8,13 @@ import ImageCarousel from '../components/ImageCarousel';
 const HomeschoolProgram = () => {
   const [content, setContent] = useState({
     introText: "Reign Jiu Jitsu proudly offers a Homeschool Jiu Jitsu program tailored to families seeking daytime martial arts training. Students benefit from physical fitness, social interaction, and learning the values of discipline and perseverance. If you’re searching for homeschool martial arts near me, our program is the perfect fit.",
-    detailsTitle: "Physical Fitness & Social Interaction",
+    detailsTitle: "Physical Fitness & Social Interaction (Key Areas)",
     detailsText: "Our program is designed to provide a comprehensive experience for homeschool students, focusing on key areas of development.",
     detailsList: [
-      "- Benefit from physical fitness",
-      "- Develop social interaction skills",
-      "- Learn the values of discipline and perseverance",
-      "- Perfect for daytime martial arts training"
+      "Benefit from physical fitness",
+      "Develop social interaction skills",
+      "Learn the values of discipline and perseverance",
+      "Perfect for daytime martial arts training"
     ],
     image1: "https://static.wixstatic.com/media/c5947c_b0565367f7d345408d6f1e8853fb5f2f~mv2.png", // Body Image
     carouselImages: [

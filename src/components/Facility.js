@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Facility.css';
 
-const initialFacilityImages = [
-  { alt: 'Wide shot of facility interior', zoom: 1 },
-  { alt: 'Clean locker rooms / training equipment', zoom: 1 }
-];
-
 const defaultImages = [
   'https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png',
   'https://static.wixstatic.com/media/c5947c_b40f2d46adab45ae967e41fd1868925b~mv2.png'
@@ -71,7 +66,7 @@ const Facility = () => {
     <section id="facility" className="facility-section">
       <h2 className="section-title">Our Facility</h2>
       <p className="facility-description">
-        Our modern facility provides everything you need for safe and effective training. With competition-quality mats, spacious training areas, and a clean environment, we are more than a Jiu Jitsu studio near me – we are a sports performance gym in Katy, TX, designed to help you grow physically and mentally.
+        Our modern facility provides everything you need for safe high performance strength and conditioning training. With competition-quality mats, spacious training areas, and a clean environment, we are more than a Jiu Jitsu studio – we are a sports performance gym in Katy, TX, designed to help you grow physically and mentally.
       </p>
 
       {mediaType === 'images' ? (

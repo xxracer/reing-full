@@ -11,10 +11,10 @@ const FundamentalsProgram = () => {
     detailsTitle: "Build a Strong Foundation",
     detailsText: "Our fundamentals program is designed to give you the confidence and skills you need to succeed in your Jiu Jitsu journey.",
     detailsList: [
-      "- Learn basic movements and positions",
-      "- Understand core techniques",
-      "- Build a solid foundation for advanced classes",
-      "- Perfect for beginners"
+      "Learn basic movements and positions",
+      "Understand core techniques",
+      "Build a solid foundation for advanced classes",
+      "Perfect for beginners"
     ],
     image1: "https://static.wixstatic.com/media/c5947c_9de5932b95dc4de18b8a7277f4f8509b~mv2.png", // Body Image
     carouselImages: [
