@@ -63,6 +63,24 @@ const requireAuth = (req, res, next) => {
   return next();
 };
 
+// --- Caching Middleware for Public Content ---
+// By setting s-maxage, Vercel caches the response at the edge network.
+const cacheMiddleware = (req, res, next) => {
+  if (req.method === 'GET') {
+    // Cache on Vercel Edge for 60 seconds, serve stale content while revalidating for up to 1 day
+    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=86400');
+  }
+  next();
+};
+
+app.use('/api/content', cacheMiddleware);
+app.use('/api/images', cacheMiddleware);
+app.use('/api/instructors', cacheMiddleware);
+app.use('/api/google-reviews', cacheMiddleware);
+app.use('/api/schedule', cacheMiddleware);
+app.use('/api/blogs', cacheMiddleware);
+app.use('/api/instagram', cacheMiddleware); // In case they have an instagram route
+
 // --- Keep-Alive / Health Check Endpoint ---
 app.get('/api/keep-alive', async (req, res) => {
   try {

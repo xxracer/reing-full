@@ -143,7 +143,6 @@ const WelcomeSection = () => {
               <img
                 src={imageUrl}
                 alt="Group of mixed-age students on the mats"
-                loading="lazy"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -159,7 +158,6 @@ const WelcomeSection = () => {
               <img
                 src={imageUrl}
                 alt=""
-                loading="lazy"
                 style={{
                   position: 'absolute',
                   top: 0,

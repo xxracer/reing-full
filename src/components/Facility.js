@@ -84,7 +84,7 @@ const Facility = () => {
                   style={{ width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#000' }}
                 />
               ) : (
-                <img src={src} alt={`Facility ${index + 1}`} loading="lazy" />
+                <img src={src} alt={`Facility ${index + 1}`} />
               )}
             </div>
           ))}
@@ -108,7 +108,6 @@ const Facility = () => {
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-              loading="lazy"
               style={{ width: '100%', height: '100%' }}
             ></iframe>
           ) : videoUrl ? (
