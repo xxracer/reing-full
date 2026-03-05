@@ -14,7 +14,13 @@ const initialProgramsData = [
 ];
 
 const Programs = () => {
-  const [programsData, setProgramsData] = useState([]); // Start empty to avoid flashing default data if we removed images
+  const [programsData, setProgramsData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('reign_programs_cache');
+      if (cached) return JSON.parse(cached);
+    } catch (e) { }
+    return initialProgramsData;
+  });
   const apiBaseUrl = ''; // All API calls will be proxied
 
   useEffect(() => {
@@ -39,13 +45,13 @@ const Programs = () => {
           })
           .catch(error => {
             // Silently fail for individual images so others still load
-            console.log(`No custom image for ${program.title}`);
           })
       );
 
       // Wait for all requests to finish
       await Promise.all(imagePromises);
       setProgramsData(updatedPrograms);
+      localStorage.setItem('reign_programs_cache', JSON.stringify(updatedPrograms));
     };
 
     fetchProgramImages();
@@ -67,6 +73,7 @@ const Programs = () => {
                       loop
                       muted
                       playsInline
+                      preload="auto"
                       style={{
                         width: '100%',
                         height: '100%',
@@ -76,26 +83,6 @@ const Programs = () => {
                         transformOrigin: `${program.coords?.x ?? 50}% ${program.coords?.y ?? 50}%`,
                         position: 'relative',
                         zIndex: 1,
-                        pointerEvents: 'none'
-                      }}
-                    />
-                    {/* Blurred Background for Video */}
-                    <video
-                      src={program.image}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        filter: 'blur(20px) brightness(0.7)',
-                        transform: 'scale(1.1)',
-                        zIndex: 0,
                         pointerEvents: 'none'
                       }}
                     />
@@ -115,22 +102,6 @@ const Programs = () => {
                         transition: 'object-position 0.3s ease-out, transform 0.3s ease-out',
                         position: 'relative',
                         zIndex: 1
-                      }}
-                    />
-                    {/* Blurred Background */}
-                    <img
-                      src={program.image}
-                      alt=""
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        filter: 'blur(20px) brightness(0.7)',
-                        transform: 'scale(1.1)',
-                        zIndex: 0
                       }}
                     />
                   </>

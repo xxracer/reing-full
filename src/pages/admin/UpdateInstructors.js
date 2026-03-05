@@ -181,22 +181,7 @@ const UpdateInstructors = () => {
               <div style={{ marginTop: '10px' }}>
                 <p>Preview (Drag to Pan):</p>
                 <div className="image-mask-container" style={{ position: 'relative', overflow: 'hidden' }}>
-                  {/* Background Blur */}
-                  <img
-                    src={formData.image}
-                    alt=""
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      filter: 'blur(20px) brightness(0.7)',
-                      transform: 'scale(1.1)',
-                      zIndex: 0
-                    }}
-                  />
+                  {/* Removed Background Blur */}
                   <Draggable
                     nodeRef={nodeRef}
                     position={coords}

@@ -8,9 +8,22 @@ const defaultImages = [
 ];
 
 const Facility = () => {
-  const [facilityImages, setFacilityImages] = useState(defaultImages);
-  const [videoUrl, setVideoUrl] = useState('');
-  const [mediaType, setMediaType] = useState('images'); // Default to images
+  const getCachedFacility = () => {
+    try {
+      const cached = localStorage.getItem('reign_facility_data');
+      if (cached) return JSON.parse(cached);
+    } catch (e) { }
+    return {
+      facilityImages: defaultImages,
+      videoUrl: '',
+      mediaType: 'images'
+    };
+  };
+  const [cachedData] = useState(getCachedFacility);
+
+  const [facilityImages, setFacilityImages] = useState(cachedData.facilityImages);
+  const [videoUrl, setVideoUrl] = useState(cachedData.videoUrl);
+  const [mediaType, setMediaType] = useState(cachedData.mediaType);
   const apiBaseUrl = '';
 
   useEffect(() => {
@@ -55,9 +68,17 @@ const Facility = () => {
 
       setFacilityImages([img1, img2]);
 
+      let finalVideoUrl = videoUrl;
       if (videoRes && videoRes.data && videoRes.data.content_value) {
-        setVideoUrl(videoRes.data.content_value);
+        finalVideoUrl = videoRes.data.content_value;
+        setVideoUrl(finalVideoUrl);
       }
+
+      localStorage.setItem('reign_facility_data', JSON.stringify({
+        mediaType: mediaTypeRes?.data?.content_value || 'images',
+        facilityImages: [img1, img2],
+        videoUrl: finalVideoUrl
+      }));
     };
     fetchFacilityContent();
   }, []);

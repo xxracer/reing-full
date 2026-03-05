@@ -4,22 +4,38 @@ import axios from 'axios';
 import './HeroSection.css';
 
 const HeroSection = ({ videoOpacity }) => {
-  const [heroImage, setHeroImage] = useState({ url: null, position: 'center', coords: { x: 50, y: 50 } });
-  const [heroVideoUrl, setHeroVideoUrl] = useState(null); // Fix: Start with null to prevent "ghost" video
-  const [isLoading, setIsLoading] = useState(true);
+  const getCachedHero = () => {
+    try {
+      const cached = localStorage.getItem('reign_hero_data');
+      if (cached) return JSON.parse(cached);
+    } catch (e) { }
+    return {
+      heroImage: { url: null, position: 'center', coords: { x: 50, y: 50 } },
+      heroVideoUrl: null
+    };
+  };
+  const [cachedData] = useState(getCachedHero);
+
+  const [heroImage, setHeroImage] = useState(cachedData.heroImage);
+  const [heroVideoUrl, setHeroVideoUrl] = useState(cachedData.heroVideoUrl);
+  const [isLoading, setIsLoading] = useState(!cachedData.heroImage.url && !cachedData.heroVideoUrl);
   const apiBaseUrl = ''; // All API calls will be proxied
 
   useEffect(() => {
     const fetchHeroContent = async () => {
       try {
+        let newHeroImage = { ...cachedData.heroImage };
+        let newHeroVideoUrl = cachedData.heroVideoUrl;
+
         const imageResponse = await axios.get(`${apiBaseUrl}/api/content/homepage_main_image`);
         if (imageResponse.data && imageResponse.data.content_value) {
           const content = JSON.parse(imageResponse.data.content_value);
-          setHeroImage({
+          newHeroImage = {
             url: content.url,
             position: content.position || 'center',
             coords: content.coords || { x: 50, y: 50 }
-          });
+          };
+          setHeroImage(newHeroImage);
         }
 
         const videoResponse = await axios.get(`${apiBaseUrl}/api/content/homepage_hero_video`);
@@ -31,11 +47,18 @@ const HeroSection = ({ videoOpacity }) => {
           const videoId = (match && match[2].length === 11) ? match[2] : null;
 
           if (videoId) {
-            setHeroVideoUrl(`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1`);
+            newHeroVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1`;
           } else {
-            setHeroVideoUrl(val); // Fallback to raw value
+            newHeroVideoUrl = val; // Fallback to raw value
           }
+          setHeroVideoUrl(newHeroVideoUrl);
         }
+
+        localStorage.setItem('reign_hero_data', JSON.stringify({
+          heroImage: newHeroImage,
+          heroVideoUrl: newHeroVideoUrl
+        }));
+
       } catch (error) {
         console.error('Error fetching homepage hero content:', error);
       } finally {
@@ -43,7 +66,7 @@ const HeroSection = ({ videoOpacity }) => {
       }
     };
     fetchHeroContent();
-  }, [apiBaseUrl]);
+  }, [apiBaseUrl, cachedData]);
 
   // Logic to determine what to show:
   // 1. If User has set a custom video (not default), show it (PRIMARY).

@@ -93,22 +93,6 @@ const Instructors = () => {
                   zIndex: 1
                 }}
               />
-              {/* Blurred Background */}
-              <img
-                src={imageUrl}
-                alt=""
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: 'blur(20px) brightness(0.7)',
-                  transform: 'scale(1.1)',
-                  zIndex: 0
-                }}
-              />
             </div>
             <div className="instructor-bio">
               <h2>{instructor.name}</h2>

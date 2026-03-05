@@ -3,11 +3,20 @@ import axios from 'axios';
 import './WelcomeSection.css';
 
 const WelcomeSection = () => {
-  const [imageUrl, setImageUrl] = useState('');
-  const [zoom, setZoom] = useState(1);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [aspectRatio, setAspectRatio] = useState('16 / 9');
-  const [objectFit, setObjectFit] = useState('cover');
+  const getCached = () => {
+    try {
+      const cached = localStorage.getItem('reign_welcome_data');
+      if (cached) return JSON.parse(cached);
+    } catch (e) { }
+    return { url: '', zoom: 1, coords: { x: 50, y: 50 }, aspectRatio: '16 / 9', objectFit: 'cover' };
+  };
+  const [cachedData] = useState(getCached);
+
+  const [imageUrl, setImageUrl] = useState(cachedData.url);
+  const [zoom, setZoom] = useState(cachedData.zoom);
+  const [coords, setCoords] = useState(cachedData.coords);
+  const [aspectRatio, setAspectRatio] = useState(cachedData.aspectRatio);
+  const [objectFit, setObjectFit] = useState(cachedData.objectFit);
   const apiBaseUrl = ''; // All API calls will be proxied
 
   useEffect(() => {
@@ -17,11 +26,21 @@ const WelcomeSection = () => {
         if (response.data && response.data.content_value) {
           try {
             const content = JSON.parse(response.data.content_value);
-            setImageUrl(content.url || response.data.content_value);
-            if (content.zoom) setZoom(parseFloat(content.zoom));
-            if (content.coords) setCoords(content.coords);
-            if (content.aspectRatio) setAspectRatio(content.aspectRatio);
-            if (content.objectFit) setObjectFit(content.objectFit);
+            const newUrl = content.url || response.data.content_value;
+            const newZoom = content.zoom ? parseFloat(content.zoom) : 1;
+            const newCoords = content.coords || { x: 50, y: 50 };
+            const newAspectRatio = content.aspectRatio || '16 / 9';
+            const newObjectFit = content.objectFit || 'cover';
+
+            setImageUrl(newUrl);
+            setZoom(newZoom);
+            setCoords(newCoords);
+            setAspectRatio(newAspectRatio);
+            setObjectFit(newObjectFit);
+
+            localStorage.setItem('reign_welcome_data', JSON.stringify({
+              url: newUrl, zoom: newZoom, coords: newCoords, aspectRatio: newAspectRatio, objectFit: newObjectFit
+            }));
           } catch (e) {
             setImageUrl(response.data.content_value);
           }
@@ -104,6 +123,7 @@ const WelcomeSection = () => {
                 loop
                 muted
                 playsInline
+                preload="auto"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -114,26 +134,6 @@ const WelcomeSection = () => {
                   transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
                   position: 'relative',
                   zIndex: 1,
-                  pointerEvents: 'none'
-                }}
-              />
-              {/* Blurred Background Video */}
-              <video
-                src={imageUrl}
-                autoPlay
-                loop
-                muted
-                playsInline
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: 'blur(20px) brightness(0.7)',
-                  transform: 'scale(1.1)',
-                  zIndex: 0,
                   pointerEvents: 'none'
                 }}
               />
@@ -153,21 +153,6 @@ const WelcomeSection = () => {
                   transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
                   position: 'relative',
                   zIndex: 1
-                }}
-              />
-              <img
-                src={imageUrl}
-                alt=""
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: 'blur(20px) brightness(0.7)',
-                  transform: 'scale(1.1)',
-                  zIndex: 0
                 }}
               />
             </>
