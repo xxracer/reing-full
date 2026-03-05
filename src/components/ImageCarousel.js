@@ -53,6 +53,7 @@ const ImageCarousel = ({ images }) => {
                             <img
                                 src={src}
                                 alt={`Gallery ${index + 1}`}
+                                loading="lazy"
                                 style={{ ...positionStyle, ...zoomStyle }}
                             />
                         )}

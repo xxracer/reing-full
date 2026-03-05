@@ -105,6 +105,7 @@ const InstagramFeed = () => {
                     scrolling="no"
                     allowtransparency="true"
                     allow="encrypted-media"
+                    loading="lazy"
                     style={{ width: '100%', height: '100%' }}
                   ></iframe>
                 </div>
@@ -132,6 +133,7 @@ const InstagramFeed = () => {
                     <img
                       src={post.img}
                       alt={`Instagram post ${post.id}`}
+                      loading="lazy"
                       style={{
                         objectPosition: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
                         transform: `scale(${post.zoom || 1})`,

@@ -105,6 +105,7 @@ const Programs = () => {
                     <img
                       src={program.image}
                       alt={program.alt}
+                      loading="lazy"
                       style={{
                         width: '100%',
                         height: '100%',
@@ -121,6 +122,7 @@ const Programs = () => {
                     <img
                       src={program.image}
                       alt=""
+                      loading="lazy"
                       style={{
                         position: 'absolute',
                         top: 0,
