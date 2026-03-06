@@ -16,14 +16,8 @@ const AdultProgram = () => {
       "Experience personal growth in a supportive community",
       "Classes include both Gi and No-Gi training"
     ],
-    image1: "https://static.wixstatic.com/media/c5947c_200495ae287d4122be667a7e4a8f4551~mv2.jpg", // Body Image
-    carouselImages: [
-      "https://static.wixstatic.com/media/c5947c_32c260b29da7493f94738d8603598770~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_200495ae287d4122be667a7e4a8f4551~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_32c260b29da7493f94738d8603598770~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_200495ae287d4122be667a7e4a8f4551~mv2.jpg",
-      "https://static.wixstatic.com/media/c5947c_32c260b29da7493f94738d8603598770~mv2.jpg"
-    ],
+    image1: "", // Body Image
+    carouselImages: Array(5).fill(null),
     faqs: [
       {
         question: "Does the training cover self-defense techniques?",

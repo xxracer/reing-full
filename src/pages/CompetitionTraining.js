@@ -8,8 +8,6 @@ import ImageCarousel from '../components/ImageCarousel';
 const CompetitionTraining = () => {
   const [content, setContent] = useState({
     introText: "For those who want to take their training to the next level, our Competition Training program is led by experienced coaches who prepare students for local, national, and international tournaments. Push yourself, sharpen your game, and represent BJJ Katy Texas with pride.",
-    detailsTitle: "Prepare for the Podium",
-    detailsText: "Our program is designed to sharpen your game and prepare you for the highest levels of competition.",
     detailsList: [
       "Led by experienced, world-class coaches",
       "Prepare for local, national, and international tournaments",

@@ -107,7 +107,7 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
           zIndex: 0
         }}
       >
-        {heroImageUrl && heroImageUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
+        {typeof heroImageUrl === 'string' && heroImageUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
           <video
             src={heroImageUrl}
             autoPlay

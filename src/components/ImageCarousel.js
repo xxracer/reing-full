@@ -17,6 +17,12 @@ const ImageCarousel = ({ images }) => {
         return url && url.match(/\.(mp4|webm|mov|quicktime)(\?|$)/i);
     };
 
+    const isValidUrl = (url) => {
+        if (!url || typeof url !== 'string' || url === 'undefined' || url === 'null' || url.trim() === '') return false;
+        if (url.startsWith('{') || url.startsWith('[')) return false;
+        return true;
+    };
+
     return (
         <div className="images-grid-container">
             {displayImages.map((item, index) => {
@@ -32,10 +38,6 @@ const ImageCarousel = ({ images }) => {
                     if (item.zoom && item.zoom !== 1) {
                         zoomStyle = { transform: `scale(${item.zoom})` };
                     }
-                }
-
-                if (!src) {
-                    return <div className="grid-image-item" key={index} style={{ backgroundColor: '#f0f0f0' }}></div>;
                 }
 
                 return (

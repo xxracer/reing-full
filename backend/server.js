@@ -274,6 +274,7 @@ app.post('/api/upload', requireAuth, upload.single('image'), async (req, res) =>
       access: 'public',
       token: process.env.BLOB_READ_WRITE_TOKEN,
       allowOverwrite: true,
+      cacheControlMaxAge: 31536000 // Cache in browsers for 1 full year without downloading
     });
 
     // Save the image URL to the library
