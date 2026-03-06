@@ -5,9 +5,24 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <App />
-);
+
+const renderApp = () => {
+  root.render(
+    <App />
+  );
+};
+
+// Halt React from booting until the initial HTML preload script has populated localStorage
+if (window.__REIGN_PRELOAD_PROMISE__) {
+  window.__REIGN_PRELOAD_PROMISE__
+    .then(() => renderApp())
+    .catch((err) => {
+      console.error("Hydration failed, booting anyway.", err);
+      renderApp();
+    });
+} else {
+  renderApp();
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

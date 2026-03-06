@@ -16,10 +16,21 @@ import axios from 'axios';
 import './ProgramHero.css';
 
 const ProgramHero = ({ title, sectionId, defaultImage }) => {
+  const isValidUrl = (url) => {
+    if (!url || typeof url !== 'string' || url === 'undefined' || url === 'null' || url.trim() === '') return false;
+    if (url.startsWith('{') || url.startsWith('[')) return false;
+    return true;
+  };
+
   const getCachedHero = () => {
     try {
       const cached = localStorage.getItem(`reign_program_hero_${sectionId}`);
-      if (cached) return JSON.parse(cached);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (isValidUrl(parsed.heroImageUrl)) {
+          return parsed;
+        }
+      }
     } catch (e) { }
     return {
       heroImageUrl: defaultImage,
@@ -44,6 +55,9 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
           try {
             const content = JSON.parse(response.data.content_value);
             const newUrl = content.url || response.data.content_value;
+
+            if (!isValidUrl(newUrl)) throw new Error("Invalid URL from DB");
+
             const newZoom = parseFloat(content.zoom) || 1;
             const newCoords = content.coords || { x: 50, y: 50 };
             const newAspectRatio = content.aspectRatio || undefined;
@@ -60,13 +74,16 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
               aspectRatio: newAspectRatio
             }));
           } catch (e) {
-            setHeroImageUrl(response.data.content_value);
-            localStorage.setItem(`reign_program_hero_${sectionId}`, JSON.stringify({
-              heroImageUrl: response.data.content_value,
-              zoom: 1,
-              coords: { x: 50, y: 50 },
-              aspectRatio: undefined
-            }));
+            const rawVal = response.data.content_value;
+            if (isValidUrl(rawVal)) {
+              setHeroImageUrl(rawVal);
+              localStorage.setItem(`reign_program_hero_${sectionId}`, JSON.stringify({
+                heroImageUrl: rawVal,
+                zoom: 1,
+                coords: { x: 50, y: 50 },
+                aspectRatio: undefined
+              }));
+            }
           }
         }
       } catch (error) {

@@ -128,30 +128,64 @@
             }));
           }
 
+          // Force the browser network layer to start downloading the actual bytes of the media
+          // before React even mounts. This is the true Netflix/Amazon technique.
+          const forcePreload = (url, asType) => {
+            if (!url || typeof url !== 'string' || url === 'undefined' || url === 'null') return;
+            if (url.includes('youtube.com') || url.includes('youtu.be')) return;
+
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = asType;
+            link.href = url;
+            document.head.appendChild(link);
+          };
+
           // Program Heroes Cache (Dynamic)
-          for (const key in data) {
-            if (key.startsWith('program_') && key.endsWith('_hero')) {
-              const imgStr = data[key];
-              if (imgStr) {
-                try {
-                  const parsed = JSON.parse(imgStr);
-                  localStorage.setItem(`reign_program_hero_${key}`, JSON.stringify({
-                    heroImageUrl: parsed.url || imgStr,
-                    zoom: parseFloat(parsed.zoom) || 1,
-                    coords: parsed.coords || { x: 50, y: 50 },
-                    aspectRatio: parsed.aspectRatio || undefined
-                  }));
-                } catch (e) {
-                  localStorage.setItem(`reign_program_hero_${key}`, JSON.stringify({
+          const programNames = ['kids', 'homeschool', 'adult', 'fundamentals', 'competition', 'private_lessons', 'wrestling'];
+
+          for (const prog of programNames) {
+            // Because of the 'SYNC' feature, the user might update the homepage card image
+            // (_image) but never explicitly save the hero (_hero). 
+            // We must try to load _hero first, and fallback to _image if empty.
+            let imgStr = data[`program_${prog}_hero`] || data[`program_${prog}_image`];
+
+            // For adult vs adults mismatch in some places, try 'adults'
+            if (!imgStr && prog === 'adult') {
+              imgStr = data[`program_adults_hero`] || data[`program_adults_image`];
+            }
+
+            if (imgStr) {
+              const isValid = (u) => u && typeof u === 'string' && u !== 'undefined' && u !== 'null' && u.trim() !== '' && !u.startsWith('{') && !u.startsWith('[');
+              try {
+                const parsed = JSON.parse(imgStr);
+                const heroUrl = parsed.url || imgStr;
+                if (!isValid(heroUrl)) throw new Error("Invalid URL");
+                localStorage.setItem(`reign_program_hero_program_${prog}_hero`, JSON.stringify({
+                  heroImageUrl: heroUrl,
+                  zoom: parseFloat(parsed.zoom) || 1,
+                  coords: parsed.coords || { x: 50, y: 50 },
+                  aspectRatio: parsed.aspectRatio || undefined
+                }));
+                forcePreload(heroUrl, heroUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? 'video' : 'image');
+              } catch (e) {
+                if (isValid(imgStr)) {
+                  localStorage.setItem(`reign_program_hero_program_${prog}_hero`, JSON.stringify({
                     heroImageUrl: imgStr,
                     zoom: 1,
                     coords: { x: 50, y: 50 },
                     aspectRatio: undefined
                   }));
+                  forcePreload(imgStr, imgStr.match(/\.(mp4|webm|mov)(\?|$)/i) ? 'video' : 'image');
                 }
               }
             }
           }
+
+          // Priority Preloads for Home and Facility
+          if (heroVideoUrl) forcePreload(heroVideoUrl, 'video');
+          if (heroImage && heroImage.url) forcePreload(heroImage.url, 'image');
+          if (finalVideoUrl) forcePreload(finalVideoUrl, 'video');
 
           return data;
         })
