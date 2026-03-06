@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Reign Jiu Jitsu is a premier family-friendly martial arts academy in Katy, TX, offering expert training to promote discipline, confidence, and fitness."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description"
+    content="Reign Jiu Jitsu is a premier family-friendly martial arts academy in Katy, TX, offering expert training to promote discipline, confidence, and fitness." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet">
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -27,12 +28,143 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Reign BJJ | Katy's Premier Family Friendly Jiu Jitsu</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+  <!-- REIGN PAGE CACHE HYDRATION SCRIPT -->
+  <script>
+    (function () {
+      // Kick off the fetch immediately in the head, parallel to CSS/JS downloading.
+      window.__REIGN_PRELOAD_PROMISE__ = fetch('/api/content-preload', { cache: 'no-store' })
+        .then(res => res.json())
+        .then(data => {
+          window.__REIGN_PRELOAD_DATA__ = data;
+
+          // Map the data into localStorage format so React sees it instantly on mount
+          const welcomeImageStr = data['welcome_section_image'];
+          if (welcomeImageStr) {
+            try {
+              const parsed = JSON.parse(welcomeImageStr);
+              localStorage.setItem('reign_welcome_data', JSON.stringify({
+                url: parsed.url || welcomeImageStr,
+                zoom: parseFloat(parsed.zoom || 1),
+                coords: parsed.coords || { x: 50, y: 50 },
+                aspectRatio: parsed.aspectRatio || '16 / 9',
+                objectFit: parsed.objectFit || 'cover'
+              }));
+            } catch (e) { }
+          }
+
+          const heroMainStr = data['homepage_main_image'];
+          const heroVideoStr = data['homepage_hero_video'];
+          if (heroMainStr || heroVideoStr) {
+            let heroImage = { url: null, position: 'center', coords: { x: 50, y: 50 } };
+            let heroVideoUrl = null;
+            if (heroMainStr) {
+              try {
+                const parsed = JSON.parse(heroMainStr);
+                heroImage = { url: parsed.url, position: parsed.position || 'center', coords: parsed.coords || { x: 50, y: 50 } };
+              } catch (e) { }
+            }
+            if (heroVideoStr) {
+              const val = heroVideoStr;
+              const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+              const match = val.match(regExp);
+              const videoId = (match && match[2].length === 11) ? match[2] : null;
+              if (videoId) {
+                heroVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1`;
+              } else {
+                heroVideoUrl = val;
+              }
+            }
+            localStorage.setItem('reign_hero_data', JSON.stringify({ heroImage, heroVideoUrl }));
+          }
+
+          // Programs cache
+          const programsStr = data['homepage_program_images'];
+          if (programsStr) {
+            try {
+              const parsed = JSON.parse(programsStr);
+              const initialProgramsData = [
+                { id: 'kids', title: 'Kids Program', path: '/kids-program', description: 'Confidence, discipline, and fun for children.', alt: 'Kids class in session', zoom: 1 },
+                { id: 'adults', title: 'Adult Program', path: '/adult-program', description: 'Beginner to advanced Jiu Jitsu for all levels.', alt: 'Adult class in session', zoom: 1 },
+                { id: 'homeschool', title: 'HomeSchool Program', path: '/homeschool-program', description: 'Daytime training tailored for homeschoolers.', alt: 'Homeschool class in session', zoom: 1 }
+              ];
+              const updatedPrograms = initialProgramsData.map(program => {
+                if (parsed[program.id]) {
+                  program.image = parsed[program.id].url || parsed[program.id];
+                  program.zoom = parsed[program.id].zoom || 1;
+                  program.coords = parsed[program.id].coords || { x: 50, y: 50 };
+                }
+                return program;
+              });
+              localStorage.setItem('reign_programs_cache', JSON.stringify(updatedPrograms));
+            } catch (e) { }
+          }
+
+          // Facility cache
+          const facType = data['facility_media_type'] || 'images';
+          const facImg1 = data['facility_image_1'];
+          const facImg2 = data['facility_image_2'];
+          const facVideo = data['facility_video'];
+
+          const processImage = (srcStr) => {
+            if (!srcStr) return null;
+            try {
+              const content = JSON.parse(srcStr);
+              return content.url || srcStr;
+            } catch (e) { return srcStr; }
+          };
+
+          const img1 = processImage(facImg1);
+          const img2 = processImage(facImg2);
+          let finalVideoUrl = facVideo || '';
+          const facilityImagesData = [];
+          if (img1 && img1 !== 'undefined' && img1 !== 'null') facilityImagesData.push(img1);
+          if (img2 && img2 !== 'undefined' && img2 !== 'null') facilityImagesData.push(img2);
+
+          if (facilityImagesData.length > 0 || finalVideoUrl) {
+            localStorage.setItem('reign_facility_data', JSON.stringify({
+              mediaType: facType,
+              facilityImages: facilityImagesData,
+              videoUrl: finalVideoUrl
+            }));
+          }
+
+          // Program Heroes Cache (Dynamic)
+          for (const key in data) {
+            if (key.startsWith('program_') && key.endsWith('_hero')) {
+              const imgStr = data[key];
+              if (imgStr) {
+                try {
+                  const parsed = JSON.parse(imgStr);
+                  localStorage.setItem(`reign_program_hero_${key}`, JSON.stringify({
+                    heroImageUrl: parsed.url || imgStr,
+                    zoom: parseFloat(parsed.zoom) || 1,
+                    coords: parsed.coords || { x: 50, y: 50 },
+                    aspectRatio: parsed.aspectRatio || undefined
+                  }));
+                } catch (e) {
+                  localStorage.setItem(`reign_program_hero_${key}`, JSON.stringify({
+                    heroImageUrl: imgStr,
+                    zoom: 1,
+                    coords: { x: 50, y: 50 },
+                    aspectRatio: undefined
+                  }));
+                }
+              }
+            }
+          }
+
+          return data;
+        })
+        .catch(err => console.error('Error prefetching data:', err));
+    })();
+  </script>
+  <title>Reign BJJ | Katy's Premier Family Friendly Jiu Jitsu</title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -42,5 +174,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>

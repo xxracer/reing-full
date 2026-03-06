@@ -16,10 +16,24 @@ import axios from 'axios';
 import './ProgramHero.css';
 
 const ProgramHero = ({ title, sectionId, defaultImage }) => {
-  const [heroImageUrl, setHeroImageUrl] = useState(defaultImage);
-  const [zoom, setZoom] = useState(1);
-  const [coords, setCoords] = useState({ x: 50, y: 50 });
-  const [aspectRatio, setAspectRatio] = useState(undefined); // Start undefined to let CSS default apply if not set
+  const getCachedHero = () => {
+    try {
+      const cached = localStorage.getItem(`reign_program_hero_${sectionId}`);
+      if (cached) return JSON.parse(cached);
+    } catch (e) { }
+    return {
+      heroImageUrl: defaultImage,
+      zoom: 1,
+      coords: { x: 50, y: 50 },
+      aspectRatio: undefined
+    };
+  };
+
+  const [cachedData] = useState(getCachedHero);
+  const [heroImageUrl, setHeroImageUrl] = useState(cachedData.heroImageUrl);
+  const [zoom, setZoom] = useState(cachedData.zoom);
+  const [coords, setCoords] = useState(cachedData.coords);
+  const [aspectRatio, setAspectRatio] = useState(cachedData.aspectRatio);
   const apiBaseUrl = ''; // All API calls will be proxied
 
   useEffect(() => {
@@ -29,12 +43,30 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
         if (response.data && response.data.content_value) {
           try {
             const content = JSON.parse(response.data.content_value);
-            setHeroImageUrl(content.url || response.data.content_value);
-            if (content.zoom) setZoom(parseFloat(content.zoom));
-            if (content.coords) setCoords(content.coords);
-            if (content.aspectRatio) setAspectRatio(content.aspectRatio);
+            const newUrl = content.url || response.data.content_value;
+            const newZoom = parseFloat(content.zoom) || 1;
+            const newCoords = content.coords || { x: 50, y: 50 };
+            const newAspectRatio = content.aspectRatio || undefined;
+
+            setHeroImageUrl(newUrl);
+            setZoom(newZoom);
+            setCoords(newCoords);
+            setAspectRatio(newAspectRatio);
+
+            localStorage.setItem(`reign_program_hero_${sectionId}`, JSON.stringify({
+              heroImageUrl: newUrl,
+              zoom: newZoom,
+              coords: newCoords,
+              aspectRatio: newAspectRatio
+            }));
           } catch (e) {
             setHeroImageUrl(response.data.content_value);
+            localStorage.setItem(`reign_program_hero_${sectionId}`, JSON.stringify({
+              heroImageUrl: response.data.content_value,
+              zoom: 1,
+              coords: { x: 50, y: 50 },
+              aspectRatio: undefined
+            }));
           }
         }
       } catch (error) {

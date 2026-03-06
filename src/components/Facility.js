@@ -68,10 +68,15 @@ const Facility = () => {
 
       setFacilityImages([img1, img2]);
 
-      let finalVideoUrl = videoUrl;
+      let finalVideoUrl = '';
       if (videoRes && videoRes.data && videoRes.data.content_value) {
         finalVideoUrl = videoRes.data.content_value;
         setVideoUrl(finalVideoUrl);
+      } else {
+        setVideoUrl(prev => {
+          finalVideoUrl = prev;
+          return prev;
+        });
       }
 
       localStorage.setItem('reign_facility_data', JSON.stringify({

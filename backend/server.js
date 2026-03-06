@@ -73,6 +73,7 @@ const cacheMiddleware = (req, res, next) => {
   next();
 };
 
+app.use('/api/content-preload', cacheMiddleware);
 app.use('/api/content', cacheMiddleware);
 app.use('/api/images', cacheMiddleware);
 app.use('/api/instructors', cacheMiddleware);
@@ -307,6 +308,21 @@ app.delete('/api/images', requireAuth, async (req, res) => {
   } catch (err) {
     console.error('Error deleting image:', err);
     res.status(500).json({ success: false, message: 'Failed to delete image.' });
+  }
+});
+
+// Page Content Preload API for instant client hydration
+app.get('/api/content-preload', async (req, res) => {
+  try {
+    const { rows } = await db.query('SELECT section_id, content_value FROM page_content');
+    const contentMap = {};
+    rows.forEach(row => {
+      contentMap[row.section_id] = row.content_value;
+    });
+    res.json(contentMap);
+  } catch (err) {
+    console.error('Error fetching preload content:', err);
+    res.status(500).json({ success: false, message: 'Failed to fetch content.' });
   }
 });
 

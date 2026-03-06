@@ -39,6 +39,8 @@ import LoginPage from './pages/LoginPage';
 
 import GoogleReviewsButton from './components/GoogleReviewsButton';
 
+import ScrollToTop from './components/ScrollToTop';
+
 // Configure axios to send credentials
 // axios.defaults.withCredentials = true; // Assuming this was here before, uncommenting if needed or keep commented if handled globally
 
@@ -46,6 +48,7 @@ import GoogleReviewsButton from './components/GoogleReviewsButton';
 const AppLayout = () => {
   return (
     <div className="App">
+      <ScrollToTop />
       <Navbar />
       <main>
         <Routes>
