@@ -17,12 +17,6 @@ const ImageCarousel = ({ images }) => {
         return url && url.match(/\.(mp4|webm|mov|quicktime)(\?|$)/i);
     };
 
-    const isValidUrl = (url) => {
-        if (!url || typeof url !== 'string' || url === 'undefined' || url === 'null' || url.trim() === '') return false;
-        if (url.startsWith('{') || url.startsWith('[')) return false;
-        return true;
-    };
-
     return (
         <div className="images-grid-container">
             {displayImages.map((item, index) => {
