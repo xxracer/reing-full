@@ -52,11 +52,12 @@
             } catch (e) { }
           }
 
+          let heroImage = { url: null, position: 'center', coords: { x: 50, y: 50 } };
+          let heroVideoUrl = null;
+
           const heroMainStr = data['homepage_main_image'];
           const heroVideoStr = data['homepage_hero_video'];
           if (heroMainStr || heroVideoStr) {
-            let heroImage = { url: null, position: 'center', coords: { x: 50, y: 50 } };
-            let heroVideoUrl = null;
             if (heroMainStr) {
               try {
                 const parsed = JSON.parse(heroMainStr);

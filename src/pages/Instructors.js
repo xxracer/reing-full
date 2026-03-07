@@ -64,20 +64,19 @@ const Instructors = () => {
         let imageUrl = instructor.image;
         let zoom = 1;
         let coords = { x: 50, y: 50 };
-        let aspectRatio = '4 / 5'; // Default for instructors usually vertical, but can be overridden
+        const aspectRatio = '1 / 1'; // Force square for all instructors
         try {
           const parsed = JSON.parse(instructor.image);
           if (parsed.url) imageUrl = parsed.url;
           if (parsed.zoom) zoom = parseFloat(parsed.zoom);
           if (parsed.coords) coords = parsed.coords;
-          if (parsed.aspectRatio) aspectRatio = parsed.aspectRatio;
         } catch (e) {
           // raw string
         }
 
         return (
           <div key={instructor.id} className={`instructor-item ${index % 2 !== 0 ? 'reverse' : ''}`}>
-            <div className="instructor-image-wrapper" style={{ aspectRatio: aspectRatio || '4 / 5', position: 'relative' }}>
+            <div className="instructor-image-wrapper" style={{ aspectRatio: aspectRatio, position: 'relative' }}>
               <img
                 src={imageUrl}
                 alt={instructor.name}

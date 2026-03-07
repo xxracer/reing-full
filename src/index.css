@@ -86,16 +86,25 @@ button:active,
   box-shadow: 0 4px 15px rgba(227, 28, 37, 0.4);
 }
 
+html,
+body {
+  overflow-x: hidden;
+  /* Prevent ANY horizontal scroll on the entire page */
+  max-width: 100%;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-primary);
-  color: var(--text-medium-gray);
+  color: var(--text-dark-gray);
   font-size: 18px;
   line-height: 1.6;
   transition: background-color 0.4s ease, color 0.4s ease;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 h1,
@@ -104,9 +113,20 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading-secondary);
+  font-family: var(--font-heading-primary);
   color: var(--text-charcoal);
   font-weight: 700;
+  margin-top: 0;
+  hyphens: none;
+  -webkit-hyphens: none;
+  overflow-wrap: break-word;
+}
+
+p {
+  overflow-wrap: break-word;
+  /* Allow text to wrap inside its container */
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 h1 {
