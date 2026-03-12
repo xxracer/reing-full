@@ -9,7 +9,7 @@ const HomeschoolProgram = () => {
   const [content, setContent] = useState({
     introText: "Reign Jiu Jitsu proudly offers a Homeschool Jiu Jitsu program tailored to families seeking daytime martial arts training. Students benefit from physical fitness, social interaction, and learning the values of discipline and perseverance. If you’re searching for homeschool martial arts near me, our program is the perfect fit.",
     detailsTitle: "Physical Fitness & Social Interaction (Key Areas)",
-    detailsText: "Our program is designed to provide a comprehensive experience for homeschool students, focusing on key areas of development.",
+    detailsText: "Our program is designed to provide a comprehensive experience for homeschool students, focusing on key areas of development:",
     detailsList: [
       "Benefit from physical fitness",
       "Develop social interaction skills",
@@ -72,7 +72,6 @@ const HomeschoolProgram = () => {
             let data = res.value.data.content_value;
             try {
               const parsed = JSON.parse(data);
-              // Store the full object if it has a url, otherwise just the string
               if (parsed.url) data = parsed;
             } catch (e) { }
             newCarousel[index] = data;
@@ -102,7 +101,7 @@ const HomeschoolProgram = () => {
 
     fetchContent();
     fetchDynamicImages();
-  }, []);
+  }, [apiBaseUrl]);
 
   const getImageProps = (imgData) => {
     if (typeof imgData === 'object' && imgData !== null && imgData.url) {
@@ -127,12 +126,11 @@ const HomeschoolProgram = () => {
 
       <div className="program-content-container">
 
-        {/* Top Intro Section */}
-        <section className="program-top-intro">
+        <section className="program-top-intro animate-fade-up">
           <p>{content.introText}</p>
         </section>
 
-        <section className="program-main-split">
+        <section className="program-main-split animate-fade-up delay-1">
           <div className="text-side">
             <div className="program-details-text-only">
               <h2>{content.detailsTitle}</h2>
@@ -149,18 +147,18 @@ const HomeschoolProgram = () => {
             <div className="program-body-image-wrapper">
               <img
                 src={image1Props.src}
-                alt="Homeschool Program Main"
-                style={{ ...image1Props.style, width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="Homeschool Program Details"
+                style={{ ...image1Props.style }}
               />
             </div>
           </div>
         </section>
 
-        <section className="program-carousel-section">
+        <section className="program-carousel-section animate-fade-up delay-2">
           <ImageCarousel images={content.carouselImages} />
         </section>
 
-        <FAQ faqData={content.faqs} title="Homeschool Program FAQs" />
+        <FAQ faqData={content.faqs} title="Frequently Asked Questions" />
       </div>
     </div>
   );

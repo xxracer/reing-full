@@ -1,275 +1,250 @@
 /* Styling for the redesigned Program pages */
 
 .program-page {
-  background-color: var(--background-primary);
-  color: var(--text-charcoal);
-  padding-top: 80px;
-  /* To account for fixed navbar */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  /* The navbar is fixed, so we don't need padding-top here as the Hero handles it */
+  padding-top: 0; 
+  overflow: hidden; /* Prevent horizontal scroll on x-axis completely */
 }
 
-.program-hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 100px 20px;
-  background-color: var(--background-secondary);
-  background-size: cover;
-  background-position: center;
-}
-
-.program-hero-title {
-  font-family: var(--font-heading-primary);
-  font-size: 56px;
-  color: var(--text-charcoal);
-}
-
-.program-intro {
-  max-width: 800px;
-  margin: 60px auto;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.program-intro p {
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-
-
-.program-details-section {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  max-width: 1200px;
-  margin: 60px auto;
-  padding: 0 20px;
-}
-
-.program-details-text {
-  flex: 1;
-  min-width: 300px;
-  max-width: 600px;
-}
-
-.program-details-text h2 {
-  font-family: var(--font-heading-secondary);
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-.program-details-text ul {
-  list-style: none;
-  padding: 0;
-}
-
-.program-details-text li {
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-.program-details-image {
-  flex: 1;
-  min-width: 300px;
-  max-width: 500px;
-}
-
-.program-details-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 60px auto;
-  padding: 0 20px;
-}
-
-.benefit-item {
-  text-align: center;
-}
-
-.benefit-item h3 {
-  font-family: var(--font-heading-secondary);
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.scrolled .program-page {
-  background-color: var(--background-primary);
-  color: var(--text-charcoal);
-}
-
-.scrolled .program-hero {
-  background-color: var(--background-secondary);
-}
-
-.scrolled .program-hero-title,
-.scrolled .program-details-text h2,
-.scrolled .benefit-item h3 {
-  color: var(--text-charcoal);
-}
-
-/* New Layout Styles - Corrected */
+/* Base Wrapper for structural alignment */
 .program-content-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl); /* Massive space between sections */
+  padding-bottom: var(--space-3xl);
 }
 
+/* -------------------------------------
+   Intro Section 
+-------------------------------------- */
+.program-top-intro {
+  max-width: 900px;
+  margin: var(--space-2xl) auto 0;
+  text-align: center;
+  padding: 0 var(--space-m);
+}
+
+.program-top-intro p {
+  font-size: var(--font-step-1);
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-weight: 400;
+  max-width: 100%;
+}
+
+/* -------------------------------------
+   Main Split Section (Text + Image) 
+-------------------------------------- */
 .program-main-split {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
-  margin-bottom: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--space-2xl);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-l);
+  /* Add subtle background for contrast */
+  background: var(--bg-accent-subtle);
+  border-radius: 16px;
+  border: 1px solid var(--border-accent);
 }
 
 .text-side {
-  flex: 1;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+.program-details-text-only h2 {
+  font-family: var(--font-bebas);
+  font-size: clamp(1.4rem, 5vw, var(--font-step-5)); /* Shrink to fit on mobile */
+  color: var(--text-primary);
+  margin-bottom: var(--space-m);
+  letter-spacing: 0.05em;
+  text-shadow: 0 4px 12px oklch(0 0 0 / 0.5);
+  white-space: nowrap; /* Force 1 line */
+}
+
+.program-details-text-only p {
+  font-size: var(--font-step-0);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-l);
+}
+
+.program-details-text-only ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.program-details-text-only li {
+  font-size: var(--font-step-0);
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: var(--space-l);
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+}
+
+.program-details-text-only li::before {
+  content: "✓";
+  color: var(--brand-primary);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  font-weight: bold;
+  font-size: var(--font-step-1);
+}
+
+/* Image Side container */
 .image-side {
-  flex: 1;
-  max-width: 600px;
-  /* Adjust as needed */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .program-body-image-wrapper {
+  position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  /* Aspect ratio trick to make it look premium (portrait/square split) */
+  aspect-ratio: 4/5; 
+}
+
+.program-body-image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--border-accent);
+  border-radius: 12px;
+  pointer-events: none;
 }
 
 .program-body-image-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  transition: transform 0.6s ease;
 }
 
-/* Top Intro Text - Centered and "Two Lines" look */
-.program-top-intro {
-  text-align: center;
-  max-width: 900px;
-  margin: 0 auto 50px auto;
-  /* Space below intro */
+.program-body-image-wrapper:hover img {
+  transform: scale(1.03);
 }
 
-.program-top-intro p,
-.program-top-intro .intro-text-highlight {
-  font-family: var(--font-heading-secondary);
-  /* Maybe Montserrat for this prominence? */
-  font-size: 24px;
-  line-height: 1.5;
-  color: var(--text-charcoal);
-  font-weight: 600;
+/* -------------------------------------
+   Benefits Grid Restyling
+-------------------------------------- */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-l);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-l);
 }
 
-/* Override Details Text styles for the split view */
-.program-details-text-only {
-  max-width: 100%;
-  margin: 0;
-  text-align: left;
+.benefit-item {
+  text-align: left; /* Better readability than center */
+  padding: var(--space-xl) var(--space-l);
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 6px oklch(0 0 0 / 0.1);
 }
 
-.program-details-text-only h2 {
-  font-family: var(--font-heading-secondary);
-  font-size: 32px;
-  margin-top: 0;
-  /* CRITICAL: Remove top margin to align with image */
-  margin-bottom: 20px;
-  color: var(--text-charcoal);
-  line-height: 1.1;
-  /* Tighter line height for title */
+.benefit-item:hover {
+  transform: translateY(-4px);
+  background-color: var(--card-bg-hover);
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow-hover);
 }
 
-.program-details-text-only p {
-  font-size: 18px;
+.benefit-item h3 {
+  font-family: var(--font-bebas);
+  font-size: var(--font-step-3);
+  color: var(--brand-primary-light); /* Utilize colorize */
+  margin-bottom: var(--space-s);
+  letter-spacing: 0.05em;
+}
+
+.benefit-item p {
+  font-size: var(--font-step-0);
+  color: var(--text-secondary);
   line-height: 1.6;
-  margin-bottom: 20px;
 }
 
-.program-details-text-only ul {
-  list-style: none;
-  padding: 0;
+/* -------------------------------------
+   Carousel Wrapper
+-------------------------------------- */
+.program-carousel-section {
+  width: 100%;
+  padding: var(--space-2xl) 0;
+  background-color: var(--bg-tertiary);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.program-details-text-only li {
-  font-size: 16px;
-  margin-bottom: 12px;
-  padding-left: 20px;
-  position: relative;
+/* -------------------------------------
+   Mobile Responsiveness (Crucial)
+-------------------------------------- */
+@media (max-width: 1024px) {
+  .program-main-split {
+    grid-template-columns: 1fr;
+    /* Reverse order on mobile: Image first, Text second */
+    display: flex;
+    flex-direction: column-reverse;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: var(--space-xl) var(--space-m);
+  }
+  
+  .program-body-image-wrapper {
+    aspect-ratio: 16/9; /* Swap to landscape on narrow screens */
+    border-radius: 8px;
+  }
 }
 
-.program-details-text-only li::before {
-  content: "•";
-  color: var(--accent-red);
-  font-weight: bold;
-  position: absolute;
-  left: 0;
-}
-
-/* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
-  .program-hero {
-    padding: 60px 20px;
+  .program-top-intro {
+    margin-top: var(--space-xl);
   }
 
-  .program-hero-title {
-    font-size: 42px;
+  .program-top-intro p {
+    font-size: var(--font-step-0);
   }
 
-  .program-intro {
-    margin: 40px auto;
+  .program-details-text-only h2 {
+    font-size: var(--font-step-4);
+    text-align: center;
   }
-
-  .program-intro p {
-    font-size: 16px;
+  
+  .program-details-text-only p {
+    text-align: center;
   }
-
-  .program-details-section {
-    flex-direction: column;
-    margin: 40px auto;
-    gap: 30px;
-  }
-
-  .program-details-text,
-  .program-details-image {
-    min-width: 100%;
-    width: 100%;
-  }
-
-  .program-details-text h2 {
-    font-size: 24px;
-  }
-
+  
   .benefits-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    padding: 0 var(--space-m);
   }
-
-  .program-page div img {
-    max-width: 100%;
-    height: auto;
+  
+  .benefit-item {
+    text-align: center;
   }
-
-  .program-main-split {
-    flex-direction: column;
-  }
-
-  .text-side,
-  .image-side {
-    width: 100%;
-    max-width: 100%;
+  
+  .program-content-container {
+    gap: var(--space-xl);
   }
 }

@@ -7,14 +7,14 @@ import ImageCarousel from '../components/ImageCarousel';
 
 const PrivateLessons = () => {
   const [content, setContent] = useState({
-    introText: "Accelerate your progress with Private BJJ lessons. Work directly with our instructors to focus on your goals, from self-defense to competition preparation. Many students find that private Jiu Jitsu classes near me give them the boost they need to succeed.",
-    detailsTitle: "Focus on Your Goals",
-    detailsText: "Private lessons are the fastest way to improve. Get personalized feedback and instruction tailored to your specific needs.",
+    introText: "Accelerate your progress with one-on-one Private Jiu Jitsu lessons. Whether you are a beginner looking to build a strong foundation, an advanced practitioner fixing specific leaks in your game, or someone with a challenging schedule, private training offers the most direct path to mastery.",
+    detailsTitle: "Precision & Personalization",
+    detailsText: "In a group class, the curriculum is general. In a private lesson, the curriculum is you. Get immediate feedback, tailored drilling, and answers to your specific questions.",
     detailsList: [
-      "Accelerate your progress",
-      "Focus on your specific goals",
-      "Ideal for self-defense or competition prep",
-      "Get the boost you need to succeed"
+      "Rapid Progression: Learn faster with undivided attention from a Black Belt",
+      "Custom Curriculum: Focus entirely on your specific goals and problem areas",
+      "Flexible Scheduling: Train at times that work specifically for your lifestyle",
+      "Competition Specific: Fine-tune your game plan and cut weight safely"
     ],
     image1: "", // Body Image
     carouselImages: Array(5).fill(null),
@@ -48,8 +48,6 @@ const PrivateLessons = () => {
         const carouselPromises = [1, 2, 3, 4, 5].map(num =>
           axios.get(`${apiBaseUrl}/api/content/program_private-lessons_carousel_${num}`)
         );
-        // Private lessons internal_1 and internal_2 are already handled, but let's conform to the pattern if we want consistency
-        // Or just leave them since they were separate. Actually, I should update carousel logic here.
 
         const internalPromise1 = axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_1`);
         const internalPromise2 = axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_2`);
@@ -102,7 +100,7 @@ const PrivateLessons = () => {
 
     fetchContent();
     fetchDynamicImages();
-  }, []);
+  }, [apiBaseUrl]);
 
   const getImageProps = (imgData) => {
     if (typeof imgData === 'object' && imgData !== null && imgData.url) {
@@ -127,11 +125,11 @@ const PrivateLessons = () => {
 
       <div className="program-content-container">
 
-        <section className="program-top-intro">
+        <section className="program-top-intro animate-fade-up">
           <p>{content.introText}</p>
         </section>
 
-        <section className="program-main-split">
+        <section className="program-main-split animate-fade-up delay-1">
           <div className="text-side">
             <div className="program-details-text-only">
               <h2>{content.detailsTitle}</h2>
@@ -148,18 +146,18 @@ const PrivateLessons = () => {
             <div className="program-body-image-wrapper">
               <img
                 src={image1Props.src}
-                alt="Private Lesson Main"
-                style={{ ...image1Props.style, width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="Private Lesson Details"
+                style={{ ...image1Props.style }}
               />
             </div>
           </div>
         </section>
 
-        <section className="program-carousel-section">
+        <section className="program-carousel-section animate-fade-up delay-2">
           <ImageCarousel images={content.carouselImages} />
         </section>
 
-        <FAQ faqData={content.faqs} title="Private Lessons FAQs" />
+        <FAQ faqData={content.faqs} title="Frequently Asked Questions" />
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ import ImageCarousel from '../components/ImageCarousel';
 const CompetitionTraining = () => {
   const [content, setContent] = useState({
     introText: "For those who want to take their training to the next level, our Competition Training program is led by experienced coaches who prepare students for local, national, and international tournaments. Push yourself, sharpen your game, and represent BJJ Katy Texas with pride.",
+    detailsTitle: "Prepare for the Podium",
+    detailsText: "Our program is designed to sharpen your game and prepare you for the highest levels of competition.",
     detailsList: [
       "Led by experienced, world-class coaches",
       "Prepare for local, national, and international tournaments",
@@ -58,7 +60,7 @@ const CompetitionTraining = () => {
         [r1, r2, r3, r4, r5].forEach((res, index) => {
           if (res.status === 'fulfilled' && res.value.data && res.value.data.content_value) {
             let src = res.value.data.content_value;
-            try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+            try { const c = JSON.parse(src); if (c.url) src = c; } catch (e) { }
             newCarousel[index] = src;
           }
         });
@@ -66,7 +68,7 @@ const CompetitionTraining = () => {
         let newImage1 = null;
         if (rInt1.status === 'fulfilled' && rInt1.value.data && rInt1.value.data.content_value) {
           let src = rInt1.value.data.content_value;
-          try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+          try { const c = JSON.parse(src); if (c.url) src = c; } catch (e) { }
           newImage1 = src;
         }
 
@@ -83,7 +85,19 @@ const CompetitionTraining = () => {
 
     fetchContent();
     fetchDynamicImages();
-  }, []);
+  }, [apiBaseUrl]);
+
+  const getImageProps = (imgData) => {
+    if (typeof imgData === 'object' && imgData !== null && imgData.url) {
+      return {
+        src: imgData.url,
+        style: imgData.coords ? { objectPosition: `${imgData.coords.x}% ${imgData.coords.y}%` } : {}
+      };
+    }
+    return { src: imgData, style: {} };
+  };
+
+  const image1Props = getImageProps(content.image1);
 
   return (
     <div className="program-page">
@@ -96,11 +110,11 @@ const CompetitionTraining = () => {
 
       <div className="program-content-container">
 
-        <section className="program-top-intro">
+        <section className="program-top-intro animate-fade-up">
           <p>{content.introText}</p>
         </section>
 
-        <section className="program-main-split">
+        <section className="program-main-split animate-fade-up delay-1">
           <div className="text-side">
             <div className="program-details-text-only">
               <h2>{content.detailsTitle}</h2>
@@ -115,16 +129,20 @@ const CompetitionTraining = () => {
 
           <div className="image-side">
             <div className="program-body-image-wrapper">
-              <img src={content.image1} alt="Competition Training Main" />
+              <img
+                src={image1Props.src}
+                alt="Competition Training Details"
+                style={{ ...image1Props.style }}
+              />
             </div>
           </div>
         </section>
 
-        <section className="program-carousel-section">
+        <section className="program-carousel-section animate-fade-up delay-2">
           <ImageCarousel images={content.carouselImages} />
         </section>
 
-        <FAQ faqData={content.faqs} title="Competition Training FAQs" />
+        <FAQ faqData={content.faqs} title="Frequently Asked Questions" />
       </div>
     </div>
   );

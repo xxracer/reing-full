@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './styles/variables.css';
+import './styles/typography.css';
+import './styles/global.css';
+import './styles/buttons.css';
+import './styles/animations.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -16,8 +20,7 @@ const renderApp = () => {
 if (window.__REIGN_PRELOAD_PROMISE__) {
   window.__REIGN_PRELOAD_PROMISE__
     .then(() => renderApp())
-    .catch((err) => {
-      console.error("Hydration failed, booting anyway.", err);
+    .catch(() => {
       renderApp();
     });
 } else {

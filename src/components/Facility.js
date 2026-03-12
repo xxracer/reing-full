@@ -107,26 +107,15 @@ const Facility = () => {
                   muted
                   playsInline
                   controls
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#000' }}
                 />
               ) : (
-                <img src={src} alt={`Facility ${index + 1}`} />
+                <img src={src} alt={`Facility ${index + 1}`} loading="lazy" />
               )}
             </div>
           ))}
         </div>
       ) : (
-        <div
-          className="facility-video-wrapper"
-          style={{
-            maxWidth: mediaType === 'youtube' ? '900px' : '400px',
-            margin: '0 auto',
-            aspectRatio: mediaType === 'youtube' ? '16 / 9' : '9 / 16',
-            borderRadius: '20px',
-            overflow: 'hidden',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
-          }}
-        >
+        <div className={`facility-video-wrapper ${mediaType}`}>
           {videoUrl && (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) ? (
             <iframe
               src={videoUrl}
@@ -134,18 +123,16 @@ const Facility = () => {
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-              style={{ width: '100%', height: '100%' }}
             ></iframe>
           ) : videoUrl ? (
             <video
               src={videoUrl}
               controls
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             >
               Your browser does not support the video tag.
             </video>
           ) : (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+            <div className="no-video-placeholder">
               No Video Available
             </div>
           )}

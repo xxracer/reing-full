@@ -12,11 +12,19 @@
   text-align: center;
 }
 
+.footer-seo-text {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .footer-seo-text p {
   font-size: 14px;
   color: var(--text-medium-gray);
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
   line-height: 1.6;
+  text-align: center;
+  max-width: 800px;
 }
 
 .footer-links {

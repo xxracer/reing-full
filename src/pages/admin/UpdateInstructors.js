@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './UpdateInstructors.css';
-import ReactQuill from 'react-quill-new';
+import ReactQuill, { Quill } from 'react-quill-new';
 import Draggable from 'react-draggable';
 import 'react-quill-new/dist/quill.snow.css'; // Import Quill stylest
+
+// Configure custom font sizes (5px to 20px in 0.5 steps)
+const Size = Quill.import('attributors/style/size');
+const customFontSizes = [];
+for (let i = 5; i <= 20; i += 0.5) {
+  customFontSizes.push(`${i}px`);
+}
+Size.whitelist = customFontSizes;
+Quill.register(Size, true);
 
 // ... imports remain the same
 
@@ -159,6 +168,7 @@ const UpdateInstructors = () => {
             onChange={(content) => setFormData(prev => ({ ...prev, bio: content }))}
             modules={{
               toolbar: [
+                [{ 'font': [] }, { 'size': customFontSizes }],
                 [{ 'header': [1, 2, 3, false] }],
                 ['bold', 'italic', 'underline', 'strike', 'blockquote'],
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }],

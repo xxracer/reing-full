@@ -66,49 +66,32 @@ const Programs = () => {
             {program.image ? (
               <div className="program-image-wrapper">
                 {program.image && program.image.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
-                  <>
-                    <video
-                      src={program.image}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: `${program.coords?.x ?? 50}% ${program.coords?.y ?? 50}%`,
-                        transform: `scale(${program.zoom || 1})`,
-                        transformOrigin: `${program.coords?.x ?? 50}% ${program.coords?.y ?? 50}%`,
-                        position: 'relative',
-                        zIndex: 1,
-                        pointerEvents: 'none'
-                      }}
-                    />
-                  </>
+                  <video
+                    src={program.image}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    style={{
+                      objectPosition: `${program.coords?.x ?? 50}% ${program.coords?.y ?? 50}%`,
+                      transform: `scale(${program.zoom || 1})`,
+                    }}
+                  />
                 ) : (
-                  <>
-                    <img
-                      src={program.image}
-                      alt={program.alt}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: `${program.coords?.x ?? 50}% ${program.coords?.y ?? 50}%`,
-                        transform: `scale(${program.zoom || 1})`,
-                        transformOrigin: `${program.coords?.x ?? 50}% ${program.coords?.y ?? 50}%`,
-                        transition: 'object-position 0.3s ease-out, transform 0.3s ease-out',
-                        position: 'relative',
-                        zIndex: 1
-                      }}
-                    />
-                  </>
+                  <img
+                    src={program.image}
+                    alt={program.alt}
+                    loading="lazy"
+                    style={{
+                      objectPosition: `${program.coords?.x ?? 50}% ${program.coords?.y ?? 50}%`,
+                      transform: `scale(${program.zoom || 1})`,
+                    }}
+                  />
                 )}
               </div>
             ) : (
-              <div className="program-image-wrapper skeleton-loader" style={{ height: '200px', backgroundColor: 'var(--background-secondary)' }}></div>
+              <div className="program-image-wrapper skeleton-loader"></div>
             )}
             <div className="program-content">
               <h3 className="program-title">{program.title}</h3>

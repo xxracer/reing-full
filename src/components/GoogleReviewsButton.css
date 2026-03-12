@@ -2,35 +2,40 @@
 
 .google-reviews-button {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: var(--space-l);
+  right: var(--space-l);
   z-index: 999;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease;
+  box-shadow: var(--card-shadow);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .google-reviews-button:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 40px oklch(0 0 0 / 0.3);
+}
+
+.google-reviews-button:active {
+  transform: scale(0.95);
 }
 
 .google-reviews-button img {
   display: block;
-  width: 150px; /* Adjust size as needed */
+  width: 140px;
   height: auto;
 }
 
 @media (max-width: 768px) {
   .google-reviews-button {
-    bottom: 15px;
-    right: 15px;
+    bottom: var(--space-m);
+    right: var(--space-m);
   }
   .google-reviews-button img {
-    width: 120px; /* Smaller on mobile */
+    width: 110px;
   }
 }

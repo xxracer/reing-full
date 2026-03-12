@@ -18,11 +18,9 @@ const ManageSchedule = () => {
     const fetchSchedule = async () => {
         try {
             const res = await axios.get(`${apiBaseUrl}/api/schedule`);
-            console.log("Fetched schedule items:", res.data);
             setScheduleItems(res.data);
         } catch (err) {
-            console.error("Error fetching schedule:", err);
-            if (err.response) console.error("Response:", err.response.status, err.response.data);
+            // Handle error silently or with UI
         } finally {
             setLoading(false);
         }
@@ -55,12 +53,10 @@ const ManageSchedule = () => {
             fetchSchedule();
             resetForm();
         } catch (err) {
-            console.error("Error saving schedule item:", err);
             if (err.response) {
-                console.error("Save Error Response:", err.response.status, err.response.data);
                 alert(`Error saving: ${err.response.data.message || err.response.statusText}`);
             } else {
-                alert('Error saving schedule item. Check console.');
+                alert('Error saving schedule item.');
             }
         }
     };

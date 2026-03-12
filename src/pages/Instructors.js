@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import FAQ from '../components/FAQ';
@@ -13,18 +12,22 @@ const Instructors = () => {
     fetch(API_URL)
       .then(res => res.json())
       .then(data => {
-        console.log("Instructors Data Received from API:", data);
-        // Ensure sorting by ID
         const sortedData = data.sort((a, b) => parseInt(a.id) - parseInt(b.id));
         setInstructors(sortedData);
       })
-      .catch(err => console.error("Error fetching instructors:", err));
+      .catch(err => {
+        // Silently handle error for production
+      });
   }, []);
 
   const parseBio = (bio) => {
     // If bio is already HTML (contains <p> or <h3>), return it as is.
     if (typeof bio === 'string' && (bio.includes('<p>') || bio.includes('<h3>'))) {
-      return DOMPurify.sanitize(bio);
+      // The CMS might contain hard line breaks inside HTML that look ugly on mobile.
+      // We will replace newline characters with spaces, then sanitize.
+      // Additionally, replace non-breaking spaces (&nbsp; or \u00A0) to allow wrapping.
+      const cleanedHtml = bio.replace(/\n+/g, ' ').replace(/&nbsp;|\u00A0/g, ' ');
+      return DOMPurify.sanitize(cleanedHtml);
     }
 
     // Fallback: Parse the custom array format or raw string
@@ -32,7 +35,8 @@ const Instructors = () => {
     let html = '';
 
     bioArray.forEach(paragraph => {
-      const p = String(paragraph).trim(); // Ensure string
+      // Clean arbitrary newlines inside paragraph blocks and remove non-breaking spaces
+      const p = String(paragraph).trim().replace(/\n+/g, ' ').replace(/&nbsp;|\u00A0/g, ' '); 
       if (p.startsWith('#')) {
         html += `<h3>${p.substring(1).trim()}</h3>`;
       } else if (p.startsWith('*')) {
@@ -58,13 +62,12 @@ const Instructors = () => {
 
   return (
     <div className="instructors-page">
-      <h1>Meet Our World-Class Instructors</h1>
+      <h1 className="animate-fade-up">Meet Our World-Class Instructors</h1>
 
       {instructors.map((instructor, index) => {
         let imageUrl = instructor.image;
         let zoom = 1;
         let coords = { x: 50, y: 50 };
-        const aspectRatio = '1 / 1'; // Force square for all instructors
         try {
           const parsed = JSON.parse(instructor.image);
           if (parsed.url) imageUrl = parsed.url;
@@ -74,24 +77,68 @@ const Instructors = () => {
           // raw string
         }
 
+        // Stagger the entrance animation up to 3 delays
+        const delayClass = index === 0 ? '' : `delay-${Math.min(index, 3)}`;
+
+        // Default object position for raw strings
+        if (typeof instructor.image === 'string' && !instructor.image.startsWith('{')) {
+           // It's a raw URL, default to object-fit cover
+           return (
+            <div 
+              key={instructor.id} 
+              className={`instructor-item animate-fade-up ${delayClass} ${index % 2 !== 0 ? 'reverse' : ''}`}
+            >
+              <div className="instructor-image-wrapper">
+                <img
+                  src={imageUrl}
+                  alt={instructor.name}
+                  loading="lazy"
+                  className="instructor-media"
+                  style={{ objectFit: 'cover', objectPosition: 'center 15%' }} // A good default for portraits
+                />
+              </div>
+              <div className="instructor-bio">
+                <h2>{instructor.name}</h2>
+                <div
+                  className="instructor-bio-content"
+                  dangerouslySetInnerHTML={{ __html: parseBio(instructor.bio) }}
+                />
+              </div>
+            </div>
+           );
+        }
+
         return (
-          <div key={instructor.id} className={`instructor-item ${index % 2 !== 0 ? 'reverse' : ''}`}>
-            <div className="instructor-image-wrapper" style={{ aspectRatio: aspectRatio, position: 'relative' }}>
-              <img
-                src={imageUrl}
-                alt={instructor.name}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: `${coords.x}% ${coords.y}%`,
-                  transform: `scale(${zoom})`,
-                  transformOrigin: `${coords.x}% ${coords.y}%`,
-                  transition: 'transform 0.3s ease-out',
-                  position: 'relative',
-                  zIndex: 1
-                }}
-              />
+          <div 
+            key={instructor.id} 
+            className={`instructor-item animate-fade-up ${delayClass} ${index % 2 !== 0 ? 'reverse' : ''}`}
+          >
+            <div className="instructor-image-wrapper" style={{ containerType: 'inline-size' }}>
+              <div style={{ 
+                width: '100%', 
+                height: '100%', 
+                display: 'flex', 
+                alignItems: 'flex-start', 
+                justifyContent: 'center' 
+              }}>
+                <div style={{ 
+                  width: '100%', 
+                  transform: `translate(calc(${coords.x || 0} * 100cqi / 200), calc(${coords.y || 0} * 100cqi / 200))`,
+                  position: 'relative'
+                 }}>
+                  <img
+                    src={imageUrl}
+                    alt={instructor.name}
+                    loading="lazy"
+                    style={{
+                      width: '100%',
+                      transform: `scale(${zoom})`,
+                      transformOrigin: 'center center',
+                      display: 'block'
+                    }}
+                  />
+                </div>
+              </div>
             </div>
             <div className="instructor-bio">
               <h2>{instructor.name}</h2>
@@ -104,7 +151,9 @@ const Instructors = () => {
         )
       })}
 
-      <FAQ faqData={pageFaqs} title="Instructor FAQs" />
+      <div className="animate-fade-up delay-2">
+        <FAQ faqData={pageFaqs} title="Instructor FAQs" />
+      </div>
     </div>
   );
 };

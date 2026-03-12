@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-bebas);
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-top: 0;
+}
+
+h1 { font-size: var(--font-step-6); }
+h2 { font-size: var(--font-step-5); }
+h3 { font-size: var(--font-step-4); }
+h4 { font-size: var(--font-step-3); }
+h5 { font-size: var(--font-step-2); }
+h6 { font-size: var(--font-step-1); }
+
+p {
+  font-size: var(--font-step-0);
+  color: var(--text-secondary);
+  max-width: 65ch;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--brand-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--brand-primary-light);
+}
+
+.section-title {
+  text-align: center;
+  font-size: var(--font-step-5);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xl);
+  font-family: var(--font-bebas);
+  letter-spacing: 0.05em;
+}
+
+::selection {
+  background-color: var(--brand-primary);
+  color: var(--neutral-0);
+}

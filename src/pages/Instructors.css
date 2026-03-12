@@ -3,160 +3,157 @@
 .instructors-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
-  color: var(--text-medium-gray);
+  padding: 120px var(--space-s) var(--space-2xl); /* padding top for header offset */
 }
 
 .instructors-page h1 {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 60px;
+  font-size: var(--font-step-5);
+  margin-bottom: var(--space-2xl);
+  color: var(--text-primary);
+  font-family: var(--font-bebas);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--text-charcoal);
-  /* Dark gray for premium feel */
-  font-family: 'Oswald', sans-serif;
-  /* Assuming font availability, fallback to sans-serif */
-  letter-spacing: 1px;
 }
 
 .instructor-item {
   display: flex;
   align-items: flex-start;
-  /* Align top so text flows naturally */
-  gap: 60px;
-  margin-bottom: 80px;
-  padding-bottom: 60px;
-  border-bottom: 1px solid var(--border-light-gray);
-  /* Subtle separator */
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-3xl);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-xl);
+  background-color: var(--bg-primary);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-subtle);
 }
 
-.instructor-item:last-child {
-  border-bottom: none;
-}
-
-/* Reverse layout for alternating items */
 .instructor-item.reverse {
   flex-direction: row-reverse;
+  background-color: var(--bg-accent-subtle);
 }
 
-/* Image Styling */
 .instructor-image-wrapper {
-  flex: 0 0 180px;
-  /* Fixed width for images */
+  flex: 0 0 clamp(250px, 30vw, 400px);
+  aspect-ratio: 1 / 1;
   position: relative;
   overflow: hidden;
-  /* Added for zoom containment */
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15); /* deeper shadow for images */
+  border: 1px solid rgba(255,255,255,0.1);
+  background-color: var(--bg-secondary);
 }
 
-.instructor-image-wrapper img {
+.instructor-media {
   width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  /* Premium shadow */
+  height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.instructor-image-wrapper img:hover {
-  transform: translateY(-5px);
+.instructor-item:hover .instructor-media {
+  transform: scale(1.05) !important; /* Slightly override inline scale on hover */
 }
 
-/* Bio/Text Styling */
 .instructor-bio {
   flex: 1;
-  /* Take remaining space */
-  max-width: 100%;
-  /* Ensure it doesn't overflow parent */
-  overflow-wrap: normal;
-  /* Prevent aggressive word slicing */
-  word-break: normal;
-  hyphens: none;
-  /* Ensure text isn't fully justified which causes huge gaps */
   text-align: left;
+  /* Prevent text overflow in flex children */
+  min-width: 0; 
 }
 
 .instructor-bio h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: var(--text-charcoal);
-  font-family: 'Oswald', sans-serif;
+  font-size: var(--font-step-4);
+  margin-bottom: var(--space-s);
+  color: var(--brand-primary);
+  font-family: var(--font-bebas);
+  border-bottom: 2px solid var(--brand-accent);
+  padding-bottom: var(--space-xs);
+  display: inline-block;
+  text-transform: uppercase;
 }
 
-/* Content Typography (from previous file, but verified) */
+.instructor-bio-content {
+  margin-top: var(--space-m);
+}
+
 .instructor-bio-content h3 {
-  font-size: 1.2rem;
-  color: var(--text-dark-gray);
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: var(--font-step-1);
+  color: var(--text-primary);
+  margin-top: var(--space-l);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-bebas);
+  letter-spacing: 0.05em;
 }
 
 .instructor-bio-content p {
   line-height: 1.8;
-  margin-bottom: 1.5em;
-  color: var(--text-medium-gray);
-  font-size: 0.9rem;
-  text-align: left;
-  overflow-wrap: break-word;
-  /* wrap text inside column, no horizontal overflow */
-  hyphens: none;
-  -webkit-hyphens: none;
+  margin-bottom: var(--space-m);
+  color: var(--text-secondary);
+  font-size: var(--font-step-0);
+  /* Ensure paragraph text wraps naturally */
+  white-space: normal;
+}
+
+.instructor-bio-content p strong {
+    color: var(--text-primary);
 }
 
 .instructor-bio-content ul,
 .instructor-bio-content ol {
-  margin-bottom: 1.5em;
-  padding-left: 20px;
-  color: var(--text-medium-gray);
-  list-style-type: disc;
-  text-align: left !important;
+  margin-bottom: var(--space-m);
+  padding-left: var(--space-l);
+  color: var(--text-secondary);
 }
 
 .instructor-bio-content li {
-  margin-bottom: 0.5em;
+  margin-bottom: var(--space-xs);
   line-height: 1.6;
-  text-align: left !important;
 }
 
-.instructor-bio-content strong,
-.instructor-bio-content b {
-  color: var(--text-charcoal);
-  font-weight: 700;
-  /* Ensure bold shows */
+/* Animations */
+.animate-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Responsive Design */
 @media (max-width: 900px) {
+  .instructors-page {
+      padding-top: 100px;
+  }
+  
   .instructor-item {
-    flex-direction: column !important;
-    /* Stack on mobile */
-    gap: 30px;
+    flex-direction: column !important; /* Stack vertically */
+    gap: var(--space-l);
     align-items: center;
-    text-align: center;
+    padding: var(--space-l);
   }
 
-  .instructor-bio,
-  .instructor-bio-content {
-    text-align: left !important;
+  .instructor-bio {
+    text-align: center;
+    width: 100%; /* Take full width constraint securely */
+  }
+
+  .instructor-bio h2 {
+      border-bottom: none;
+      border-bottom: 2px solid var(--brand-accent);
   }
 
   .instructor-image-wrapper {
     flex: 0 0 auto;
     width: 100%;
-    max-width: 320px;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    border-radius: 8px;
-    /* Force iOS Safari overflow mask */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    mask-image: -webkit-radial-gradient(white, black);
+    max-width: 350px; /* Keep reasonable size on mobile */
   }
+}
 
-  .instructors-page h1 {
-    font-size: 2rem;
-  }
+@media (max-width: 480px) {
+    .instructor-item {
+        padding: var(--space-m);
+    }
+    
+    .instructor-bio h2 {
+        font-size: var(--font-step-3);
+    }
 }

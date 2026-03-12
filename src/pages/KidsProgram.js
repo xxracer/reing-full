@@ -8,7 +8,7 @@ import ImageCarousel from '../components/ImageCarousel';
 const KidsProgram = () => {
   const [content, setContent] = useState({
     introText: "Our Kids Jiu Jitsu classes are designed to help children build confidence, respect, and discipline while having fun. From preschoolers (ages 4 and up) to teens, our children’s Jiu Jitsu and teens Jiu Jitsu classes focus on developing coordination, teamwork, and self-defense skills. We also welcome families looking for family Jiu Jitsu programs.",
-    detailsTitle: "Building Confidence and Skills",
+    detailsTitle: "More Than Just Self-Defense",
     detailsText: "We provide a safe and supportive environment where children can learn and grow. Our curriculum is designed to be engaging and effective.",
     detailsList: [
       "Develop coordination and teamwork",
@@ -41,8 +41,6 @@ const KidsProgram = () => {
           setContent(prev => ({
             ...prev,
             ...parsedData,
-            // Only use parsed carousel if explicitly set, otherwise wait for dynamic fetch
-            // or keep existing defaults if dynamic fetch fails.
           }));
         }
       } catch (error) {
@@ -56,26 +54,22 @@ const KidsProgram = () => {
           axios.get(`${apiBaseUrl}/api/content/program_kids_carousel_${num}?t=${Date.now()}`)
         );
 
-        // Also fetch internal image 1 if dynamic
         const internalPromise = axios.get(`${apiBaseUrl}/api/content/program_kids_internal_1?t=${Date.now()}`);
 
         const [r1, r2, r3, r4, r5, rInt1] = await Promise.allSettled([...carouselPromises, internalPromise]);
 
-        // Process Carousel
         const newCarousel = [];
         [r1, r2, r3, r4, r5].forEach((res, index) => {
           if (res.status === 'fulfilled' && res.value.data && res.value.data.content_value) {
             let data = res.value.data.content_value;
             try {
               const parsed = JSON.parse(data);
-              // Store the full object if it has a url, otherwise just the string
               if (parsed.url) data = parsed;
             } catch (e) { }
             newCarousel[index] = data;
           }
         });
 
-        // Process Internal Image
         let newImage1 = null;
         if (rInt1.status === 'fulfilled' && rInt1.value.data && rInt1.value.data.content_value) {
           let data = rInt1.value.data.content_value;
@@ -88,17 +82,12 @@ const KidsProgram = () => {
 
         setContent(prev => {
           const updated = { ...prev };
-
-          // Update carousel if we found any new images
           if (newCarousel.some(img => img)) {
             updated.carouselImages = updated.carouselImages.map((old, idx) => newCarousel[idx] || old);
           }
-
-          // Update internal image if found
           if (newImage1) {
             updated.image1 = newImage1;
           }
-
           return updated;
         });
       } catch (e) {
@@ -108,7 +97,7 @@ const KidsProgram = () => {
 
     fetchContent();
     fetchDynamicImages();
-  }, []);
+  }, [apiBaseUrl]);
 
   const getImageProps = (imgData) => {
     if (typeof imgData === 'object' && imgData !== null && imgData.url) {
@@ -125,7 +114,6 @@ const KidsProgram = () => {
   return (
     <div className="program-page">
 
-      {/* 1. Hero Image */}
       <ProgramHero
         title="Kids Program"
         sectionId="program_kids_hero"
@@ -134,17 +122,13 @@ const KidsProgram = () => {
 
       <div className="program-content-container">
 
-        {/* Top Intro Section - "Subirlo arriba y ponerlo en dos lineas" */}
-        <section className="program-top-intro">
+        <section className="program-top-intro animate-fade-up">
           <p>{content.introText}</p>
         </section>
 
-        {/* Split Section: Text Left, Image Right */}
-        <section className="program-main-split">
-
+        <section className="program-main-split animate-fade-up delay-1">
           <div className="text-side">
             <div className="program-details-text-only">
-              {/* Bold Title aligned with Image Top */}
               <h2>{content.detailsTitle}</h2>
               <p>{content.detailsText}</p>
               <ul>
@@ -159,20 +143,18 @@ const KidsProgram = () => {
             <div className="program-body-image-wrapper">
               <img
                 src={image1Props.src}
-                alt="Kids Program Main"
-                style={{ ...image1Props.style, width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="Kids Program Details"
+                style={{ ...image1Props.style }}
               />
             </div>
           </div>
-
         </section>
 
-        {/* 5 Images Grid */}
-        <section className="program-carousel-section">
+        <section className="program-carousel-section animate-fade-up delay-2">
           <ImageCarousel images={content.carouselImages} />
         </section>
 
-        <FAQ faqData={content.faqs} title="Kids Program FAQs" />
+        <FAQ faqData={content.faqs} title="Frequently Asked Questions" />
       </div>
     </div>
   );

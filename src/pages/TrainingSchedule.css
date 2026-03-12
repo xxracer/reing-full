@@ -281,3 +281,60 @@
         padding: 100px 16px 60px;
     }
 }
+
+@media print {
+    .schedule-page {
+        padding: 0;
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
+    .schedule-page h1, 
+    .schedule-page p.schedule-intro,
+    .schedule-cta,
+    .schedule-download-btn-container,
+    .schedule-spacer {
+        display: none !important;
+    }
+
+    .schedule-content-to-capture {
+        padding: 0 !important;
+        background-color: #fff !important;
+    }
+
+    .schedule-grid {
+        display: block !important;
+    }
+
+    .schedule-day {
+        break-inside: avoid;
+        margin-bottom: 20px;
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        background-color: #fff !important;
+    }
+
+    .schedule-day h2 {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    .schedule-session {
+        border-bottom: 1px solid #eee !important;
+    }
+
+    .schedule-session .time {
+        color: #333 !important;
+    }
+
+    .schedule-session .title {
+        color: #000 !important;
+    }
+
+    .session-tag {
+        background: transparent !important;
+        border: 1px solid #ccc !important;
+        color: #333 !important;
+    }
+}

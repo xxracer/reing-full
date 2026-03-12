@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './TrainingSchedule.css';
 import axios from 'axios';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+// html2canvas and jspdf will be dynamically imported for better performance
 
 const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -54,39 +53,40 @@ const TrainingSchedule = () => {
         if (!scheduleRef.current) return;
 
         try {
+            // Dynamically import libraries to reduce main bundle size
+            const [html2canvas, { jsPDF }] = await Promise.all([
+                import('html2canvas').then(m => m.default),
+                import('jspdf')
+            ]);
+
             // Create a clone of the element to render it with desktop styles
             const element = scheduleRef.current;
             const clone = element.cloneNode(true);
 
             // Style the clone to force desktop rendering
-            // We set a fixed width large enough to trigger the desktop grid layout (passed 1200px breakpoint)
             clone.style.width = '1400px';
             clone.style.height = 'auto';
             clone.style.position = 'absolute';
             clone.style.top = '-9999px';
             clone.style.left = '-9999px';
             clone.style.zIndex = '-1';
-            clone.style.backgroundColor = '#000000'; // Ensure background is captured
+            clone.style.backgroundColor = '#000000';
 
-            // Append to body to ensure it renders (needed for html2canvas)
             document.body.appendChild(clone);
 
-            // Wait briefly for layout to settle? usually needed for fonts/images but clone is sync.
-            // HTML2Canvas options
             const canvas = await html2canvas(clone, {
-                scale: 2, // High res
+                scale: 2,
                 backgroundColor: '#000000',
                 useCORS: true,
                 logging: false,
-                width: 1400, // Force canvas width
-                windowWidth: 1400 // Mock window width for media queries
+                width: 1400,
+                windowWidth: 1400
             });
 
-            // Remove clone
             document.body.removeChild(clone);
 
             const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('l', 'mm', 'a4'); // Landscape
+            const pdf = new jsPDF('l', 'mm', 'a4');
 
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -94,12 +94,8 @@ const TrainingSchedule = () => {
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
 
-            // Calculate ratio to fit width
             const ratio = pdfWidth / imgWidth;
 
-            // Check if height overflows A4 landscape
-            // If it does, we scale to fit height instead, or split. 
-            // Fitting to height is safer for a single page summary.
             let finalRatio = ratio;
             if (imgHeight * ratio > pdfHeight) {
                 finalRatio = pdfHeight / imgHeight;
@@ -108,7 +104,6 @@ const TrainingSchedule = () => {
             const finalWidth = imgWidth * finalRatio;
             const finalHeight = imgHeight * finalRatio;
 
-            // Center
             const imgX = (pdfWidth - finalWidth) / 2;
             const imgY = (pdfHeight - finalHeight) / 2;
 

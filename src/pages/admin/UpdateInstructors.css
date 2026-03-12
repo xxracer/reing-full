@@ -165,3 +165,14 @@
 .image-mask-container:active {
     cursor: grabbing;
 }
+
+/* ReactQuill dynamic custom sizes - renders the 'data-value' directly */
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value]::before {
+  content: attr(data-value) !important;
+}
+
+/* Make sure the font dropdown isn't too narrow */
+.ql-snow .ql-picker.ql-size {
+    width: 65px;
+}

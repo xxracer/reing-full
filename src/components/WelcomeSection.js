@@ -101,7 +101,7 @@ const WelcomeSection = () => {
           <p className="welcome-seo-text">
             Scroll down to explore why Reign Jiu-Jitsu is recognized among the best in the World.
           </p>
-          <button className="welcome-info-button">Get more info</button>
+          <a href="#contact" className="welcome-info-button btn-red" style={{ display: 'inline-block', textDecoration: 'none' }}>Get more info</a>
         </div>
         <div
           className="welcome-image-wrapper"
