@@ -152,7 +152,7 @@ const ContactUs = () => {
                   aria-required="true"
                   className="contact-dropdown"
                 >
-                  <option value="" disabled>Which Program(s) interest you?</option>
+                  <option value="" disabled>Select one</option>
                   <option value="Kids">Kids</option>
                   <option value="Adults">Adults</option>
                   <option value="Adult Fundamentals">Adult Fundamentals</option>
@@ -166,7 +166,7 @@ const ContactUs = () => {
                   id="message-input"
                   name="message"
                   rows="5"
-                  placeholder="Message: How can we help you?"
+                  placeholder="Type here..."
                   value={formData.message}
                   onChange={handleInputChange}
                   required
