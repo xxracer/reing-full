@@ -16,7 +16,8 @@
 }
 
 .contact-map-container {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   height: 460px;
   border-radius: 18px;
   overflow: hidden;
@@ -26,7 +27,8 @@
 }
 
 .contact-form-container {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   background-color: var(--background-primary);
   border-radius: 18px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);

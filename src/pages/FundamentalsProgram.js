@@ -44,6 +44,12 @@ const FundamentalsProgram = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_fundamentals_data?t=${Date.now()}`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
+          // Block CMS from overriding text
+          delete parsedData.introText;
+          delete parsedData.detailsTitle;
+          delete parsedData.detailsText;
+          delete parsedData.detailsList;
+          delete parsedData.faqs;
           setContent(prev => ({
             ...prev,
             ...parsedData,

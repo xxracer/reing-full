@@ -82,7 +82,7 @@
   line-height: 1.1;
   letter-spacing: 0.02em;
   text-align: center;
-  white-space: nowrap; /* Prevent breaking into two lines */
+  white-space: normal; /* Allow wrapping on very narrow screens to prevent horizontal overflow */
 }
 
 .hero-cta-button {

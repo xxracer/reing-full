@@ -36,8 +36,8 @@ const AboutPage = () => {
           </p>
         </section>
 
-        <section className="program-main-split animate-fade-up delay-1" style={{ display: 'block' }}>
-          <div className="program-details-text-only" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+        <section className="program-main-split animate-fade-up delay-1">
+          <div className="program-details-text-only">
             <p style={{ marginBottom: '1.5rem', fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
               By combining proven teaching principles with high-level technical training, he has produced some of the top youth competitors in the world, developing multiple champions through a system built on discipline, confidence, and intelligent progression.
             </p>
