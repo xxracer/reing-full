@@ -54,7 +54,7 @@
   font-size: var(--font-step-6);
   color: var(--neutral-0);
   text-transform: uppercase;
-  text-shadow: 0 4px 12px oklch(0 0 0 / 0.5);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.05em;
   margin: 0;
   line-height: 1.1;
@@ -64,7 +64,7 @@
   font-size: var(--font-step-1);
   color: var(--neutral-100);
   margin: 0;
-  text-shadow: 0 2px 8px oklch(0 0 0 / 0.5);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   max-width: 600px;
   line-height: 1.5;
 }

@@ -17,7 +17,7 @@
 
 .google-reviews-button:hover {
   transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 20px 40px oklch(0 0 0 / 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .google-reviews-button:active {

@@ -106,13 +106,13 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-logo">
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '15px', textDecoration: 'none', color: 'inherit' }}>
           <img
-            src="https://static.wixstatic.com/media/c5947c_19213bcf1b97445db4da31c938fb312b~mv2.jpg"
+            src="https://static.wixstatic.com/media/c5947c_72a4a7f1a82b4dacafe667d2d38c58bd~mv2.webp"
             alt="Reign Logo"
-            style={{ height: '40px', width: 'auto' }}
+            className="navbar-logo-img"
           />
-          REIGN JIU JITSU
+          <span className="navbar-brand-text">REIGN JIU JITSU</span>
         </Link>
       </div>
       <div className="navbar-right">

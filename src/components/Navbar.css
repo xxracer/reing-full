@@ -65,12 +65,45 @@
 .navbar-logo {
   flex-grow: 1;
   text-align: center;
-  font-family: var(--font-heading-primary);
-  font-size: 28px;
-  font-weight: 700;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.navbar-logo-img {
+  height: 50px;
+  width: auto;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.navbar-logo-img:hover {
+  transform: scale(1.05);
+}
+
+.navbar-brand-text {
+  font-family: var(--font-bebas); 
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  line-height: 1;
+  padding-top: 5px; /* Alignment tweak for Bebas */
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-family: var(--font-bebas); /* Changed to requested font */
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: var(--font-step-2); /* Increased size for Bebas */
+  letter-spacing: 0.05em; /* Added tracking for Bebas */
+  text-transform: uppercase;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .navbar-contact {
@@ -272,6 +305,15 @@ button.mobile-menu-toggle:focus {
     text-align: left;
   }
 
+  .navbar-logo-img {
+    height: 40px; /* Smaller height for mobile */
+  }
+
+  .navbar-brand-text {
+    font-size: 24px;
+    padding-top: 3px;
+  }
+
   .navbar-contact {
     display: none;
   }
@@ -331,6 +373,22 @@ button.mobile-menu-toggle:focus {
     font-size: var(--font-step-3);
     color: var(--text-charcoal);
     border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .mobile-menu-links a {
+    font-family: var(--font-bebas);
+    font-size: var(--font-step-4);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-s) var(--space-m);
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: transparent;
   }
 
   .mobile-social-icons {

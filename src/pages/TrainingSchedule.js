@@ -54,10 +54,13 @@ const TrainingSchedule = () => {
 
         try {
             // Dynamically import libraries to reduce main bundle size
-            const [html2canvas, { jsPDF }] = await Promise.all([
-                import('html2canvas').then(m => m.default),
+            const [html2canvasModule, jsPDFModule] = await Promise.all([
+                import('html2canvas'),
                 import('jspdf')
             ]);
+            
+            const html2canvas = html2canvasModule.default || html2canvasModule;
+            const jsPDF = jsPDFModule.jsPDF || jsPDFModule.default;
 
             // Create a clone of the element to render it with desktop styles
             const element = scheduleRef.current;
@@ -111,7 +114,7 @@ const TrainingSchedule = () => {
             pdf.save('reign_schedule.pdf');
         } catch (err) {
             console.error("PDF generation failed", err);
-            alert("Could not generate PDF. Please try again.");
+            alert("Could not generate PDF. Please try again. Details: " + (err.message || err.toString()));
         }
     };
 

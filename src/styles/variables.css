@@ -1,54 +1,54 @@
 :root {
   /* Brand Colors - Premium Red Palette */
-  --brand-primary: oklch(0.55 0.22 25);
-  --brand-primary-light: oklch(0.63 0.18 25);
-  --brand-primary-dark: oklch(0.45 0.25 25);
+  --brand-primary: #dd0000;
+  --brand-primary-light: #ff3333;
+  --brand-primary-dark: #aa0000;
   
   /* Semantic Brand Accents (Replacing basic Grays) */
-  --brand-accent: oklch(0.7 0.15 45); /* Warm secondary accent - Orange/Amber */
-  --brand-accent-cool: oklch(0.55 0.15 250); /* Deep cool blue for contrast */
-  --brand-accent-gold: oklch(0.75 0.14 75); /* Premium gold touch for highlights */
+  --brand-accent: #fca311; /* Warm secondary accent - Orange/Amber */
+  --brand-accent-cool: #14213d; /* Deep cool blue for contrast */
+  --brand-accent-gold: #d4af37; /* Premium gold touch for highlights */
 
   /* Tinted Neutrals - Blue/Purple-tinted for premium depth, not pure grayscale */
-  --neutral-0: oklch(1 0 0); /* Pure White */
-  --neutral-50: oklch(0.98 0.01 240);
-  --neutral-100: oklch(0.95 0.01 240);
-  --neutral-200: oklch(0.9 0.02 240);
-  --neutral-300: oklch(0.8 0.02 240);
-  --neutral-400: oklch(0.7 0.02 240);
-  --neutral-500: oklch(0.6 0.02 240);
-  --neutral-600: oklch(0.5 0.02 240);
-  --neutral-700: oklch(0.4 0.02 240);
-  --neutral-800: oklch(0.3 0.02 240);
-  --neutral-900: oklch(0.2 0.02 240);
-  --neutral-950: oklch(0.12 0.02 240);
-  --neutral-1000: oklch(0 0 0);
+  --neutral-0: #ffffff; /* Pure White */
+  --neutral-50: #f8f9fa;
+  --neutral-100: #f1f3f5;
+  --neutral-200: #e9ecef;
+  --neutral-300: #dee2e6;
+  --neutral-400: #ced4da;
+  --neutral-500: #adb5bd;
+  --neutral-600: #6c757d;
+  --neutral-700: #495057;
+  --neutral-800: #343a40;
+  --neutral-900: #212529;
+  --neutral-950: #1a1d20;
+  --neutral-1000: #000000;
 
   /* Semantic Mappings - "White Gi" Light Theme */
   --bg-primary: var(--neutral-0); /* Pure White */
   --bg-secondary: var(--neutral-50); /* Very light gray/blue tint */
   --bg-tertiary: var(--neutral-100);
-  --bg-accent-subtle: oklch(0.97 0.01 25.0); /* Extremely subtle warm tint */
+  --bg-accent-subtle: #fcf8f5; /* Extremely subtle warm tint */
   
   --text-primary: var(--neutral-900);
   --text-secondary: var(--neutral-700);
   --text-accent: var(--brand-primary-dark);
   
   --border-subtle: var(--neutral-200);
-  --border-accent: oklch(0.55 0.22 25 / 0.15); /* Subtle red border */
+  --border-accent: rgba(221, 0, 0, 0.15); /* Subtle red border */
   
   /* Feature Specific */
   --card-bg: var(--neutral-0);
   --card-bg-hover: var(--neutral-50);
   --card-border: var(--neutral-200);
-  --card-border-hover: oklch(0.55 0.22 25 / 0.4);
-  --card-shadow: 0 10px 30px oklch(0 0 0 / 0.05); /* Lighter shadow for light theme */
-  --card-shadow-hover: 0 20px 40px oklch(0 0 0 / 0.1), 0 0 15px oklch(0.55 0.22 25 / 0.05);
+  --card-border-hover: rgba(221, 0, 0, 0.4);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Lighter shadow for light theme */
+  --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 15px rgba(221, 0, 0, 0.05);
 
   /* Gradients */
-  --grad-hero-overlay: linear-gradient(to top, var(--bg-primary) 0%, oklch(0 0 0 / 0.4) 50%, oklch(0 0 0 / 0.1) 100%);
+  --grad-hero-overlay: linear-gradient(to top, var(--bg-primary) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.1) 100%);
   --grad-primary: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
-  --grad-dark-red: linear-gradient(135deg, var(--neutral-50) 0%, oklch(0.95 0.02 25) 100%);
+  --grad-dark-red: linear-gradient(135deg, var(--neutral-50) 0%, #ff1a1a 100%);
 
   /* Typography */
   --font-main: 'Montserrat', sans-serif;
@@ -79,8 +79,8 @@
   --space-3xl: clamp(6rem, 5.5rem + 2.5vw, 8rem); /* Extra breathing room */
 
   /* Shadow & Glow */
-  --glow-red: 0 0 20px oklch(0.55 0.22 25 / 0.4);
-  --glow-red-strong: 0 0 30px oklch(0.55 0.22 25 / 0.6);
+  --glow-red: 0 0 20px rgba(221, 0, 0, 0.4);
+  --glow-red-strong: 0 0 30px rgba(221, 0, 0, 0.6);
 
   /* Legacy Compat */
   --background-primary: var(--bg-primary);

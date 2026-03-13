@@ -31,7 +31,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: oklch(0 0 0 / 0.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -103,7 +103,7 @@
 .hero-cta-button:hover {
   background-color: var(--brand-primary-light);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px oklch(0.6 0.25 25 / 0.4);
+  box-shadow: 0 10px 20px rgba(221, 0, 0, 0.4);
 }
 
 @keyframes fadeIn {
