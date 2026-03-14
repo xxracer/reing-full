@@ -7,14 +7,14 @@ import ImageCarousel from '../components/ImageCarousel';
 
 const PrivateLessons = () => {
   const [content, setContent] = useState({
-    introText: "Accelerate your progress with one-on-one Private Jiu Jitsu lessons. Whether you are a beginner looking to build a strong foundation, an advanced practitioner fixing specific leaks in your game, or someone with a challenging schedule, private training offers the most direct path to mastery.",
-    detailsTitle: "Precision & Personalization",
-    detailsText: "In a group class, the curriculum is general. In a private lesson, the curriculum is you. Get immediate feedback, tailored drilling, and answers to your specific questions.",
+    introText: "Our Private Training will give you the chance to get personalized coaching from professional martial artists. We can help you sharpen your mind, hone your body, and get the results you want. No matter whether your goal is to lose weight, to build muscle, to become more flexible and athletic, or to bump yourself up to the next belt, our team is happy to work with you to help you achieve your dreams. Reign Jiu Jitsu is dedicated to the success of each and every one of our members, whether they come to us from Katy or elsewhere. With our Private Training, you can take your Jiu Jitsu skills to the next level!",
+    detailsTitle: "Get Katy's Best Private Jiu Jitsu Training",
+    detailsText: "",
     detailsList: [
-      "Rapid Progression: Learn faster with undivided attention from a Black Belt",
-      "Custom Curriculum: Focus entirely on your specific goals and problem areas",
-      "Flexible Scheduling: Train at times that work specifically for your lifestyle",
-      "Competition Specific: Fine-tune your game plan and cut weight safely"
+      "Workouts & Jiu Jitsu coaching personalized for your individual goals",
+      "Unlimited support & accountability from our expert team",
+      "The motivation and drive that comes with one-on-one training",
+      "Real results driven by custom workouts & nutrition strategies"
     ],
     image1: "", // Body Image
     carouselImages: Array(5).fill(null),

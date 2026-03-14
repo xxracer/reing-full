@@ -91,7 +91,7 @@ const InstagramFeed = () => {
           return (
             <div key={post.id} className="instagram-post-wrapper">
               {isInstagramLink ? (
-                <div style={{ width: '100%', height: '500px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '600px', overflow: 'hidden' }}>
                   <iframe
                     className="instagram-embed-iframe"
                     title={`Instagram Post ${post.id}`}

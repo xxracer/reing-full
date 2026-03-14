@@ -95,7 +95,15 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
   }, [sectionId, apiBaseUrl]);
 
   return (
-    <section className="program-hero" style={{ aspectRatio: aspectRatio || '16 / 9', maxHeight: '65vh' }}>
+    <section 
+      className="program-hero" 
+      style={{ 
+        // Use aspect ratio on larger screens, but guarantee a safe minimum height on mobile
+        // so content (title + subtitle + button) doesn't bleed out of the hero background.
+        aspectRatio: aspectRatio || '16 / 9', 
+        minHeight: 'min-content' // Crucial: ensure it never collapses smaller than the children need
+      }}
+    >
       <div className="program-hero-bg-wrapper">
         {typeof heroImageUrl === 'string' && heroImageUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
           <video

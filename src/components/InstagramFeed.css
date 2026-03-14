@@ -32,7 +32,7 @@
 
 .instagram-post-wrapper {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 5; /* Desktop default */
   background: var(--bg-primary);
   border-radius: 8px;
   overflow: hidden;
@@ -77,5 +77,8 @@
 @media (max-width: 480px) {
   .instagram-feed-section {
     padding: var(--space-l) var(--space-xs);
+  }
+  .instagram-post-wrapper {
+    aspect-ratio: 4 / 7; /* Taller for mobile */
   }
 }

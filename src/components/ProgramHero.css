@@ -6,6 +6,9 @@
   align-items: center;
   overflow: hidden;
   background-color: var(--neutral-900);
+  /* Ensure content clears the ~90px fixed navbar at the top */
+  padding: calc(var(--space-2xl) + 60px) 0 var(--space-2xl); 
+  min-height: 400px; /* Absolute baseline safeguard */
 }
 
 .program-hero-bg-wrapper {
@@ -88,8 +91,24 @@
 
 /* --- Mobile Specifics --- */
 @media (max-width: 768px) {
+  .program-hero {
+    /* Break the strict aspect ratio on narrow screens because 16:9 on a 360px wide screen is only 200px tall, which is too short for the 3 elements inside it. */
+    aspect-ratio: auto !important;
+    min-height: 480px; /* Give it enough breathing room for Title + Subtitle + Button + Navbar */
+    padding: 120px var(--space-s) var(--space-xl); /* Top padding 120px clears the 90px navbar safely */
+  }
+
   .program-hero-content {
-    gap: var(--space-s);
+    gap: var(--space-m); /* Keep comfortable gap */
+    width: 100%;
+  }
+
+  .program-hero-title {
+    /* Force it to stay on one line. Scale font drastically down so 20 character titles fit inside 340px */
+    font-size: min(10vw, 3rem); 
+    white-space: nowrap; 
+    width: 100%;
+    /* In case it still overflows slightly on the smallest screens, allow smooth scaling */
   }
   
   .program-hero-subtitle {
