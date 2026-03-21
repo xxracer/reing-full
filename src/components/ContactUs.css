@@ -3,6 +3,7 @@
 .contact-us-section {
   padding: 80px 20px;
   background-color: var(--background-secondary);
+  scroll-margin-top: 70px; /* offset for fixed navbar */
 }
 
 .contact-us-container {
@@ -35,6 +36,7 @@
   text-align: left;
   display: flex;
   flex-direction: column;
+  scroll-margin-top: 70px; /* offset for fixed navbar */
 }
 
 .contact-form-container .section-title {

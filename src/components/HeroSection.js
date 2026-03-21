@@ -47,7 +47,7 @@ const HeroSection = ({ videoOpacity }) => {
           const videoId = (match && match[2].length === 11) ? match[2] : null;
 
           if (videoId) {
-            newHeroVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1`;
+            newHeroVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1&enablejsapi=1&rel=0`;
           } else {
             newHeroVideoUrl = val; // Fallback to raw value
           }
@@ -86,7 +86,7 @@ const HeroSection = ({ videoOpacity }) => {
               src={heroVideoUrl}
               title="Hero Video"
               frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               className="hero-iframe"
             ></iframe>
@@ -135,7 +135,7 @@ const HeroSection = ({ videoOpacity }) => {
       <div className="hero-content">
         <h1 className="hero-main-title">Katys Premier Jiu Jitsu Academy</h1>
         <p className="hero-sub-text">Kids Jiu-Jitsu • Adult Gi & No-Gi • Competition & Homeschool Program</p>
-        <a href="#contact" className="hero-cta-button btn-red">Book Your Trial Class</a>
+        <a href="/#contact-form" className="hero-cta-button btn-red">Book Your Trial Class</a>
       </div>
     </section>
   );

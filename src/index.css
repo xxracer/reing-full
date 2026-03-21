@@ -1,25 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
 
+/* ============================================
+   GLOBAL TEXT WRAPPING — "Invisible Box" System
+   Ensures text never cuts words in half.
+   ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+  Text wrapping rules:
+  - overflow-wrap: break-word → text wraps to next line; only breaks a word
+    if that single word is wider than the entire container (e.g. a URL)
+  - hyphens: none → never add automatic hyphens
+  NOTE: Do NOT combine with text-align:justify — that causes word splitting!
+*/
+
+body,
+p, li, span, a, div,
+h1, h2, h3, h4, h5, h6,
+ul, ol, blockquote {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: none !important;
+  -webkit-hyphens: none !important;
+  -ms-hyphens: none !important;
+}
+
+/* Fix the classic flex min-width bug */
+.instructor-top,
+.instructor-credentials,
+.instructor-bio-full,
+.instructor-item,
+.welcome-text-content,
+.program-content,
+.text-side {
+  min-width: 0;
+  max-width: 100%;
+}
+
 :root {
   /* Color Palette */
   --background-primary: #ffffff;
   --background-secondary: #f4f4f4;
-  /* Light Gray for "Clean" look */
   --text-charcoal: #000000;
   --text-inverse: #000000;
-  /* Text on secondary is now dark */
   --text-dark-gray: #333333;
   --text-medium-gray: #555555;
   --border-light-gray: #e0e0e0;
   --text-white: #ffffff;
-  /* New variable for actual white text */
 
-  /* ... rest of vars ... */
-  /* Gold replaced with Red/Neutral as requested */
+  /* Accent Colors */
   --accent-gold: #D32F2F;
-  /* Matching Red */
   --accent-gold-dark: #B71C1C;
-  /* Darker Red */
   --accent-red: #ff0000;
   --accent-red-hover: #cc0000;
 
@@ -27,28 +63,22 @@
   --font-heading-primary: 'Bebas Neue', cursive;
   --font-heading-secondary: 'Montserrat', sans-serif;
   --font-body: 'Open Sans', sans-serif;
+
+  /* Responsive padding for text containers — the "invisible box" */
+  --text-padding-inline: clamp(15px, 5vw, 40px);
 }
 
 @keyframes borderRotate {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Global Button Styles with Red Effect */
+/* Global Button Styles */
 button,
 .btn-red-effect {
   background-color: var(--background-secondary);
   color: var(--text-white);
-  /* Forced white text */
   border: none;
   padding: 10px 20px;
   cursor: pointer;
@@ -89,7 +119,6 @@ button:active,
 html,
 body {
   overflow-x: hidden;
-  /* Prevent ANY horizontal scroll on the entire page */
   max-width: 100%;
 }
 
@@ -100,42 +129,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-primary);
   color: var(--text-dark-gray);
-  font-size: 18px;
-  line-height: 1.6;
+  font-size: clamp(15px, 1vw + 12px, 18px);
+  line-height: 1.7;
   transition: background-color 0.4s ease, color 0.4s ease;
-  hyphens: none;
-  -webkit-hyphens: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading-primary);
   color: var(--text-charcoal);
   font-weight: 700;
   margin-top: 0;
-  hyphens: none;
-  -webkit-hyphens: none;
-  overflow-wrap: break-word;
-}
-
-p {
-  overflow-wrap: break-word;
-  /* Allow text to wrap inside its container */
-  hyphens: none;
-  -webkit-hyphens: none;
 }
 
 h1 {
   font-family: var(--font-heading-primary);
-  font-size: 48px;
+  font-size: clamp(32px, 5vw, 48px);
 }
 
 h2 {
-  font-size: 32px;
+  font-size: clamp(24px, 4vw, 32px);
 }
 
 a {
@@ -148,13 +160,9 @@ a:hover {
   color: var(--accent-gold);
 }
 
-* {
-  box-sizing: border-box;
-}
-
 .section-title {
   text-align: center;
-  font-size: 32px;
+  font-size: clamp(24px, 4vw, 32px);
   color: var(--text-charcoal);
   margin-bottom: 50px;
   font-family: var(--font-heading-secondary);

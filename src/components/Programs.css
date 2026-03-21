@@ -136,6 +136,10 @@
     gap: 25px;
   }
 
+  .program-card {
+    padding: 0 !important;
+  }
+
   .program-title {
     font-size: 20px;
   }

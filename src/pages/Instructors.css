@@ -1,162 +1,193 @@
 /* src/pages/Instructors.css */
 
+/* ============================================
+   INSTRUCTORS PAGE
+   Layout: image + bullets side by side (top)
+           full-width bio text (bottom)
+   ============================================ */
+
+/* ---- PAGE SHELL ---- */
 .instructors-page {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 20px;
-  color: var(--text-medium-gray);
+  padding: 40px 16px;   /* 16px is the absolute minimum safe margin */
+  box-sizing: border-box;
 }
 
 .instructors-page h1 {
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   text-transform: uppercase;
   color: var(--text-charcoal);
-  /* Dark gray for premium feel */
   font-family: 'Oswald', sans-serif;
-  /* Assuming font availability, fallback to sans-serif */
   letter-spacing: 1px;
 }
 
+/* ---- CARD ---- */
 .instructor-item {
+  margin-bottom: 55px;
+  padding-bottom: 45px;
+  border-bottom: 1px solid var(--border-light-gray);
+}
+.instructor-item:last-child { border-bottom: none; }
+
+/* ---- TOP: image + credentials ---- */
+.instructor-top {
   display: flex;
   align-items: flex-start;
-  /* Align top so text flows naturally */
-  gap: 60px;
-  margin-bottom: 80px;
-  padding-bottom: 60px;
-  border-bottom: 1px solid var(--border-light-gray);
-  /* Subtle separator */
+  gap: 24px;
+  margin-bottom: 20px;
 }
 
-.instructor-item:last-child {
-  border-bottom: none;
-}
-
-/* Reverse layout for alternating items */
-.instructor-item.reverse {
-  flex-direction: row-reverse;
-}
-
-/* Image Styling */
 .instructor-image-wrapper {
-  flex: 0 0 180px;
-  /* Fixed width for images */
-  position: relative;
+  flex: 0 0 190px;
   overflow: hidden;
-  /* Added for zoom containment */
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
 }
-
 .instructor-image-wrapper img {
   width: 100%;
   height: auto;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  /* Premium shadow */
+  display: block;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
-.instructor-image-wrapper img:hover {
-  transform: translateY(-5px);
-}
-
-/* Bio/Text Styling */
-.instructor-bio {
+.instructor-credentials {
   flex: 1;
-  /* Take remaining space */
-  max-width: 100%;
-  /* Ensure it doesn't overflow parent */
-  overflow-wrap: normal;
-  /* Prevent aggressive word slicing */
-  word-break: normal;
-  hyphens: none;
-  /* Ensure text isn't fully justified which causes huge gaps */
-  text-align: left;
+  min-width: 0;
 }
-
-.instructor-bio h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
+.instructor-credentials h2 {
+  font-size: 1.8rem;
+  margin: 0 0 12px 0;
   color: var(--text-charcoal);
   font-family: 'Oswald', sans-serif;
 }
 
-/* Content Typography (from previous file, but verified) */
-.instructor-bio-content h3 {
-  font-size: 1.2rem;
-  color: var(--text-dark-gray);
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.instructor-bio-content p {
-  line-height: 1.8;
-  margin-bottom: 1.5em;
-  color: var(--text-medium-gray);
-  font-size: 0.9rem;
-  text-align: left;
-  overflow-wrap: break-word;
-  /* wrap text inside column, no horizontal overflow */
-  hyphens: none;
-  -webkit-hyphens: none;
-}
-
-.instructor-bio-content ul,
-.instructor-bio-content ol {
-  margin-bottom: 1.5em;
-  padding-left: 20px;
-  color: var(--text-medium-gray);
+.instructor-bullets ul,
+.instructor-bullets ol {
+  margin: 0;
+  padding-left: 18px;
   list-style-type: disc;
-  text-align: left !important;
+}
+.instructor-bullets li {
+  margin-bottom: 5px;
+  line-height: 1.5;
+  font-size: 15px;
+  color: var(--text-dark-gray);
 }
 
-.instructor-bio-content li {
+/* ---- BOTTOM: full-width bio text ---- */
+.instructor-bio-full {
+  width: 100%;
+  box-sizing: border-box;
+}
+.instructor-bio-full p {
+  font-size: 16px;
+  line-height: 1.8;
   margin-bottom: 0.5em;
-  line-height: 1.6;
-  text-align: left !important;
+  color: var(--text-medium-gray);
+  text-align: left;
+}
+.instructor-bio-full strong,
+.instructor-bio-full b { font-weight: 700; }
+.instructor-bio-full em,
+.instructor-bio-full i { font-style: italic; }
+
+/* Force all CMS-injected spans to stay inline. */
+.instructor-bio-full span {
+  display: inline !important;
+  max-width: 100% !important;
+  width: auto !important;
+}
+/* Force all paragraphs and divs inside bio to take full width */
+.instructor-bio-full p,
+.instructor-bio-full div {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* KEY FIX: override-wrap:normal so WHOLE words move to next line.
+   break-word was splitting 'work' → 'w' + 'ork'.
+   The container is wide enough so words always fit on next line. */
+.instructor-bio-full,
+.instructor-bio-full * {
+  overflow-wrap: normal !important;
+  word-wrap: normal !important;
+  word-break: normal !important;
 }
 
-.instructor-bio-content strong,
-.instructor-bio-content b {
-  color: var(--text-charcoal);
-  font-weight: 700;
-  /* Ensure bold shows */
-}
+/* ============================================
+   MOBILE  — all phones from old 360px to iPhone 17 Pro Max (430px+)
+   clamp(min, preferred, max) scales smoothly across all sizes.
+   DESKTOP CSS above is unchanged.
+   ============================================ */
+@media (max-width: 768px) {
 
-/* Responsive Design */
-@media (max-width: 900px) {
-  .instructor-item {
-    flex-direction: column !important;
-    /* Stack on mobile */
-    gap: 30px;
-    align-items: center;
-    text-align: center;
-  }
-
-  .instructor-bio,
-  .instructor-bio-content {
-    text-align: left !important;
-  }
-
-  .instructor-image-wrapper {
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: 320px;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    border-radius: 8px;
-    /* Force iOS Safari overflow mask */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    mask-image: -webkit-radial-gradient(white, black);
+  /* Page padding: 14px on tiny phones, 18px on large ones */
+  .instructors-page {
+    padding: clamp(16px, 4vw, 24px) clamp(14px, 4vw, 18px);
   }
 
   .instructors-page h1 {
-    font-size: 2rem;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+    margin-bottom: clamp(20px, 5vw, 32px);
+  }
+
+  /* Stack: image centered above credentials */
+  .instructor-top {
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(10px, 3vw, 16px);
+    margin-bottom: clamp(14px, 4vw, 22px);
+  }
+
+  /* Image: big enough to show face, small enough to leave room for text */
+  .instructor-image-wrapper {
+    width: 50%;
+    max-width: clamp(160px, 45vw, 220px);
+    flex: 0 0 auto;
+  }
+
+  /* Credentials (name + bullets) */
+  .instructor-credentials {
+    width: 100%;
+    text-align: center;
+  }
+  .instructor-credentials h2 {
+    font-size: clamp(1.1rem, 5vw, 1.4rem);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  /* Bullet list left-aligned, centered inside the container */
+  .instructor-bullets ul,
+  .instructor-bullets ol {
+    display: inline-block;
+    text-align: left;
+    padding-left: 16px;
+  }
+  .instructor-bullets li {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* Bio text — no extra padding (page already gives 14-18px) */
+  .instructor-bio-full {
+    padding: 0;
+    width: 100%;
+  }
+  .instructor-bio-full p {
+    font-size: 10px;
+    line-height: 1.75;
+    margin-bottom: 0.5em;
+    text-align: left;
+  }
+
+  /* Card spacing */
+  .instructor-item {
+    margin-bottom: clamp(28px, 6vw, 40px);
+    padding-bottom: clamp(20px, 5vw, 32px);
   }
 }

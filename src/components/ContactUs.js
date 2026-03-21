@@ -67,7 +67,7 @@ const ContactUs = () => {
             title="Reign Jiu Jitsu Location"
           ></iframe>
         </div>
-        <div className="contact-form-container">
+        <div id="contact-form" className="contact-form-container">
           <h2 className="section-title">Contact Us</h2>
           <p className="contact-phone" style={{ marginBottom: '10px' }}>
             Submit your info below or text us for a faster response at <a href="tel:17134466008">(713) 446-6008</a>

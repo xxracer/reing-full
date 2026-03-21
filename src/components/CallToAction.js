@@ -10,7 +10,7 @@ const CallToAction = () => {
           Join athletes and families across Katy who trust Reign Jiu Jitsu for expert coaching
           and a positive learning environment. Take the first step today!
         </p>
-        <a href="#contact" className="cta-button">Get More Info</a>
+        <a href="/#contact-form" className="cta-button">Get More Info</a>
       </div>
     </section>
   );
