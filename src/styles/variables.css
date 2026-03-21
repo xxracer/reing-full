@@ -1,0 +1,94 @@
+:root {
+  /* Brand Colors - Premium Red Palette */
+  --brand-primary: #dd0000;
+  --brand-primary-light: #ff3333;
+  --brand-primary-dark: #aa0000;
+  
+  /* Semantic Brand Accents (Replacing basic Grays) */
+  --brand-accent: #fca311; /* Warm secondary accent - Orange/Amber */
+  --brand-accent-cool: #14213d; /* Deep cool blue for contrast */
+  --brand-accent-gold: #d4af37; /* Premium gold touch for highlights */
+
+  /* Tinted Neutrals - Blue/Purple-tinted for premium depth, not pure grayscale */
+  --neutral-0: #ffffff; /* Pure White */
+  --neutral-50: #f8f9fa;
+  --neutral-100: #f1f3f5;
+  --neutral-200: #e9ecef;
+  --neutral-300: #dee2e6;
+  --neutral-400: #ced4da;
+  --neutral-500: #adb5bd;
+  --neutral-600: #6c757d;
+  --neutral-700: #495057;
+  --neutral-800: #343a40;
+  --neutral-900: #212529;
+  --neutral-950: #1a1d20;
+  --neutral-1000: #000000;
+
+  /* Semantic Mappings - "White Gi" Light Theme */
+  --bg-primary: var(--neutral-0); /* Pure White */
+  --bg-secondary: var(--neutral-50); /* Very light gray/blue tint */
+  --bg-tertiary: var(--neutral-100);
+  --bg-accent-subtle: #fcf8f5; /* Extremely subtle warm tint */
+  
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-700);
+  --text-accent: var(--brand-primary-dark);
+  
+  --border-subtle: var(--neutral-200);
+  --border-accent: rgba(221, 0, 0, 0.15); /* Subtle red border */
+  
+  /* Feature Specific */
+  --card-bg: var(--neutral-0);
+  --card-bg-hover: var(--neutral-50);
+  --card-border: var(--neutral-200);
+  --card-border-hover: rgba(221, 0, 0, 0.4);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Lighter shadow for light theme */
+  --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 15px rgba(221, 0, 0, 0.05);
+
+  /* Gradients */
+  --grad-hero-overlay: linear-gradient(to top, var(--bg-primary) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.1) 100%);
+  --grad-primary: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
+  --grad-dark-red: linear-gradient(135deg, var(--neutral-50) 0%, #ff1a1a 100%);
+
+  /* Typography */
+  --font-main: 'Montserrat', sans-serif;
+  --font-bebas: 'Bebas Neue', cursive;
+  --font-body: 'Open Sans', sans-serif;
+
+  /* Fluid Typography (Step 1.25 ratio for stronger hierarchy) */
+  --font-step--2: clamp(0.64rem, 0.62rem + 0.11vw, 0.70rem);
+  --font-step--1: clamp(0.80rem, 0.76rem + 0.20vw, 0.90rem);
+  --font-step-0: clamp(1rem, 0.96rem + 0.22vw, 1.13rem);
+  --font-step-1: clamp(1.25rem, 1.18rem + 0.35vw, 1.41rem);
+  --font-step-2: clamp(1.56rem, 1.45rem + 0.56vw, 1.76rem);
+  --font-step-3: clamp(1.95rem, 1.77rem + 0.90vw, 2.22rem);
+  --font-step-4: clamp(2.44rem, 2.18rem + 1.28vw, 2.98rem); /* Bolder */
+  --font-step-5: clamp(3.05rem, 2.68rem + 1.83vw, 3.82rem); /* Bolder */
+  --font-step-6: clamp(3.81rem, 3.28rem + 2.65vw, 5.00rem); /* Much bolder hero text */
+  --font-step-7: clamp(4.76rem, 4.10rem + 3.3vw, 6.25rem); /* Giant hero title */
+
+  /* Spacing */
+  --space-3xs: clamp(0.25rem, 0.23rem + 0.09vw, 0.31rem);
+  --space-2xs: clamp(0.5rem, 0.46rem + 0.17vw, 0.63rem);
+  --space-xs: clamp(0.75rem, 0.69rem + 0.26vw, 0.94rem);
+  --space-s: clamp(1rem, 0.91rem + 0.35vw, 1.25rem);
+  --space-m: clamp(1.5rem, 1.37rem + 0.52vw, 1.88rem);
+  --space-l: clamp(2rem, 1.83rem + 0.7vw, 2.5rem);
+  --space-xl: clamp(3rem, 2.74rem + 1.04vw, 3.75rem);
+  --space-2xl: clamp(4rem, 3.65rem + 1.39vw, 5rem);
+  --space-3xl: clamp(6rem, 5.5rem + 2.5vw, 8rem); /* Extra breathing room */
+
+  /* Shadow & Glow */
+  --glow-red: 0 0 20px rgba(221, 0, 0, 0.4);
+  --glow-red-strong: 0 0 30px rgba(221, 0, 0, 0.6);
+
+  /* Legacy Compat */
+  --background-primary: var(--bg-primary);
+  --background-secondary: var(--bg-secondary);
+  --accent-gold: var(--brand-accent-gold);
+  --accent-red: var(--brand-primary);
+  --accent-red-hover: var(--brand-primary-light);
+  --text-white: var(--neutral-0);
+  --text-charcoal: var(--text-primary);
+  --text-inverse: var(--neutral-1000);
+}

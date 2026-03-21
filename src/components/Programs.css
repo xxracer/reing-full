@@ -1,139 +1,138 @@
 /* src/components/Programs.css */
 
 .programs-section {
-  padding: 80px 20px;
-  background-color: var(--background-secondary);
+  padding: var(--space-2xl) var(--space-s);
+  background-color: var(--bg-primary);
+  counter-reset: program-counter;
 }
 
 .programs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 1200px;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-l);
+  max-width: 1400px;
   margin: 0 auto;
 }
 
 .program-card {
-  border-radius: 16px;
   position: relative;
-  text-align: left;
   text-decoration: none;
   color: inherit;
   display: flex;
   flex-direction: column;
-  z-index: 1;
-
-  /* Ensure white background */
-  background-color: var(--background-primary);
-  border: none;
-
-  /* Parallax properties */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  /* Enable 3D transform context */
-  transform-style: preserve-3d;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  counter-increment: program-counter;
 }
 
-/* Gradient Border Pseudo-element behind card */
+/* Asymmetrical Spans */
+.program-card:nth-child(4n+1) { grid-column: span 7; }
+.program-card:nth-child(4n+2) { grid-column: span 5; }
+.program-card:nth-child(4n+3) { grid-column: span 5; }
+.program-card:nth-child(4n+4) { grid-column: span 7; }
+
 .program-card::before {
-  content: "";
+  content: counter(program-counter, decimal-leading-zero);
   position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border-radius: 19px;
-  /* Slightly larger than card */
-  /* Gradient removed for cleaner look */
-  background: #e0e0e0;
-  /* Solid light gray */
-  /* background-size: 200% 200%; REMOVED */
-  /* animation: borderRotate 4s ease infinite; REMOVED */
-
-  /* Push behind */
-  transform: translateZ(-1px);
-
-  opacity: 0.7;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  font-family: var(--font-bebas);
+  font-size: var(--font-step-4);
+  color: rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  transition: color 0.4s ease;
 }
 
 .program-card:hover {
-  /* "Parallax" lift effect */
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  border-color: var(--brand-primary);
+  transform: translateY(-5px);
+  box-shadow: var(--card-shadow);
 }
 
 .program-card:hover::before {
-  opacity: 1;
-  /* Make border vibrant on hover */
-  filter: blur(2px);
-  /* Slight glow */
+  color: var(--brand-primary);
 }
 
 .program-image-wrapper {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 21 / 9;
   overflow: hidden;
-  background-color: var(--background-secondary);
   position: relative;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+  background-color: var(--neutral-900);
 }
 
-.program-image-wrapper img {
+.program-card:nth-child(even) .program-image-wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+.program-image-wrapper img,
+.program-image-wrapper video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  ;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.program-card:hover .program-image-wrapper img,
+.program-card:hover .program-image-wrapper video {
+  transform: scale(1.05);
 }
 
 .program-content {
-  padding: 25px;
+  padding: var(--space-m);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  /* Center content horizontally */
-  gap: 0px;
-  /* Reduced gap to practically zero */
-  flex: 1;
-  background-color: var(--background-primary);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  text-align: center;
-  /* Center text */
+  gap: var(--space-3xs);
+  position: relative;
+  z-index: 2;
 }
 
 .program-title {
-  font-size: 22px;
-  font-family: var(--font-heading-secondary);
-  color: var(--text-charcoal);
-  margin-top: 0;
-  margin-bottom: 0;
-  /* Removed margin to let gap handle it */
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: normal;
-  line-height: 1.1;
-  /* Tighten title height */
+  font-size: var(--font-step-2);
+  font-family: var(--font-bebas);
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: 0.05em;
 }
 
 .program-description {
-  font-size: 16px;
-  color: var(--text-medium-gray);
-  line-height: 1.3;
-  margin-top: 5px;
-  /* Visual tweak to bring it closer */
-  margin-bottom: 0;
+  font-size: var(--font-step--1);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 40ch;
+}
+
+/* Tablet Adjustments */
+@media (max-width: 1024px) {
+  .programs-grid {
+    gap: var(--space-m);
+  }
+
+  .program-card {
+    grid-column: span 6 !important;
+  }
+
+  /* Keep a slight stagger for tablet */
+  .program-card:nth-child(even) {
+    transform: translateY(var(--space-l));
+  }
+
+  .program-card::before {
+    font-size: var(--font-step-3);
+  }
 }
 
 @media (max-width: 768px) {
-  .programs-section {
-    padding: 60px 15px;
-  }
-
   .programs-grid {
-    gap: 25px;
+    grid-template-columns: 1fr;
+    gap: var(--space-m);
+  }
+  
+  .program-card {
+    grid-column: 1 / -1 !important;
   }
 
   .program-card {

@@ -1,48 +1,47 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // Import core layout components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-
-// Import page components
-import HomePage from './pages/HomePage';
-import KidsProgram from './pages/KidsProgram';
-import HomeschoolProgram from './pages/HomeschoolProgram';
-import AdultProgram from './pages/AdultProgram';
-import FundamentalsProgram from './pages/FundamentalsProgram';
-import CompetitionTraining from './pages/CompetitionTraining';
-import WrestlingProgram from './pages/WrestlingProgram';
-import PrivateLessons from './pages/PrivateLessons';
-import Schedule from './pages/Schedule';
-import TrainingSchedule from './pages/TrainingSchedule';
-import Instructors from './pages/Instructors';
-import OurFacility from './pages/OurFacility';
-import AffiliateSchools from './pages/AffiliateSchools';
-import ContactPage from './pages/ContactPage';
-import AboutPage from './pages/AboutPage';
-import BlogPage from './pages/BlogPage';
-import BlogPost from './pages/BlogPost';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import ManageHomepage from './pages/admin/ManageHomepage';
-import ManagePrograms from './pages/admin/ManagePrograms';
-import ManageProgramContent from './pages/admin/ManageProgramContent';
-import ManageAbout from './pages/admin/ManageAbout';
-import ManageFacility from './pages/admin/ManageFacility';
-import ManageSchedule from './pages/admin/ManageSchedule';
-import ManageBlog from './pages/admin/ManageBlog';
-import UpdateInstructors from './pages/admin/UpdateInstructors';
-import ChangePasswordPage from './pages/admin/ChangePasswordPage';
-import PrivateRoute from './components/PrivateRoute';
-import LoginPage from './pages/LoginPage';
-
 import GoogleReviewsButton from './components/GoogleReviewsButton';
-
 import ScrollToTop from './components/ScrollToTop';
+import PrivateRoute from './components/PrivateRoute';
 
-// Configure axios to send credentials
-// axios.defaults.withCredentials = true; // Assuming this was here before, uncommenting if needed or keep commented if handled globally
+// Lazy load page components
+const HomePage = lazy(() => import('./pages/HomePage'));
+const KidsProgram = lazy(() => import('./pages/KidsProgram'));
+const HomeschoolProgram = lazy(() => import('./pages/HomeschoolProgram'));
+const AdultProgram = lazy(() => import('./pages/AdultProgram'));
+const FundamentalsProgram = lazy(() => import('./pages/FundamentalsProgram'));
+const CompetitionTraining = lazy(() => import('./pages/CompetitionTraining'));
+const WrestlingProgram = lazy(() => import('./pages/WrestlingProgram'));
+const PrivateLessons = lazy(() => import('./pages/PrivateLessons'));
+const Schedule = lazy(() => import('./pages/Schedule'));
+const TrainingSchedule = lazy(() => import('./pages/TrainingSchedule'));
+const Instructors = lazy(() => import('./pages/Instructors'));
+const OurFacility = lazy(() => import('./pages/OurFacility'));
+const AffiliateSchools = lazy(() => import('./pages/AffiliateSchools'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const BlogPage = lazy(() => import('./pages/BlogPage'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+
+// Admin Pages (Lazy Load)
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const ManageHomepage = lazy(() => import('./pages/admin/ManageHomepage'));
+const ManagePrograms = lazy(() => import('./pages/admin/ManagePrograms'));
+const ManageProgramContent = lazy(() => import('./pages/admin/ManageProgramContent'));
+const ManageAbout = lazy(() => import('./pages/admin/ManageAbout'));
+const ManageFacility = lazy(() => import('./pages/admin/ManageFacility'));
+const ManageSchedule = lazy(() => import('./pages/admin/ManageSchedule'));
+const ManageBlog = lazy(() => import('./pages/admin/ManageBlog'));
+const UpdateInstructors = lazy(() => import('./pages/admin/UpdateInstructors'));
+const ChangePasswordPage = lazy(() => import('./pages/admin/ChangePasswordPage'));
+
+const LoadingFallback = () => <div className="loading-screen" style={{ height: '100vh', backgroundColor: 'var(--bg-primary)' }}></div>;
 
 // This new component handles the layout
 const AppLayout = () => {
@@ -51,49 +50,50 @@ const AppLayout = () => {
       <ScrollToTop />
       <Navbar />
       <main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/kids-program" element={<KidsProgram />} />
-          <Route path="/homeschool-program" element={<HomeschoolProgram />} />
-          <Route path="/adult-program" element={<AdultProgram />} />
-          <Route path="/fundamentals-program" element={<FundamentalsProgram />} />
-          <Route path="/competition-training" element={<CompetitionTraining />} />
-          <Route path="/wrestling-program" element={<WrestlingProgram />} />
-          <Route path="/private-lessons" element={<PrivateLessons />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/training-schedule" element={<TrainingSchedule />} />
-          <Route path="/instructors" element={<Instructors />} />
-          <Route path="/facility" element={<OurFacility />} />
-          <Route path="/affiliate-schools" element={<AffiliateSchools />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/kids-program" element={<KidsProgram />} />
+            <Route path="/homeschool-program" element={<HomeschoolProgram />} />
+            <Route path="/adult-program" element={<AdultProgram />} />
+            <Route path="/fundamentals-program" element={<FundamentalsProgram />} />
+            <Route path="/competition-training" element={<CompetitionTraining />} />
+            <Route path="/wrestling-program" element={<WrestlingProgram />} />
+            <Route path="/private-lessons" element={<PrivateLessons />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/training-schedule" element={<TrainingSchedule />} />
+            <Route path="/instructors" element={<Instructors />} />
+            <Route path="/facility" element={<OurFacility />} />
+            <Route path="/affiliate-schools" element={<AffiliateSchools />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
 
-          <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage />} />
 
-          {/* Protected Admin Routes */}
-          <Route
-            path="/admin/*"
-            element={
-              <PrivateRoute>
-                <AdminDashboard />
-              </PrivateRoute>
-            }
-          >
-            {/* These routes are rendered inside AdminDashboard's Outlet */}
-            <Route index element={<ManageHomepage />} />
-            <Route path="homepage" element={<ManageHomepage />} />
-            <Route path="programs" element={<ManagePrograms />} />
-            <Route path="programs/:programId" element={<ManageProgramContent />} />
-            <Route path="about" element={<ManageAbout />} />
-            <Route path="facility" element={<ManageFacility />} />
-            <Route path="instructors" element={<UpdateInstructors />} />
-            <Route path="schedule" element={<ManageSchedule />} />
-            <Route path="blog" element={<ManageBlog />} />
-            <Route path="security" element={<ChangePasswordPage />} />
-          </Route>
-        </Routes>
+            {/* Protected Admin Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <PrivateRoute>
+                  <AdminDashboard />
+                </PrivateRoute>
+              }
+            >
+              <Route index element={<ManageHomepage />} />
+              <Route path="homepage" element={<ManageHomepage />} />
+              <Route path="programs" element={<ManagePrograms />} />
+              <Route path="programs/:programId" element={<ManageProgramContent />} />
+              <Route path="about" element={<ManageAbout />} />
+              <Route path="facility" element={<ManageFacility />} />
+              <Route path="instructors" element={<UpdateInstructors />} />
+              <Route path="schedule" element={<ManageSchedule />} />
+              <Route path="blog" element={<ManageBlog />} />
+              <Route path="security" element={<ChangePasswordPage />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </main>
       <Footer />
       <GoogleReviewsButton />

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
   <meta name="theme-color" content="#000000" />
   <meta name="description"
     content="Reign Jiu Jitsu is a premier family-friendly martial arts academy in Katy, TX, offering expert training to promote discipline, confidence, and fitness." />
@@ -33,164 +33,173 @@
     (function () {
       // Kick off the fetch immediately in the head, parallel to CSS/JS downloading.
       window.__REIGN_PRELOAD_PROMISE__ = fetch('/api/content-preload', { cache: 'no-store' })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('Prefetch failed with status: ' + res.status);
+          return res.json();
+        })
         .then(data => {
           window.__REIGN_PRELOAD_DATA__ = data;
 
-          // Map the data into localStorage format so React sees it instantly on mount
-          const welcomeImageStr = data['welcome_section_image'];
-          if (welcomeImageStr) {
+          // Wrap the mapping logic in requestIdleCallback if available, fallback to setTimeout.
+          // This ensures the main thread stays free for initial layout.
+          const scheduleWork = window.requestIdleCallback || (cb => setTimeout(cb, 50));
+
+          scheduleWork(() => {
             try {
-              const parsed = JSON.parse(welcomeImageStr);
-              localStorage.setItem('reign_welcome_data', JSON.stringify({
-                url: parsed.url || welcomeImageStr,
-                zoom: parseFloat(parsed.zoom || 1),
-                coords: parsed.coords || { x: 50, y: 50 },
-                aspectRatio: parsed.aspectRatio || '16 / 9',
-                objectFit: parsed.objectFit || 'cover'
-              }));
-            } catch (e) { }
-          }
-
-          let heroImage = { url: null, position: 'center', coords: { x: 50, y: 50 } };
-          let heroVideoUrl = null;
-
-          const heroMainStr = data['homepage_main_image'];
-          const heroVideoStr = data['homepage_hero_video'];
-          if (heroMainStr || heroVideoStr) {
-            if (heroMainStr) {
-              try {
-                const parsed = JSON.parse(heroMainStr);
-                heroImage = { url: parsed.url, position: parsed.position || 'center', coords: parsed.coords || { x: 50, y: 50 } };
-              } catch (e) { }
-            }
-            if (heroVideoStr) {
-              const val = heroVideoStr;
-              const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-              const match = val.match(regExp);
-              const videoId = (match && match[2].length === 11) ? match[2] : null;
-              if (videoId) {
-                heroVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1`;
-              } else {
-                heroVideoUrl = val;
-              }
-            }
-            localStorage.setItem('reign_hero_data', JSON.stringify({ heroImage, heroVideoUrl }));
-          }
-
-          // Programs cache
-          const programsStr = data['homepage_program_images'];
-          if (programsStr) {
-            try {
-              const parsed = JSON.parse(programsStr);
-              const initialProgramsData = [
-                { id: 'kids', title: 'Kids Program', path: '/kids-program', description: 'Confidence, discipline, and fun for children.', alt: 'Kids class in session', zoom: 1 },
-                { id: 'adults', title: 'Adult Program', path: '/adult-program', description: 'Beginner to advanced Jiu Jitsu for all levels.', alt: 'Adult class in session', zoom: 1 },
-                { id: 'homeschool', title: 'HomeSchool Program', path: '/homeschool-program', description: 'Daytime training tailored for homeschoolers.', alt: 'Homeschool class in session', zoom: 1 }
-              ];
-              const updatedPrograms = initialProgramsData.map(program => {
-                if (parsed[program.id]) {
-                  program.image = parsed[program.id].url || parsed[program.id];
-                  program.zoom = parsed[program.id].zoom || 1;
-                  program.coords = parsed[program.id].coords || { x: 50, y: 50 };
-                }
-                return program;
-              });
-              localStorage.setItem('reign_programs_cache', JSON.stringify(updatedPrograms));
-            } catch (e) { }
-          }
-
-          // Facility cache
-          const facType = data['facility_media_type'] || 'images';
-          const facImg1 = data['facility_image_1'];
-          const facImg2 = data['facility_image_2'];
-          const facVideo = data['facility_video'];
-
-          const processImage = (srcStr) => {
-            if (!srcStr) return null;
-            try {
-              const content = JSON.parse(srcStr);
-              return content.url || srcStr;
-            } catch (e) { return srcStr; }
-          };
-
-          const img1 = processImage(facImg1);
-          const img2 = processImage(facImg2);
-          let finalVideoUrl = facVideo || '';
-          const facilityImagesData = [];
-          if (img1 && img1 !== 'undefined' && img1 !== 'null') facilityImagesData.push(img1);
-          if (img2 && img2 !== 'undefined' && img2 !== 'null') facilityImagesData.push(img2);
-
-          if (facilityImagesData.length > 0 || finalVideoUrl) {
-            localStorage.setItem('reign_facility_data', JSON.stringify({
-              mediaType: facType,
-              facilityImages: facilityImagesData,
-              videoUrl: finalVideoUrl
-            }));
-          }
-
-          // Force the browser network layer to start downloading the actual bytes of the media
-          // before React even mounts. This is the true Netflix/Amazon technique.
-          const forcePreload = (url, asType) => {
-            if (!url || typeof url !== 'string' || url === 'undefined' || url === 'null') return;
-            if (url.includes('youtube.com') || url.includes('youtu.be')) return;
-
-            const link = document.createElement('link');
-            link.rel = 'preload';
-            link.as = asType;
-            link.href = url;
-            document.head.appendChild(link);
-          };
-
-          // Program Heroes Cache (Dynamic)
-          const programNames = ['kids', 'homeschool', 'adult', 'fundamentals', 'competition', 'private_lessons', 'wrestling'];
-
-          for (const prog of programNames) {
-            // Because of the 'SYNC' feature, the user might update the homepage card image
-            // (_image) but never explicitly save the hero (_hero). 
-            // We must try to load _hero first, and fallback to _image if empty.
-            let imgStr = data[`program_${prog}_hero`] || data[`program_${prog}_image`];
-
-            // For adult vs adults mismatch in some places, try 'adults'
-            if (!imgStr && prog === 'adult') {
-              imgStr = data[`program_adults_hero`] || data[`program_adults_image`];
-            }
-
-            if (imgStr) {
-              const isValid = (u) => u && typeof u === 'string' && u !== 'undefined' && u !== 'null' && u.trim() !== '' && !u.startsWith('{') && !u.startsWith('[');
-              try {
-                const parsed = JSON.parse(imgStr);
-                const heroUrl = parsed.url || imgStr;
-                if (!isValid(heroUrl)) throw new Error("Invalid URL");
-                localStorage.setItem(`reign_program_hero_program_${prog}_hero`, JSON.stringify({
-                  heroImageUrl: heroUrl,
-                  zoom: parseFloat(parsed.zoom) || 1,
-                  coords: parsed.coords || { x: 50, y: 50 },
-                  aspectRatio: parsed.aspectRatio || undefined
-                }));
-                forcePreload(heroUrl, heroUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? 'video' : 'image');
-              } catch (e) {
-                if (isValid(imgStr)) {
-                  localStorage.setItem(`reign_program_hero_program_${prog}_hero`, JSON.stringify({
-                    heroImageUrl: imgStr,
-                    zoom: 1,
-                    coords: { x: 50, y: 50 },
-                    aspectRatio: undefined
+              // Map the data into localStorage format so React sees it instantly on mount
+              const welcomeImageStr = data['welcome_section_image'];
+              if (welcomeImageStr) {
+                try {
+                  const parsed = JSON.parse(welcomeImageStr);
+                  localStorage.setItem('reign_welcome_data', JSON.stringify({
+                    url: parsed.url || welcomeImageStr,
+                    zoom: parseFloat(parsed.zoom || 1),
+                    coords: parsed.coords || { x: 50, y: 50 },
+                    aspectRatio: parsed.aspectRatio || '16 / 9',
+                    objectFit: parsed.objectFit || 'cover'
                   }));
-                  forcePreload(imgStr, imgStr.match(/\.(mp4|webm|mov)(\?|$)/i) ? 'video' : 'image');
+                } catch (e) { }
+              }
+
+              let heroImage = { url: null, position: 'center', coords: { x: 50, y: 50 } };
+              let heroVideoUrl = null;
+
+              const heroMainStr = data['homepage_main_image'];
+              const heroVideoStr = data['homepage_hero_video'];
+              if (heroMainStr || heroVideoStr) {
+                if (heroMainStr) {
+                  try {
+                    const parsed = JSON.parse(heroMainStr);
+                    heroImage = { url: parsed.url, position: parsed.position || 'center', coords: parsed.coords || { x: 50, y: 50 } };
+                  } catch (e) { }
+                }
+                if (heroVideoStr) {
+                  const val = heroVideoStr;
+                  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                  const match = val.match(regExp);
+                  const videoId = (match && match[2].length === 11) ? match[2] : null;
+                  if (videoId) {
+                    heroVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1`;
+                  } else {
+                    heroVideoUrl = val;
+                  }
+                }
+                localStorage.setItem('reign_hero_data', JSON.stringify({ heroImage, heroVideoUrl }));
+              }
+
+              // Programs cache
+              const programsStr = data['homepage_program_images'];
+              if (programsStr) {
+                try {
+                  const parsed = JSON.parse(programsStr);
+                  const initialProgramsData = [
+                    { id: 'kids', title: 'Kids Program', path: '/kids-program', description: 'Confidence, discipline, and fun for children.', alt: 'Kids class in session', zoom: 1 },
+                    { id: 'adults', title: 'Adult Program', path: '/adult-program', description: 'Beginner to advanced Jiu Jitsu for all levels.', alt: 'Adult class in session', zoom: 1 },
+                    { id: 'homeschool', title: 'HomeSchool Program', path: '/homeschool-program', description: 'Daytime training tailored for homeschoolers.', alt: 'Homeschool class in session', zoom: 1 }
+                  ];
+                  const updatedPrograms = initialProgramsData.map(program => {
+                    if (parsed[program.id]) {
+                      program.image = parsed[program.id].url || parsed[program.id];
+                      program.zoom = parsed[program.id].zoom || 1;
+                      program.coords = parsed[program.id].coords || { x: 50, y: 50 };
+                    }
+                    return program;
+                  });
+                  localStorage.setItem('reign_programs_cache', JSON.stringify(updatedPrograms));
+                } catch (e) { }
+              }
+
+              // Facility cache
+              const facType = data['facility_media_type'] || 'images';
+              const facImg1 = data['facility_image_1'];
+              const facImg2 = data['facility_image_2'];
+              const facVideo = data['facility_video'];
+
+              const processImage = (srcStr) => {
+                if (!srcStr) return null;
+                try {
+                  const content = JSON.parse(srcStr);
+                  return content.url || srcStr;
+                } catch (e) { return srcStr; }
+              };
+
+              const img1 = processImage(facImg1);
+              const img2 = processImage(facImg2);
+              let finalVideoUrl = facVideo || '';
+              const facilityImagesData = [];
+              if (img1 && img1 !== 'undefined' && img1 !== 'null') facilityImagesData.push(img1);
+              if (img2 && img2 !== 'undefined' && img2 !== 'null') facilityImagesData.push(img2);
+
+              if (facilityImagesData.length > 0 || finalVideoUrl) {
+                localStorage.setItem('reign_facility_data', JSON.stringify({
+                  mediaType: facType,
+                  facilityImages: facilityImagesData,
+                  videoUrl: finalVideoUrl
+                }));
+              }
+
+              // Force the browser network layer to start downloading the actual bytes of the media
+              const forcePreload = (url, asType) => {
+                if (!url || typeof url !== 'string' || url === 'undefined' || url === 'null') return;
+                if (url.includes('youtube.com') || url.includes('youtu.be')) return;
+
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = asType;
+                link.href = url;
+                document.head.appendChild(link);
+              };
+
+              // Program Heroes Cache (Dynamic)
+              const programNames = ['kids', 'homeschool', 'adult', 'fundamentals', 'competition', 'private_lessons', 'wrestling'];
+
+              for (const prog of programNames) {
+                let imgStr = data[`program_${prog}_hero`] || data[`program_${prog}_image`];
+                if (!imgStr && prog === 'adult') {
+                  imgStr = data[`program_adults_hero`] || data[`program_adults_image`];
+                }
+
+                if (imgStr) {
+                  const isValid = (u) => u && typeof u === 'string' && u !== 'undefined' && u !== 'null' && u.trim() !== '' && !u.startsWith('{') && !u.startsWith('[');
+                  try {
+                    const parsed = JSON.parse(imgStr);
+                    const heroUrl = parsed.url || imgStr;
+                    if (!isValid(heroUrl)) throw new Error("Invalid URL");
+                    localStorage.setItem(`reign_program_hero_program_${prog}_hero`, JSON.stringify({
+                      heroImageUrl: heroUrl,
+                      zoom: parseFloat(parsed.zoom) || 1,
+                      coords: parsed.coords || { x: 50, y: 50 },
+                      aspectRatio: parsed.aspectRatio || undefined
+                    }));
+                    forcePreload(heroUrl, heroUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? 'video' : 'image');
+                  } catch (e) {
+                    if (isValid(imgStr)) {
+                      localStorage.setItem(`reign_program_hero_program_${prog}_hero`, JSON.stringify({
+                        heroImageUrl: imgStr,
+                        zoom: 1,
+                        coords: { x: 50, y: 50 },
+                        aspectRatio: undefined
+                      }));
+                      forcePreload(imgStr, imgStr.match(/\.(mp4|webm|mov)(\?|$)/i) ? 'video' : 'image');
+                    }
+                  }
                 }
               }
-            }
-          }
 
-          // Priority Preloads for Home and Facility
-          if (heroVideoUrl) forcePreload(heroVideoUrl, 'video');
-          if (heroImage && heroImage.url) forcePreload(heroImage.url, 'image');
-          if (finalVideoUrl) forcePreload(finalVideoUrl, 'video');
+              // Priority Preloads for Home and Facility
+              if (heroVideoUrl) forcePreload(heroVideoUrl, 'video');
+              if (heroImage && heroImage.url) forcePreload(heroImage.url, 'image');
+              if (finalVideoUrl) forcePreload(finalVideoUrl, 'video');
+            } catch (err) {
+              console.error('Error hydrating cache from prefetch:', err);
+            }
+          });
 
           return data;
         })
-        .catch(err => console.error('Error prefetching data:', err));
+        .catch(err => {
+          console.error('Error prefetching critical data:', err);
+        });
     })();
   </script>
   <title>Reign BJJ | Katy's Premier Family Friendly Jiu Jitsu</title>

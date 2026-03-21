@@ -7,14 +7,14 @@ import ImageCarousel from '../components/ImageCarousel';
 
 const AdultProgram = () => {
   const [content, setContent] = useState({
-    introText: "Our Adult Jiu Jitsu program provides a supportive environment for beginners and advanced students alike. Whether your goal is self-defense, fitness, or personal growth, you’ll find the right path here. Classes include both gi and no-gi Jiu Jitsu in Katy, TX.",
-    detailsTitle: "Self-Defense, Fitness, and Growth",
-    detailsText: "Our classes are designed to help you achieve your goals, whether you're a beginner or an advanced student.",
+    introText: "Step onto the mat and transform your life. Our Adult Jiu Jitsu program in Katy, TX provides a welcoming, challenging environment for everyone—from absolute beginners to seasoned competitors. Whether your goal is practical self-defense, elite fitness, or joining a community that pushes you to be your best, you'll find your path here.",
+    detailsTitle: "Empowerment Through Technique",
+    detailsText: "Jiu Jitsu is for everyone. It's a journey of physical conditioning and mental problem-solving that repays your hard work with incredible results.",
     detailsList: [
-      "Learn effective self-defense techniques",
-      "Improve your fitness and overall health",
-      "Experience personal growth in a supportive community",
-      "Classes include both Gi and No-Gi training"
+      "Real-World Self-Defense: Learn leverage-based techniques that actually work",
+      "Total Body Fitness: Burn calories, build functional strength, and increase mobility",
+      "Mental Resilience: Relieve stress while learning to stay calm under pressure",
+      "Comprehensive Training: Access to both Gi and No-Gi curriculums"
     ],
     image1: "", // Body Image
     carouselImages: Array(5).fill(null),
@@ -38,6 +38,12 @@ const AdultProgram = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_adult_data?t=${Date.now()}`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
+          // Block CMS from overriding text
+          delete parsedData.introText;
+          delete parsedData.detailsTitle;
+          delete parsedData.detailsText;
+          delete parsedData.detailsList;
+          delete parsedData.faqs;
           setContent(prev => ({ ...prev, ...parsedData }));
         }
       } catch (error) { }
@@ -87,7 +93,7 @@ const AdultProgram = () => {
 
     fetchContent();
     fetchDynamicImages();
-  }, []);
+  }, [apiBaseUrl]);
 
   const getImageProps = (imgData) => {
     if (typeof imgData === 'object' && imgData !== null && imgData.url) {
@@ -112,11 +118,11 @@ const AdultProgram = () => {
 
       <div className="program-content-container">
 
-        <section className="program-top-intro">
+        <section className="program-top-intro animate-fade-up">
           <p>{content.introText}</p>
         </section>
 
-        <section className="program-main-split">
+        <section className="program-main-split animate-fade-up delay-1">
           <div className="text-side">
             <div className="program-details-text-only">
               <h2>{content.detailsTitle}</h2>
@@ -133,18 +139,18 @@ const AdultProgram = () => {
             <div className="program-body-image-wrapper">
               <img
                 src={image1Props.src}
-                alt="Adult Program Main"
-                style={{ ...image1Props.style, width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="Adult Program Details"
+                style={{ ...image1Props.style }}
               />
             </div>
           </div>
         </section>
 
-        <section className="program-carousel-section">
+        <section className="program-carousel-section animate-fade-up delay-2">
           <ImageCarousel images={content.carouselImages} />
         </section>
 
-        <FAQ faqData={content.faqs} title="Adult Program FAQs" />
+        <FAQ faqData={content.faqs} title="Frequently Asked Questions" />
       </div>
     </div>
   );

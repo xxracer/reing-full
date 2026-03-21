@@ -27,9 +27,7 @@ const InstagramFeed = () => {
 
       for (const id of imageIds) {
         try {
-          console.log(`[InstagramFeed] Fetching ID: ${id}...`);
           const response = await axios.get(`/api/content/instagram_image_${id}`);
-          console.log(`[InstagramFeed] Response for ${id}:`, response.data);
 
           if (response.data && response.data.content_value) {
             // Parse if it's JSON (sometimes ImageEditor saves as JSON with coords), or use raw string
@@ -40,22 +38,19 @@ const InstagramFeed = () => {
             let aspectRatio = '1 / 1';
             try {
               const parsed = JSON.parse(imageUrl);
-              console.log(`[InstagramFeed] Parsed JSON for ${id}:`, parsed);
               if (parsed.url) imageUrl = parsed.url;
               if (parsed.postLink) postLink = parsed.postLink;
               if (parsed.zoom) zoom = parseFloat(parsed.zoom);
               if (parsed.coords) coords = parsed.coords;
               if (parsed.aspectRatio) aspectRatio = parsed.aspectRatio;
             } catch (e) {
-              console.log(`[InstagramFeed] JSON parse failed for ${id}, using raw string.`);
               // Not JSON, use as is
             }
             newPosts.push({ id, img: imageUrl, link: postLink, zoom, coords, aspectRatio });
           } else {
-            console.log(`[InstagramFeed] No content for ${id}`);
+            // No content
           }
         } catch (error) {
-          console.error(`[InstagramFeed] Error fetching ${id}:`, error);
           // Ignore missing images
         }
       }
@@ -96,7 +91,7 @@ const InstagramFeed = () => {
           return (
             <div key={post.id} className="instagram-post-wrapper">
               {isInstagramLink ? (
-                <div style={{ width: '100%', height: '500px', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '600px', overflow: 'hidden' }}>
                   <iframe
                     className="instagram-embed-iframe"
                     title={`Instagram Post ${post.id}`}
@@ -117,29 +112,22 @@ const InstagramFeed = () => {
                       loop
                       muted
                       playsInline
+                      className="instagram-media"
                       style={{
                         objectPosition: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
                         transform: `scale(${post.zoom || 1})`,
                         transformOrigin: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
-                        transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        pointerEvents: 'none'
                       }}
                     />
                   ) : (
                     <img
                       src={post.img}
                       alt={`Instagram post ${post.id}`}
+                      className="instagram-media"
                       style={{
                         objectPosition: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
                         transform: `scale(${post.zoom || 1})`,
                         transformOrigin: `${post.coords?.x ?? 50}% ${post.coords?.y ?? 50}%`,
-                        transition: 'transform 0.3s ease-out, object-position 0.3s ease-out',
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover'
                       }}
                     />
                   )}

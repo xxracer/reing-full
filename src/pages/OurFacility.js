@@ -1,125 +1,150 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './ProgramPage.css'; // Reusing the same structure as programs
 import FAQ from '../components/FAQ';
+import ProgramHero from '../components/ProgramHero';
+import ImageCarousel from '../components/ImageCarousel';
 
 const OurFacilityPage = () => {
-  const [image1, setImage1] = React.useState({ url: 'https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png', coords: { x: 50, y: 50 }, zoom: 1 });
-  const [image2, setImage2] = React.useState({ url: 'https://static.wixstatic.com/media/c5947c_b40f2d46adab45ae967e41fd1868925b~mv2.png', coords: { x: 50, y: 50 }, zoom: 1 });
+  const [content, setContent] = useState({
+    introText: "Welcome to Reign Jiu Jitsu. Our academy was built from the ground up to provide the ultimate training environment. From premium Zebra mats to spotless amenities, every detail is designed to ensure you learn safely and comfortably in a welcoming community.",
+    detailsTitle: "A Standard of Excellence",
+    detailsText: "More than just a gym, our Katy, TX facility is your second home. We prioritize cleanliness, safety, and a positive atmosphere where every student can thrive.",
+    detailsList: [
+      "Premium Training Surface: High-impact Zebra mats to protect your joints during takedowns and rolls",
+      "Immaculate Cleanliness: Mats are sanitized daily, and facilities are deep-cleaned consistently",
+      "Comfortable Amenities: Clean locker rooms and dedicated spaces for families to watch classes",
+      "Welcoming Community: A supportive environment free from ego or intimidation"
+    ],
+    image1: "", // Body Image
+    carouselImages: [
+      "https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_b40f2d46adab45ae967e41fd1868925b~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_b40f2d46adab45ae967e41fd1868925b~mv2.png",
+      "https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png"
+    ],
+    faqs: [
+      {
+        question: "How often are the training mats cleaned?",
+        answer: "We maintain germ-free facilities, prioritizing hygiene by cleaning the mats daily with medical-grade sanitizers, adhering to the highest standard of safety."
+      },
+      {
+        question: "Does the facility have locker rooms or showers?",
+        answer: "Yes, we provide modern amenities, including dedicated changing areas and showers, for the convenience of our students before and after training."
+      },
+      {
+        question: "Is there a place for parents to sit and watch?",
+        answer: "Absolutely. We have a dedicated spectator area where parents, friends, and family can comfortably watch classes."
+      }
+    ]
+  });
+
   const apiBaseUrl = '';
 
-  React.useEffect(() => {
-    const fetchContent = async (id, setter) => {
+  useEffect(() => {
+    // We try to pull dynamic content if it exists, otherwise fallback to defaults
+    const fetchDynamicImages = async () => {
       try {
-        const response = await fetch(`${apiBaseUrl}/api/content/${id}`);
-        const data = await response.json();
-        if (data && data.content_value) {
-          try {
-            const content = JSON.parse(data.content_value);
-            setter({
-              url: content.url || data.content_value,
-              coords: content.coords || { x: 50, y: 50 },
-              zoom: content.zoom || 1
-            });
-          } catch (e) {
-            setter(prev => ({ ...prev, url: data.content_value }));
-          }
+        const i1Promise = axios.get(`${apiBaseUrl}/api/content/facility_image_1`);
+        const i2Promise = axios.get(`${apiBaseUrl}/api/content/facility_image_2`);
+
+        const [r1, r2] = await Promise.allSettled([i1Promise, i2Promise]);
+
+        let url1 = null;
+        let url2 = null;
+
+        if (r1.status === 'fulfilled' && r1.value.data && r1.value.data.content_value) {
+            let src = r1.value.data.content_value;
+            try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) {}
+            url1 = src;
         }
+
+        if (r2.status === 'fulfilled' && r2.value.data && r2.value.data.content_value) {
+            let src = r2.value.data.content_value;
+            try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) {}
+            url2 = src;
+        }
+
+        setContent(prev => {
+           const updated = { ...prev };
+           if (url1) {
+             updated.image1 = url1;
+             updated.carouselImages[0] = url1;
+             updated.carouselImages[2] = url1;
+           }
+           if (url2) {
+             updated.carouselImages[1] = url2;
+             updated.carouselImages[3] = url2;
+           }
+           return updated;
+        });
+
       } catch (error) {
-        console.error(`Error fetching ${id}`, error);
+        console.error("Error fetching facility content", error);
       }
     };
 
-    fetchContent('facility_image_1', setImage1);
-    fetchContent('facility_image_2', setImage2);
-  }, []);
+    fetchDynamicImages();
+  }, [apiBaseUrl]);
 
-  const renderMedia = (mediaState, alt) => {
-    const { url, coords, zoom } = mediaState;
-    if (!url) return null;
-
-    const isVideo = url.match(/\.(mp4|webm|mov)(\?|$)/i);
-
-    const style = {
-      width: '100%',
-      maxWidth: '440px',
-      height: '300px', // Fixed height container for consistency
-      borderRadius: '8px',
-      overflow: 'hidden',
-      position: 'relative',
-      backgroundColor: '#f0f0f0'
-    };
-
-    const mediaStyle = {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      objectPosition: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
-      transform: `scale(${zoom || 1})`,
-      transformOrigin: `${coords?.x ?? 50}% ${coords?.y ?? 50}%`,
-      pointerEvents: 'none'
-    };
-
-    return (
-      <div style={style}>
-        {isVideo ? (
-          <video
-            src={url}
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={mediaStyle}
-          />
-        ) : (
-          <img
-            src={url}
-            alt={alt}
-            style={mediaStyle}
-          />
-        )}
-      </div>
-    );
-  };
-
-  const pageFaqs = [
-    {
-      question: "How often are the training mats cleaned?",
-      answer: "We maintain germ-free facilities, prioritizing hygiene by cleaning the mats daily and thoroughly, adhering to a high standard of safety and cleanliness."
-    },
-    {
-      question: "Does the facility have locker rooms or showers?",
-      answer: "Yes, we provide modern amenities, including dedicated changing areas and showers, for the convenience of our students."
+  const getImageProps = (imgData) => {
+    if (typeof imgData === 'object' && imgData !== null && imgData.url) {
+      return {
+        src: imgData.url,
+        style: imgData.coords ? { objectPosition: `${imgData.coords.x}% ${imgData.coords.y}%` } : {}
+      };
     }
-  ];
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": pageFaqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
+    return { src: imgData, style: {} };
   };
+
+  const image1Props = getImageProps(content.image1 || content.carouselImages[0]);
 
   return (
-    <div style={{ paddingTop: '120px', paddingBottom: '60px', textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
-      <h1 style={{ marginBottom: '20px' }}>Our Facility</h1>
-      <p style={{ marginBottom: '40px', fontSize: '18px', lineHeight: '1.7' }}>
-        Our academy is equipped with high-quality mats, clean locker rooms, and a welcoming environment. Parents and students alike love the safe and professional setting. More than just a gym, Reign is a community-driven martial arts academy in Katy, TX.
-      </p>
+    <div className="program-page">
 
-      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', marginBottom: '60px' }}>
-        {renderMedia(image1, "Facility interior wide shot")}
-        {renderMedia(image2, "Training equipment / mats close-up")}
+      <ProgramHero
+        title="Our Facility"
+        sectionId="facility_hero"
+        defaultImage={content.carouselImages[1] || "https://static.wixstatic.com/media/c5947c_475cbf851e054bdc915bfcbb7fd2b704~mv2.png"}
+      />
+
+      <div className="program-content-container">
+
+        <section className="program-top-intro animate-fade-up">
+          <p>{content.introText}</p>
+        </section>
+
+        <section className="program-main-split animate-fade-up delay-1">
+          <div className="text-side">
+            <div className="program-details-text-only">
+              <h2>{content.detailsTitle}</h2>
+              <p>{content.detailsText}</p>
+              <ul>
+                {content.detailsList.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="image-side">
+            <div className="program-body-image-wrapper">
+              <img
+                src={image1Props.src}
+                alt="Our Facility Main View"
+                style={{ ...image1Props.style }}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="program-carousel-section animate-fade-up delay-2">
+          <ImageCarousel images={content.carouselImages} />
+        </section>
+
+        <FAQ faqData={content.faqs} title="Facility FAQs" />
       </div>
-
-      <FAQ faqData={pageFaqs} title="Facility FAQs" />
     </div>
   );
 };

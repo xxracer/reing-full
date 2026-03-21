@@ -377,7 +377,6 @@ app.put('/api/content/:section_id', requireAuth, async (req, res) => {
 });
 
 app.post('/api/send-message', async (req, res) => {
-  const { name, email, message } = req.body;
   const webhookUrl = process.env.MAKE_WEBHOOK_URL;
 
   if (!webhookUrl) {
@@ -386,7 +385,8 @@ app.post('/api/send-message', async (req, res) => {
   }
 
   try {
-    await axios.post(webhookUrl, { name, email, message });
+    // Send the entire req.body to the webhook (name, email, program, message, location info, etc.)
+    await axios.post(webhookUrl, req.body);
     console.log('Contact form data sent to webhook successfully.');
     res.status(200).json({ success: true, message: 'Message sent successfully!' });
   } catch (error) {

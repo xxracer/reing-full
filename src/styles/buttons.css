@@ -1,0 +1,49 @@
+button,
+.btn-red-effect,
+.btn-red {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brand-primary);
+  color: var(--neutral-0);
+  border: none;
+  padding: var(--space-xs) var(--space-m);
+  font-family: var(--font-bebas);
+  font-size: var(--font-step-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+button:hover,
+.btn-red-effect:hover,
+.btn-red:hover {
+  background-color: var(--brand-primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-red);
+}
+
+button:active,
+.btn-red-effect:active,
+.btn-red:active {
+  transform: scale(0.96) translateY(0);
+}
+
+/* Ensure buttons wrap gracefully on very narrow mobile screens like iPhone SE (344px-375px) */
+@media (max-width: 480px) {
+  button,
+  .btn-red-effect,
+  .btn-red {
+    font-size: var(--font-step-0);
+    padding: var(--space-xs) var(--space-s);
+    max-width: 100%;
+    white-space: normal; /* Force text wrapping if needed */
+    text-align: center;
+    word-break: break-word; /* Prevent long words from breaking container */
+    line-height: 1.3;
+  }
+}

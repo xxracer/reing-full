@@ -17,21 +17,23 @@
 }
 
 .contact-map-container {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   height: 460px;
   border-radius: 18px;
   overflow: hidden;
   background-color: var(--background-primary);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--border-light-gray);
+  border: 1px solid var(--border-subtle);
 }
 
 .contact-form-container {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   background-color: var(--background-primary);
   border-radius: 18px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--border-light-gray);
+  border: 1px solid var(--border-subtle);
   padding: 45px 40px 50px;
   text-align: left;
   display: flex;
@@ -72,12 +74,12 @@
 .contact-dropdown {
   width: 100%;
   padding: 14px;
-  border: 1px solid var(--border-light-gray);
+  border: 1px solid var(--accent-gold) !important;
   border-radius: 10px;
   font-family: var(--font-body);
   font-size: 16px;
-  background-color: var(--input-background);
-  color: var(--text-charcoal);
+  background-color: var(--neutral-0);
+  color: var(--text-primary);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -124,9 +126,9 @@
 }
 
 .submit-button:disabled {
-  background-color: var(--border-light-gray);
-  border-color: var(--border-light-gray);
-  color: var(--text-dark-gray);
+  background-color: var(--neutral-200);
+  border-color: var(--neutral-200);
+  color: var(--text-secondary);
   cursor: not-allowed;
 }
 

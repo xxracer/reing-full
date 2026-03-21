@@ -95,18 +95,16 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
   }, [sectionId, apiBaseUrl]);
 
   return (
-    <section className="program-hero" style={{ aspectRatio: aspectRatio ? aspectRatio : '16 / 9', minHeight: '0' }}>
-      <div
-        className="program-hero-bg-wrapper"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 0
-        }}
-      >
+    <section 
+      className="program-hero" 
+      style={{ 
+        // Use aspect ratio on larger screens, but guarantee a safe minimum height on mobile
+        // so content (title + subtitle + button) doesn't bleed out of the hero background.
+        aspectRatio: aspectRatio || '16 / 9', 
+        minHeight: 'min-content' // Crucial: ensure it never collapses smaller than the children need
+      }}
+    >
+      <div className="program-hero-bg-wrapper">
         {typeof heroImageUrl === 'string' && heroImageUrl.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
           <video
             src={heroImageUrl}
@@ -115,14 +113,9 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
             muted
             playsInline
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
               objectPosition: `${coords.x}% ${coords.y}%`,
               transform: `scale(${zoom})`,
               transformOrigin: `${coords.x}% ${coords.y}%`,
-              transition: 'transform 0.1s ease-out, object-position 0.1s ease-out',
-              pointerEvents: 'none'
             }}
           />
         ) : (
@@ -130,19 +123,25 @@ const ProgramHero = ({ title, sectionId, defaultImage }) => {
             src={heroImageUrl}
             alt={title}
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover', // Ensures it covers the box
               objectPosition: `${coords.x}% ${coords.y}%`,
               transform: `scale(${zoom})`,
               transformOrigin: `${coords.x}% ${coords.y}%`,
-              transition: 'transform 0.1s ease-out, object-position 0.1s ease-out'
             }}
           />
         )}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', pointerEvents: 'none' }}></div>
+        <div className="program-hero-overlay"></div>
       </div>
-      <h1 className="program-hero-title">{title}</h1>
+      
+      <div className="program-hero-content">
+        <h1 className="program-hero-title animate-fade-up">{title}</h1>
+        {/* Added dynamic subtitle for better storytelling */}
+        <p className="program-hero-subtitle animate-fade-up delay-1">
+          Train with purpose. Build discipline. Join the Reign family today.
+        </p>
+        <a href="/contact" className="btn-red-effect animate-fade-up delay-2">
+          Book Your Trial Class
+        </a>
+      </div>
     </section>
   );
 };

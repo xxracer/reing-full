@@ -7,14 +7,14 @@ import ImageCarousel from '../components/ImageCarousel';
 
 const PrivateLessons = () => {
   const [content, setContent] = useState({
-    introText: "Accelerate your progress with Private BJJ lessons. Work directly with our instructors to focus on your goals, from self-defense to competition preparation. Many students find that private Jiu Jitsu classes near me give them the boost they need to succeed.",
-    detailsTitle: "Focus on Your Goals",
-    detailsText: "Private lessons are the fastest way to improve. Get personalized feedback and instruction tailored to your specific needs.",
+    introText: "Our Private Training will give you the chance to get personalized coaching from professional martial artists. We can help you sharpen your mind, hone your body, and get the results you want. No matter whether your goal is to lose weight, to build muscle, to become more flexible and athletic, or to bump yourself up to the next belt, our team is happy to work with you to help you achieve your dreams. Reign Jiu Jitsu is dedicated to the success of each and every one of our members, whether they come to us from Katy or elsewhere. With our Private Training, you can take your Jiu Jitsu skills to the next level!",
+    detailsTitle: "Get Katy's Best Private Jiu Jitsu Training",
+    detailsText: "",
     detailsList: [
-      "Accelerate your progress",
-      "Focus on your specific goals",
-      "Ideal for self-defense or competition prep",
-      "Get the boost you need to succeed"
+      "Workouts & Jiu Jitsu coaching personalized for your individual goals",
+      "Unlimited support & accountability from our expert team",
+      "The motivation and drive that comes with one-on-one training",
+      "Real results driven by custom workouts & nutrition strategies"
     ],
     image1: "", // Body Image
     carouselImages: Array(5).fill(null),
@@ -38,6 +38,12 @@ const PrivateLessons = () => {
         const response = await axios.get(`${apiBaseUrl}/api/content/program_private-lessons_data?t=${Date.now()}`);
         if (response.data && response.data.content_value) {
           const parsedData = JSON.parse(response.data.content_value);
+          // Block CMS from overriding text
+          delete parsedData.introText;
+          delete parsedData.detailsTitle;
+          delete parsedData.detailsText;
+          delete parsedData.detailsList;
+          delete parsedData.faqs;
           setContent(prev => ({ ...prev, ...parsedData }));
         }
       } catch (error) { }
@@ -48,8 +54,6 @@ const PrivateLessons = () => {
         const carouselPromises = [1, 2, 3, 4, 5].map(num =>
           axios.get(`${apiBaseUrl}/api/content/program_private-lessons_carousel_${num}`)
         );
-        // Private lessons internal_1 and internal_2 are already handled, but let's conform to the pattern if we want consistency
-        // Or just leave them since they were separate. Actually, I should update carousel logic here.
 
         const internalPromise1 = axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_1`);
         const internalPromise2 = axios.get(`${apiBaseUrl}/api/content/program_private-lessons_internal_2`);
@@ -102,7 +106,7 @@ const PrivateLessons = () => {
 
     fetchContent();
     fetchDynamicImages();
-  }, []);
+  }, [apiBaseUrl]);
 
   const getImageProps = (imgData) => {
     if (typeof imgData === 'object' && imgData !== null && imgData.url) {
@@ -127,11 +131,11 @@ const PrivateLessons = () => {
 
       <div className="program-content-container">
 
-        <section className="program-top-intro">
+        <section className="program-top-intro animate-fade-up">
           <p>{content.introText}</p>
         </section>
 
-        <section className="program-main-split">
+        <section className="program-main-split animate-fade-up delay-1">
           <div className="text-side">
             <div className="program-details-text-only">
               <h2>{content.detailsTitle}</h2>
@@ -148,18 +152,18 @@ const PrivateLessons = () => {
             <div className="program-body-image-wrapper">
               <img
                 src={image1Props.src}
-                alt="Private Lesson Main"
-                style={{ ...image1Props.style, width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="Private Lesson Details"
+                style={{ ...image1Props.style }}
               />
             </div>
           </div>
         </section>
 
-        <section className="program-carousel-section">
+        <section className="program-carousel-section animate-fade-up delay-2">
           <ImageCarousel images={content.carouselImages} />
         </section>
 
-        <FAQ faqData={content.faqs} title="Private Lessons FAQs" />
+        <FAQ faqData={content.faqs} title="Frequently Asked Questions" />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaFacebook, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -45,9 +45,16 @@ const Navbar = () => {
   return (
     <nav className={navClasses}>
       <div className="navbar-left">
-        <ul className={linksClasses}>
+        <ul className={linksClasses} id="navbar-links">
           <li className="dropdown">
-            <a href="#programs" onClick={(e) => handleDropdownClick(e, 'programs')}>Programs</a>
+            <a
+              href="#programs"
+              onClick={(e) => handleDropdownClick(e, 'programs')}
+              aria-haspopup="true"
+              aria-expanded={openDropdown === 'programs'}
+            >
+              Programs
+            </a>
             <ul className={`dropdown-menu ${openDropdown === 'programs' ? 'open' : ''}`}>
               <li><Link to="/kids-program" onClick={closeMobileMenu}>Kids Program</Link></li>
               <li><Link to="/homeschool-program" onClick={closeMobileMenu}>Homeschool Program</Link></li>
@@ -59,7 +66,14 @@ const Navbar = () => {
             </ul>
           </li>
           <li className="dropdown">
-            <a href="#schedule" onClick={(e) => handleDropdownClick(e, 'schedule')}>Schedule</a>
+            <a
+              href="#schedule"
+              onClick={(e) => handleDropdownClick(e, 'schedule')}
+              aria-haspopup="true"
+              aria-expanded={openDropdown === 'schedule'}
+            >
+              Schedule
+            </a>
             <ul className={`dropdown-menu ${openDropdown === 'schedule' ? 'open' : ''}`}>
               <li><Link to="/training-schedule" onClick={closeMobileMenu}>Training Schedule</Link></li>
               <li><Link to="/instructors" onClick={closeMobileMenu}>Instructors</Link></li>
@@ -67,30 +81,45 @@ const Navbar = () => {
             </ul>
           </li>
           <li className="dropdown">
-            <a href="#more" onClick={(e) => handleDropdownClick(e, 'more')}>More</a>
+            <a
+              href="#more"
+              onClick={(e) => handleDropdownClick(e, 'more')}
+              aria-haspopup="true"
+              aria-expanded={openDropdown === 'more'}
+            >
+              More
+            </a>
             <ul className={`dropdown-menu ${openDropdown === 'more' ? 'open' : ''}`}>
               <li><Link to="/contact" onClick={closeMobileMenu}>Contact Us</Link></li>
               <li><Link to="/about" onClick={closeMobileMenu}>About / Our Method</Link></li>
               <li><Link to="/blog" onClick={closeMobileMenu}>Blog</Link></li>
             </ul>
           </li>
+          <li className="mobile-social-icons">
+            <a href="https://www.facebook.com/ReignJiuJitsu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <FaFacebook />
+            </a>
+            <a href="https://www.instagram.com/reignjiujitsu/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <FaInstagram />
+            </a>
+          </li>
         </ul>
       </div>
       <div className="navbar-logo">
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '15px', textDecoration: 'none', color: 'inherit' }}>
           <img
-            src="https://static.wixstatic.com/media/c5947c_19213bcf1b97445db4da31c938fb312b~mv2.jpg"
+            src="https://static.wixstatic.com/media/c5947c_72a4a7f1a82b4dacafe667d2d38c58bd~mv2.webp"
             alt="Reign Logo"
-            style={{ height: '40px', width: 'auto' }}
+            className="navbar-logo-img"
           />
-          REIGN JIU JITSU
+          <span className="navbar-brand-text">REIGN JIU JITSU</span>
         </Link>
       </div>
       <div className="navbar-right">
         <div className="navbar-contact">
           <a href="tel:17134466008">Call or text (713) 446-6008</a>
         </div>
-        <div className="social-icons">
+        <div className="social-icons desktop-only">
           <a href="https://www.facebook.com/ReignJiuJitsu/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <FaFacebook />
           </a>
@@ -98,10 +127,14 @@ const Navbar = () => {
             <FaInstagram />
           </a>
         </div>
-        <button className={`mobile-menu-toggle ${isMobileMenuOpen ? 'open' : ''}`} onClick={handleMobileMenuToggle} aria-label="Toggle menu">
-          <span />
-          <span />
-          <span />
+        <button
+          className={`mobile-menu-toggle ${isMobileMenuOpen ? 'open' : ''}`}
+          onClick={handleMobileMenuToggle}
+          aria-label="Toggle menu"
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="navbar-links"
+        >
+          {isMobileMenuOpen ? <FaTimes size={28} color="#000" /> : <FaBars size={28} color="#000" />}
         </button>
       </div>
     </nav>

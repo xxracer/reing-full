@@ -1,193 +1,165 @@
 /* src/pages/Instructors.css */
 
-/* ============================================
-   INSTRUCTORS PAGE
-   Layout: image + bullets side by side (top)
-           full-width bio text (bottom)
-   ============================================ */
-
-/* ---- PAGE SHELL ---- */
 .instructors-page {
-  width: 100%;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 16px;   /* 16px is the absolute minimum safe margin */
-  box-sizing: border-box;
+  padding: 120px var(--space-s) var(--space-2xl);
+  /* padding top for header offset */
 }
 
 .instructors-page h1 {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 50px;
+  font-size: var(--font-step-5);
+  margin-bottom: var(--space-2xl);
+  color: var(--text-primary);
+  font-family: var(--font-bebas);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--text-charcoal);
-  font-family: 'Oswald', sans-serif;
-  letter-spacing: 1px;
 }
 
-/* ---- CARD ---- */
 .instructor-item {
-  margin-bottom: 55px;
-  padding-bottom: 45px;
-  border-bottom: 1px solid var(--border-light-gray);
-}
-.instructor-item:last-child { border-bottom: none; }
-
-/* ---- TOP: image + credentials ---- */
-.instructor-top {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
-  margin-bottom: 20px;
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-3xl);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-xl);
+  background-color: var(--bg-primary);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-subtle);
+}
+
+.instructor-item.reverse {
+  flex-direction: row-reverse;
+  background-color: var(--bg-accent-subtle);
 }
 
 .instructor-image-wrapper {
-  flex: 0 0 190px;
+  flex: 0 0 clamp(250px, 30vw, 400px);
+  aspect-ratio: 1 / 1;
+  position: relative;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-}
-.instructor-image-wrapper img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  /* deeper shadow for images */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--bg-secondary);
 }
 
-.instructor-credentials {
+.instructor-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.instructor-item:hover .instructor-media {
+  transform: scale(1.05) !important;
+  /* Slightly override inline scale on hover */
+}
+
+.instructor-bio {
   flex: 1;
+  text-align: left;
+  /* Prevent text overflow in flex children */
   min-width: 0;
 }
-.instructor-credentials h2 {
-  font-size: 1.8rem;
-  margin: 0 0 12px 0;
-  color: var(--text-charcoal);
-  font-family: 'Oswald', sans-serif;
+
+.instructor-bio h2 {
+  font-size: var(--font-step-4);
+  margin-bottom: var(--space-s);
+  color: var(--brand-primary);
+  font-family: var(--font-bebas);
+  border-bottom: 2px solid var(--brand-accent);
+  padding-bottom: var(--space-xs);
+  display: inline-block;
+  text-transform: uppercase;
 }
 
-.instructor-bullets ul,
-.instructor-bullets ol {
-  margin: 0;
-  padding-left: 18px;
-  list-style-type: disc;
-}
-.instructor-bullets li {
-  margin-bottom: 5px;
-  line-height: 1.5;
-  font-size: 15px;
-  color: var(--text-dark-gray);
+.instructor-bio-content {
+  margin-top: var(--space-m);
 }
 
-/* ---- BOTTOM: full-width bio text ---- */
-.instructor-bio-full {
-  width: 100%;
-  box-sizing: border-box;
+.instructor-bio-content h3 {
+  font-size: var(--font-step-1);
+  color: var(--text-primary);
+  margin-top: var(--space-l);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-bebas);
+  letter-spacing: 0.05em;
 }
-.instructor-bio-full p {
-  font-size: 16px;
+
+.instructor-bio-content p {
   line-height: 1.8;
-  margin-bottom: 0.5em;
-  color: var(--text-medium-gray);
-  text-align: left;
-}
-.instructor-bio-full strong,
-.instructor-bio-full b { font-weight: 700; }
-.instructor-bio-full em,
-.instructor-bio-full i { font-style: italic; }
-
-/* Force all CMS-injected spans to stay inline. */
-.instructor-bio-full span {
-  display: inline !important;
-  max-width: 100% !important;
-  width: auto !important;
-}
-/* Force all paragraphs and divs inside bio to take full width */
-.instructor-bio-full p,
-.instructor-bio-full div {
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
-}
-/* KEY FIX: override-wrap:normal so WHOLE words move to next line.
-   break-word was splitting 'work' → 'w' + 'ork'.
-   The container is wide enough so words always fit on next line. */
-.instructor-bio-full,
-.instructor-bio-full * {
-  overflow-wrap: normal !important;
-  word-wrap: normal !important;
-  word-break: normal !important;
+  margin-bottom: var(--space-m);
+  color: var(--text-secondary);
+  font-size: var(--font-step-0);
+  /* Ensure paragraph text wraps naturally */
+  white-space: normal;
 }
 
-/* ============================================
-   MOBILE  — all phones from old 360px to iPhone 17 Pro Max (430px+)
-   clamp(min, preferred, max) scales smoothly across all sizes.
-   DESKTOP CSS above is unchanged.
-   ============================================ */
-@media (max-width: 768px) {
+.instructor-bio-content p strong {
+  color: var(--text-primary);
+}
 
-  /* Page padding: 14px on tiny phones, 18px on large ones */
+.instructor-bio-content ul,
+.instructor-bio-content ol {
+  margin-bottom: var(--space-m);
+  padding-left: var(--space-l);
+  color: var(--text-secondary);
+}
+
+.instructor-bio-content li {
+  margin-bottom: var(--space-xs);
+  line-height: 1.6;
+}
+
+/* Animations */
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
   .instructors-page {
-    padding: clamp(16px, 4vw, 24px) clamp(14px, 4vw, 18px);
+    padding-top: 100px;
   }
 
-  .instructors-page h1 {
-    font-size: clamp(1.2rem, 5vw, 1.5rem);
-    margin-bottom: clamp(20px, 5vw, 32px);
-  }
-
-  /* Stack: image centered above credentials */
-  .instructor-top {
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(10px, 3vw, 16px);
-    margin-bottom: clamp(14px, 4vw, 22px);
-  }
-
-  /* Image: big enough to show face, small enough to leave room for text */
-  .instructor-image-wrapper {
-    width: 50%;
-    max-width: clamp(160px, 45vw, 220px);
-    flex: 0 0 auto;
-  }
-
-  /* Credentials (name + bullets) */
-  .instructor-credentials {
-    width: 100%;
-    text-align: center;
-  }
-  .instructor-credentials h2 {
-    font-size: clamp(1.1rem, 5vw, 1.4rem);
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  /* Bullet list left-aligned, centered inside the container */
-  .instructor-bullets ul,
-  .instructor-bullets ol {
-    display: inline-block;
-    text-align: left;
-    padding-left: 16px;
-  }
-  .instructor-bullets li {
-    font-size: 12px;
-    line-height: 1.5;
-  }
-
-  /* Bio text — no extra padding (page already gives 14-18px) */
-  .instructor-bio-full {
-    padding: 0;
-    width: 100%;
-  }
-  .instructor-bio-full p {
-    font-size: 10px;
-    line-height: 1.75;
-    margin-bottom: 0.5em;
-    text-align: left;
-  }
-
-  /* Card spacing */
   .instructor-item {
-    margin-bottom: clamp(28px, 6vw, 40px);
-    padding-bottom: clamp(20px, 5vw, 32px);
+    flex-direction: column !important;
+    /* Stack vertically */
+    gap: var(--space-l);
+    align-items: center;
+    padding: var(--space-l);
+  }
+
+  .instructor-bio {
+    text-align: center;
+    width: 100%;
+    /* Take full width constraint securely */
+  }
+
+  .instructor-bio h2 {
+    border-bottom: none;
+    border-bottom: 2px solid var(--brand-accent);
+  }
+
+  .instructor-image-wrapper {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 350px;
+    /* Keep reasonable size on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .instructor-item {
+    padding: var(--space-m);
+  }
+
+  .instructor-bio h2 {
+    font-size: var(--font-step-3);
   }
 }

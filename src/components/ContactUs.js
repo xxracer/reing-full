@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './ContactUs.css';
 
+let ipLocationCache = null;
+
 const ContactUs = () => {
   const [formData, setFormData] = useState({ name: '', email: '', program: '', message: '' });
   const [status, setStatus] = useState(''); // '' | 'submitting' | 'success' | 'error'
@@ -14,13 +16,17 @@ const ContactUs = () => {
     e.preventDefault();
     setStatus('submitting');
 
-    let locationData = {};
-    try {
-      // Attempt to fetch IP location data
-      const ipRes = await fetch('https://ipapi.co/json/');
-      locationData = await ipRes.json();
-    } catch (error) {
-      console.error('Could not fetch location data:', error);
+    let locationData = ipLocationCache || {};
+    
+    if (!ipLocationCache) {
+      try {
+        // Attempt to fetch IP location data
+        const ipRes = await fetch('https://ipapi.co/json/');
+        locationData = await ipRes.json();
+        ipLocationCache = locationData; // Cache for subsequent submissions
+      } catch (error) {
+        console.error('Could not fetch location data:', error);
+      }
     }
 
     const payload = {
@@ -30,7 +36,7 @@ const ContactUs = () => {
       region: locationData.region,
       country: locationData.country_name,
       postal: locationData.postal,
-      full_location_data: locationData // Send full object just in case
+      full_location_data: locationData 
     };
 
     fetch('/api/send-message', {
@@ -70,7 +76,7 @@ const ContactUs = () => {
         <div id="contact-form" className="contact-form-container">
           <h2 className="section-title">Contact Us</h2>
           <p className="contact-phone" style={{ marginBottom: '10px' }}>
-            Submit your info below or text us for a faster response at <a href="tel:17134466008">(713) 446-6008</a>
+            Submit your info below or text us for a faster response.
           </p>
           {status === 'success' ? (
             <div className="success-message-container">
@@ -107,49 +113,74 @@ const ContactUs = () => {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-              <select
-                name="program"
-                value={formData.program}
-                onChange={handleInputChange}
-                required
-                className="contact-dropdown"
-              >
-                <option value="" disabled>Which Program(s) interest you?</option>
-                <option value="Kids">Kids</option>
-                <option value="Adults">Adults</option>
-                <option value="Adult Fundamentals">Adult Fundamentals</option>
-                <option value="HomeSchool Program">HomeSchool Program</option>
-                <option value="Kids Comp">Kids Comp</option>
-              </select>
-              <textarea
-                name="message"
-                rows="5"
-                placeholder="Message: How can we help you?"
-                value={formData.message}
-                onChange={handleInputChange}
-                required
-              ></textarea>
+            <form onSubmit={handleSubmit} aria-labelledby="contact-heading">
+
+              <div className="form-group">
+                <label htmlFor="name-input" className="visually-hidden">Name</label>
+                <input
+                  id="name-input"
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email-input" className="visually-hidden">Email</label>
+                <input
+                  id="email-input"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="program-select" className="visually-hidden">Which Program(s) interest you?</label>
+                <select
+                  id="program-select"
+                  name="program"
+                  value={formData.program}
+                  onChange={handleInputChange}
+                  required
+                  aria-required="true"
+                  className="contact-dropdown"
+                >
+                  <option value="" disabled>Select one</option>
+                  <option value="Kids">Kids</option>
+                  <option value="Adults">Adults</option>
+                  <option value="Adult Fundamentals">Adult Fundamentals</option>
+                  <option value="HomeSchool Program">HomeSchool Program</option>
+                  <option value="Kids Comp">Kids Comp</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="message-textarea" className="visually-hidden">Message: How can we help you?</label>
+                <textarea
+                  id="message-input"
+                  name="message"
+                  rows="5"
+                  placeholder="Type here..."
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  required
+                  aria-required="true"
+                ></textarea>
+              </div>
               <button type="submit" className="submit-button" disabled={status === 'submitting'}>
                 {status === 'submitting' ? 'Sending...' : 'Submit'}
               </button>
-              {status === 'error' && <p className="status-message error">Something went wrong. Please try again.</p>}
+              {status === 'error' && (
+                <p className="status-message error" role="alert">
+                  Something went wrong. Please try again.
+                </p>
+              )}
             </form>
           )}
         </div>

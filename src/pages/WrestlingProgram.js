@@ -7,14 +7,14 @@ import ImageCarousel from '../components/ImageCarousel';
 
 const WrestlingProgram = () => {
     const [content, setContent] = useState({
-        introText: "Our Wrestling Program focuses on takedowns, control, and positional dominance. Designed for both BJJ practitioners looking to improve their stand-up game and pure wrestlers, this class covers the essential techniques of wrestling.",
-        detailsTitle: "Takedowns and Control",
-        detailsText: "Wrestling is a crucial component of grappling. Our program will help you develop the skills to take the fight to the ground on your terms.",
+        introText: "Take the fight where you want it to go. Our Wrestling Program focuses on the critical transition between standing and the ground—takedowns, clinch work, and positional control. Whether you're a BJJ practitioner looking to dominate the stand-up game or a pure wrestler refining your technique, this class gives you the edge.",
+        detailsTitle: "Dictate the Pace",
+        detailsText: "In grappling, the person who dictates where the match takes place usually wins. Our wrestling curriculum equips you with the tools to initiate and control the action.",
         detailsList: [
-            "Master effective takedowns",
-            "Improve positional control",
-            "Enhance your BJJ stand-up game",
-            "Build explosive power and conditioning"
+            "Explosive Takedowns: Master the mechanics of single, double, and high-crotch attacks",
+            "Unbreakable Defense: Sprawl, defend, and counter opponent takedown attempts",
+            "Clinch Mastery: Dominate inside ties, underhooks, and upper body control",
+            "Conditioning: Build the unique cardio and explosive power required for wrestling"
         ],
         image1: "", // Body Image
         carouselImages: Array(5).fill(null),
@@ -38,6 +38,12 @@ const WrestlingProgram = () => {
                 const response = await axios.get(`${apiBaseUrl}/api/content/program_wrestling_data`);
                 if (response.data && response.data.content_value) {
                     const parsedData = JSON.parse(response.data.content_value);
+                    // Block CMS from overriding text
+                    delete parsedData.introText;
+                    delete parsedData.detailsTitle;
+                    delete parsedData.detailsText;
+                    delete parsedData.detailsList;
+                    delete parsedData.faqs;
                     setContent(prev => ({ ...prev, ...parsedData }));
                 }
             } catch (error) { }
@@ -56,7 +62,7 @@ const WrestlingProgram = () => {
                 [r1, r2, r3, r4, r5].forEach((res, index) => {
                     if (res.status === 'fulfilled' && res.value.data && res.value.data.content_value) {
                         let src = res.value.data.content_value;
-                        try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+                        try { const c = JSON.parse(src); if (c.url) src = c; } catch (e) { }
                         newCarousel[index] = src;
                     }
                 });
@@ -64,7 +70,7 @@ const WrestlingProgram = () => {
                 let newImage1 = null;
                 if (rInt1.status === 'fulfilled' && rInt1.value.data && rInt1.value.data.content_value) {
                     let src = rInt1.value.data.content_value;
-                    try { const c = JSON.parse(src); if (c.url) src = c.url; } catch (e) { }
+                    try { const c = JSON.parse(src); if (c.url) src = c; } catch (e) { }
                     newImage1 = src;
                 }
 
@@ -81,7 +87,19 @@ const WrestlingProgram = () => {
 
         fetchContent();
         fetchDynamicImages();
-    }, []);
+    }, [apiBaseUrl]);
+
+    const getImageProps = (imgData) => {
+        if (typeof imgData === 'object' && imgData !== null && imgData.url) {
+            return {
+                src: imgData.url,
+                style: imgData.coords ? { objectPosition: `${imgData.coords.x}% ${imgData.coords.y}%` } : {}
+            };
+        }
+        return { src: imgData, style: {} };
+    };
+
+    const image1Props = getImageProps(content.image1);
 
     return (
         <div className="program-page">
@@ -94,11 +112,11 @@ const WrestlingProgram = () => {
 
             <div className="program-content-container">
 
-                <section className="program-top-intro">
+                <section className="program-top-intro animate-fade-up">
                     <p>{content.introText}</p>
                 </section>
 
-                <section className="program-main-split">
+                <section className="program-main-split animate-fade-up delay-1">
                     <div className="text-side">
                         <div className="program-details-text-only">
                             <h2>{content.detailsTitle}</h2>
@@ -113,16 +131,20 @@ const WrestlingProgram = () => {
 
                     <div className="image-side">
                         <div className="program-body-image-wrapper">
-                            <img src={content.image1} alt="Wrestling Program Main" />
+                            <img
+                                src={image1Props.src}
+                                alt="Wrestling Program Details"
+                                style={{ ...image1Props.style }}
+                            />
                         </div>
                     </div>
                 </section>
 
-                <section className="program-carousel-section">
+                <section className="program-carousel-section animate-fade-up delay-2">
                     <ImageCarousel images={content.carouselImages} />
                 </section>
 
-                <FAQ faqData={content.faqs} title="Wrestling Program FAQs" />
+                <FAQ faqData={content.faqs} title="Frequently Asked Questions" />
             </div>
         </div>
     );
