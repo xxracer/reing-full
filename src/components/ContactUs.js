@@ -4,7 +4,7 @@ import './ContactUs.css';
 let ipLocationCache = null;
 
 const ContactUs = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', program: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '', program: '', message: '' });
   const [status, setStatus] = useState(''); // '' | 'submitting' | 'success' | 'error'
 
   const handleInputChange = (e) => {
@@ -48,7 +48,7 @@ const ContactUs = () => {
       .then(data => {
         if (data.success) {
           setStatus('success');
-          setFormData({ name: '', email: '', program: '', message: '' }); // Clear form
+          setFormData({ name: '', phone: '', email: '', program: '', message: '' }); // Clear form
         } else {
           setStatus('error');
         }
@@ -123,6 +123,19 @@ const ContactUs = () => {
                   name="name"
                   placeholder="Name"
                   value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone-input" className="visually-hidden">Phone Number</label>
+                <input
+                  id="phone-input"
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={formData.phone}
                   onChange={handleInputChange}
                   required
                   aria-required="true"
