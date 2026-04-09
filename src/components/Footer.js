@@ -15,6 +15,8 @@ const Footer = () => {
           <a href="/contact">Contact</a>
           <a href="/about">About</a>
           <a href="/blog">Blog</a>
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/terms-and-conditions">Terms & Conditions</a>
         </div>
         <div className="footer-badges" style={{ margin: '20px 0', textAlign: 'center' }}>
           <img

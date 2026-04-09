@@ -4,12 +4,12 @@ import './ContactUs.css';
 let ipLocationCache = null;
 
 const ContactUs = () => {
-  const [formData, setFormData] = useState({ name: '', phone: '', email: '', program: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '', program: '', message: '', sms_consent: false });
   const [status, setStatus] = useState(''); // '' | 'submitting' | 'success' | 'error'
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
   const handleSubmit = async (e) => {
@@ -48,7 +48,7 @@ const ContactUs = () => {
       .then(data => {
         if (data.success) {
           setStatus('success');
-          setFormData({ name: '', phone: '', email: '', program: '', message: '' }); // Clear form
+          setFormData({ name: '', phone: '', email: '', program: '', message: '', sms_consent: false }); // Clear form
         } else {
           setStatus('error');
         }
@@ -186,6 +186,28 @@ const ContactUs = () => {
                   aria-required="true"
                 ></textarea>
               </div>
+
+              <div className="form-group checkbox-group">
+                <input
+                  id="sms-consent-input"
+                  type="checkbox"
+                  name="sms_consent"
+                  checked={formData.sms_consent}
+                  onChange={handleInputChange}
+                  required
+                  aria-required="true"
+                />
+                <label htmlFor="sms-consent-input" className="checkbox-label">
+                  I agree to receive SMS notifications from Reign Jiu Jitsu.
+                </label>
+              </div>
+
+              <p className="sms-disclosure">
+                By providing your phone number, you agree to receive SMS notifications from Reign Jiu Jitsu. 
+                Message and data rates may apply. Message frequency varies. 
+                Reply HELP for help or STOP to opt-out. See our <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.
+              </p>
+
               <button type="submit" className="submit-button" disabled={status === 'submitting'}>
                 {status === 'submitting' ? 'Sending...' : 'Submit'}
               </button>

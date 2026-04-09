@@ -28,6 +28,8 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const BlogPage = lazy(() => import('./pages/BlogPage'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 
 // Admin Pages (Lazy Load)
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -71,6 +73,8 @@ const AppLayout = () => {
             <Route path="/blog/:slug" element={<BlogPost />} />
 
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
             {/* Protected Admin Routes */}
             <Route
