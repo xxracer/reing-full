@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
 // Import core layout components
@@ -30,6 +30,7 @@ const BlogPost = lazy(() => import('./pages/BlogPost'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Admin Pages (Lazy Load)
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -76,6 +77,9 @@ const AppLayout = () => {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
+            {/* Redirect /home to / */}
+            <Route path="/home" element={<Navigate to="/" replace />} />
+
             {/* Protected Admin Routes */}
             <Route
               path="/admin/*"
@@ -96,6 +100,9 @@ const AppLayout = () => {
               <Route path="blog" element={<ManageBlog />} />
               <Route path="security" element={<ChangePasswordPage />} />
             </Route>
+
+            {/* Catch-all: 404 page */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>
