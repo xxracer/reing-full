@@ -59,8 +59,10 @@ app.use(bodyParser.json());
 
 // --- Authentication Middleware ---
 const requireAuth = (req, res, next) => {
-  // AUTH DISABLED BY USER REQUEST
-  return next();
+  if (req.session && req.session.authenticated) {
+    return next();
+  }
+  res.status(401).json({ success: false, message: 'Unauthorized. Please log in.' });
 };
 
 // --- Caching Middleware for Public Content ---
@@ -101,22 +103,14 @@ app.get('/api/keep-alive', async (req, res) => {
 // Auth Routes
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  try {
-    const { rows } = await db.query('SELECT * FROM users WHERE username = $1', [username]);
-    if (rows.length === 0) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials.' });
-    }
-    const user = rows[0];
-    const match = await bcrypt.compare(password, user.password_hash);
-    if (match) {
-      req.session.userId = user.id;
-      res.json({ success: true, message: 'Logged in successfully.' });
-    } else {
-      res.status(401).json({ success: false, message: 'Invalid credentials.' });
-    }
-  } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ success: false, message: 'Internal server error.' });
+  const adminUser = process.env.ADMIN_USERNAME;
+  const adminPass = process.env.ADMIN_PASSWORD;
+
+  if (username === adminUser && password === adminPass) {
+    req.session.authenticated = true;
+    res.json({ success: true, message: 'Logged in successfully.' });
+  } else {
+    res.status(401).json({ success: false, message: 'Invalid credentials.' });
   }
 });
 
@@ -131,7 +125,7 @@ app.post('/api/logout', (req, res) => {
 });
 
 app.get('/api/check-auth', (req, res) => {
-  if (req.session && req.session.userId) {
+  if (req.session && req.session.authenticated) {
     res.json({ isAuthenticated: true });
   } else {
     res.json({ isAuthenticated: false });
@@ -567,7 +561,9 @@ const startServer = async () => {
       'SESSION_SECRET',
       'BLOB_READ_WRITE_TOKEN',
       'GOOGLE_PLACES_API_KEY',
-      'GOOGLE_PLACE_ID'
+      'GOOGLE_PLACE_ID',
+      'ADMIN_USERNAME',
+      'ADMIN_PASSWORD'
     ];
     const missingEnv = requiredEnv.filter(key => !process.env[key]);
 

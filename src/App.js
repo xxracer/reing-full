@@ -1,4 +1,5 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
+import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
@@ -48,6 +49,31 @@ const LoadingFallback = () => <div className="loading-screen" style={{ height: '
 
 // This new component handles the layout
 const AppLayout = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get('/api/check-auth');
+        setIsAuthenticated(response.data.isAuthenticated);
+      } catch (err) {
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  if (loading) {
+    return <LoadingFallback />;
+  }
+
   return (
     <div className="App">
       <ScrollToTop />
@@ -56,6 +82,7 @@ const AppLayout = () => {
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            {/* ... other public routes ... */}
             <Route path="/kids-program" element={<KidsProgram />} />
             <Route path="/homeschool-program" element={<HomeschoolProgram />} />
             <Route path="/adult-program" element={<AdultProgram />} />
@@ -73,7 +100,7 @@ const AppLayout = () => {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
 
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
@@ -84,7 +111,7 @@ const AppLayout = () => {
             <Route
               path="/admin/*"
               element={
-                <PrivateRoute>
+                <PrivateRoute isAuthenticated={isAuthenticated}>
                   <AdminDashboard />
                 </PrivateRoute>
               }
