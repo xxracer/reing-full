@@ -194,8 +194,6 @@ const ContactUs = () => {
                   name="sms_consent"
                   checked={formData.sms_consent}
                   onChange={handleInputChange}
-                  required
-                  aria-required="true"
                 />
                 <label htmlFor="sms-consent-input" className="checkbox-label">
                   I agree to receive SMS notifications from Reign Jiu Jitsu.
