@@ -45,11 +45,17 @@ const PrivacyPolicy = () => {
         <section className="highlight-section">
           <h2>4. SMS and Mobile Communication</h2>
           <p>
-            <strong>No mobile information will be shared with third parties/affiliates for marketing/promotional purposes.</strong> All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.
+            Reign Jiu Jitsu is committed to protecting your privacy. <strong>Mobile information will not be shared with third parties/affiliates for marketing/promotional purposes. All other categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.</strong>
           </p>
           <p>
-            By providing your phone number, you consent to receive SMS notifications and alerts from Reign Jiu Jitsu. Message frequency varies. Message and data rates may apply. You can opt-out at any time by replying "STOP" to any message you receive from us.
+            By providing your phone number and opting in, you consent to receive SMS notifications, alerts, and occasional marketing messages from Reign Jiu Jitsu. 
           </p>
+          <ul>
+            <li><strong>Message Frequency:</strong> Message frequency varies.</li>
+            <li><strong>Rates:</strong> Message and data rates may apply.</li>
+            <li><strong>Opt-Out:</strong> You can opt-out at any time by replying "STOP" to any message you receive from us.</li>
+            <li><strong>Help:</strong> Reply "HELP" for more information or assistance.</li>
+          </ul>
         </section>
 
         <section>

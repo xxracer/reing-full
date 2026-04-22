@@ -194,15 +194,15 @@ const ContactUs = () => {
                   name="sms_consent"
                   checked={formData.sms_consent}
                   onChange={handleInputChange}
+                  required
                 />
                 <label htmlFor="sms-consent-input" className="checkbox-label">
-                  I agree to receive SMS notifications from Reign Jiu Jitsu.
+                  I agree to receive recurring automated marketing and informational text messages from Reign Jiu Jitsu at the phone number provided.
                 </label>
               </div>
 
-              <p className="sms-disclosure">
-                By providing your phone number, you agree to receive SMS notifications from Reign Jiu Jitsu. 
-                Message and data rates may apply. Message frequency varies. 
+              <p className="sms-disclosure" style={{ fontSize: '12px', marginTop: '10px', color: '#666' }}>
+                Consent is not a condition of any purchase. Message and data rates may apply. Message frequency varies. 
                 Reply HELP for help or STOP to opt-out. See our <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>.
               </p>
 

@@ -25,14 +25,15 @@ const TermsAndConditions = () => {
         <section className="highlight-section">
           <h2>3. SMS and Mobile Communication</h2>
           <p>
-            By opting in to receive SMS notifications, you agree to the following:
+            By opting in to receive SMS notifications, you agree to the following terms:
           </p>
           <ul>
+            <li><strong>Subscription:</strong> You consent to receive recurring automated marketing and informational text messages from Reign Jiu Jitsu. Consent is not a condition of any purchase.</li>
             <li><strong>Message Frequency:</strong> The number of messages you receive varies based on your interaction with our services (e.g., appointment reminders, academy updates).</li>
-            <li><strong>Customer Support:</strong> Reply "HELP" to any message for assistance.</li>
-            <li><strong>Opt-Out:</strong> You can cancel the SMS service at any time. Just text "STOP" to the phone number. After you send the SMS message "STOP" to us, we will send you an SMS message to confirm that you have been unsubscribed.</li>
-            <li><strong>Carriers:</strong> Carriers are not liable for delayed or undelivered messages.</li>
-            <li><strong>Rates:</strong> As always, message and data rates may apply for any messages sent to you from us and to us from you.</li>
+            <li><strong>Support:</strong> Reply "HELP" to any message for assistance, or contact us through our website.</li>
+            <li><strong>Opt-Out:</strong> You can cancel the SMS service at any time. Just text "STOP" to our phone number. After you send "STOP", we will send you an SMS message to confirm that you have been unsubscribed. After this, you will no longer receive SMS messages from us.</li>
+            <li><strong>Carriers:</strong> Carriers (such as T-Mobile, AT&T, Verizon, etc.) are not liable for delayed or undelivered messages.</li>
+            <li><strong>Rates:</strong> Message and data rates may apply for any messages sent to you from us and to us from you. If you have any questions about your text plan or data plan, it is best to contact your wireless provider.</li>
           </ul>
         </section>
 
