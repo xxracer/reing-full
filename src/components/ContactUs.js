@@ -194,10 +194,9 @@ const ContactUs = () => {
                   name="sms_consent"
                   checked={formData.sms_consent}
                   onChange={handleInputChange}
-                  required
                 />
                 <label htmlFor="sms-consent-input" className="checkbox-label">
-                  I agree to receive recurring automated marketing and informational text messages from Reign Jiu Jitsu at the phone number provided.
+                  (Optional) I agree to receive recurring automated marketing and informational text messages from Reign Jiu Jitsu at the phone number provided. Consent is not required to submit this form or receive services.
                 </label>
               </div>
 
