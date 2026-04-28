@@ -69,7 +69,7 @@
   gap: 18px;
 }
 
-.contact-form-container input,
+.contact-form-container input:not([type="checkbox"]),
 .contact-form-container textarea,
 .contact-dropdown {
   width: 100%;
@@ -256,9 +256,42 @@
 .checkbox-group input[type="checkbox"] {
   width: 20px !important;
   height: 20px !important;
+  min-width: 20px;
   margin-top: 2px;
   flex-shrink: 0;
   cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid var(--accent-gold);
+  border-radius: 4px;
+  background-color: var(--neutral-0);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.checkbox-group input[type="checkbox"]:checked {
+  background-color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.checkbox-group input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.checkbox-group input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(197, 163, 92, 0.3);
 }
 
 .checkbox-label {
